@@ -6,6 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ChartBarStacked, TrendingUpDown, BadgeDollarSign, Codesandbox } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Trending from "@/components/trending/TrendingComponent";
+import PresaleComponent from "@/components/presale/PresaleComponent";
 export default function Home() {
     return (
         <div>
@@ -34,7 +35,7 @@ export default function Home() {
                             <span>Trending</span>
                         </div>
                     </TabsTrigger>
-                    <TabsTrigger value="highestMarketCap">
+                    <TabsTrigger value="presale">
                         <div className="flex items-center gap-2">
                             <span><BadgeDollarSign></BadgeDollarSign></span>
                             <span>Pre-sale</span>
@@ -82,8 +83,8 @@ export default function Home() {
                 <TabsContent value="trending">
                     <Trending></Trending>
                 </TabsContent>
-                <TabsContent value="highestMarketCap">
-                    {/* Content for highest market cap */}
+                <TabsContent value="presale">
+                        <PresaleComponent></PresaleComponent>
                 </TabsContent>
                 <TabsContent value="topGainers">
                     {/* Content for top gainers */}
