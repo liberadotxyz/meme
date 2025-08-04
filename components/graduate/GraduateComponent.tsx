@@ -3,7 +3,7 @@ import { Card } from "@/components/ui/card";
 import { ArrowUp, Copy, EyeOff, Search, User, Crown, ChefHat, Plus, Dot, Globe, Sprout } from "lucide-react";
 import { Badge } from "@/components/ui/badge"
 import { FaTelegram, FaTwitter, FaDiscord } from "react-icons/fa";
-export default function PresaleComponent() {
+export default function GraduateComponent() {
     return (
         <div className="flex flex-col items-center justify-items-center gap-0 ">
             {
@@ -53,46 +53,19 @@ const TokenCard = ({
     showPnl = false,
 }: TokenCardProps) => {
     const isProfitable = pnl && parseFloat(pnl.replace(/[^0-9.-]/g, "")) > 0;
-    let progress = 50;
-    const radius = 20;
-    const circumference = 2 * Math.PI * radius;
-    const strokeDashoffset = circumference - (progress / 100) * circumference;
+
     return (
         <Card className="bg-gradient-card border-border  p-4 shadow-card hover:border-primary/20 transition-all duration-300">
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                    <div className="w-15 h-15 flex justify-center items-center relative " style={{ borderRadius: "100%", border: `2px solid gray` }}>
-                        <svg className="w-15 h-15 absolute" viewBox="0 0 44 44">
-                            {/* Background circle */}
-                            <circle
-                                cx="22"
-                                cy="22"
-                                r="20"
-                                fill="none"
-                                stroke="gray"
-                                strokeWidth="2"
-                            />
-                            {/* Progress circle */}
-                            <circle
-                                cx="22"
-                                cy="22"
-                                r="20"
-                                fill="none"
-                                stroke="green"
-                                strokeWidth="2"
-                                strokeDasharray={circumference}
-                                strokeDashoffset={strokeDashoffset}
-                                strokeLinecap="round"
-                                transform="rotate(-90 22 22)"
-                            />
-                        </svg>
+                    <div className="">
                         <img
                             src={icon}
                             alt={name}
-                            className="w-12 h-12 rounded-full object-cover border-2 border-primary/20 relative z-10"
+                            className="w-12 h-12 rounded-full object-cover border-2 border-primary/20"
                         />
+                        <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-gradient-purple rounded-full border-2 border-background"></div>
                     </div>
-
 
                     <div className="flex flex-col">
                         <div className="flex items-center">
@@ -111,7 +84,7 @@ const TokenCard = ({
                                 <FaDiscord size={12}></FaDiscord>
                                 <Globe size={12}></Globe>
                             </div>
-                            <div className="text-muted-foreground text-xs flex items-center hover:text-green-400 ">
+                            <div className="text-muted-foreground text-xs flex items-center">
                                 Awqr...dx11
                                 <Button
                                     variant="ghost"
@@ -123,7 +96,7 @@ const TokenCard = ({
                                 </Button>
                             </div>
 
-                            <div className="text-muted-foreground text-xs flex gap-1 mt-1">
+                             <div className="text-muted-foreground text-xs flex gap-1 mt-1">
                                 <div className="relative group">
                                     <Badge className="p-1 h-4 bg-transparent border border-gray-600  text-green-500"> <User size={10}></User>14</Badge>
                                     <div className="absolute bottom-full z-20 left-1/2 -translate-x-1/2 mb-2 px-2 py-1 text-xs rounded bg-gray-800 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">

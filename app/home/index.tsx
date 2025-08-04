@@ -7,6 +7,7 @@ import { ChartBarStacked, TrendingUpDown, BadgeDollarSign, Codesandbox } from "l
 import { Button } from "@/components/ui/button";
 import Trending from "@/components/trending/TrendingComponent";
 import PresaleComponent from "@/components/presale/PresaleComponent";
+import GraduateComponent from "@/components/graduate/GraduateComponent";
 export default function Home() {
     return (
         <div>
@@ -87,7 +88,7 @@ export default function Home() {
                         <PresaleComponent></PresaleComponent>
                 </TabsContent>
                 <TabsContent value="topGainers">
-                    {/* Content for top gainers */}
+                    <GraduateComponent></GraduateComponent>
                 </TabsContent>
 
             </Tabs>
