@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import Trending from "@/components/trending/TrendingComponent";
 import PresaleComponent from "@/components/presale/PresaleComponent";
 import GraduateComponent from "@/components/graduate/GraduateComponent";
+import Link from "next/link";
 export default function Home() {
     return (
         <div>
@@ -17,32 +18,35 @@ export default function Home() {
                 </CardHeader>
                 <CardContent className="space-y-3 flex-col flex items-center gap-2">
                     <div className="text-center"> Earn royalties when peeple buy and sell</div>
-                    <Button className="text-black hover:bg-green-400  justify-start p-2 bg-green-500 w-[130px]">
+                    <Link href={'/launch'} className="cursor-pointer">
+                     <Button className="text-black hover:bg-green-400 cursor-pointer justify-start p-2 bg-green-500 w-[130px]">
                         <Plus color="black" size={10}></Plus>  create coin
                     </Button>
+                    </Link>
+                   
                 </CardContent>
             </Card>
             <Tabs defaultValue="trade" className="w-full">
                 <TabsList className="grid w-full grid-cols-4 h-12 sticky top-20 z-10 ">
-                    <TabsTrigger value="trade">
+                    <TabsTrigger value="trade" className="cursor-pointer">
                         <div className="flex items-center gap-2">
                             <span><ChartBarStacked></ChartBarStacked></span>
                             <span>Trades</span>
                         </div>
                     </TabsTrigger>
-                    <TabsTrigger value="trending">
+                    <TabsTrigger value="trending" className="cursor-pointer">
                         <div className="flex items-center gap-2">
                             <span><TrendingUpDown></TrendingUpDown></span>
                             <span>Trending</span>
                         </div>
                     </TabsTrigger>
-                    <TabsTrigger value="presale">
+                    <TabsTrigger value="presale" className="cursor-pointer">
                         <div className="flex items-center gap-2">
                             <span><BadgeDollarSign></BadgeDollarSign></span>
                             <span>Pre-sale</span>
                         </div>
                     </TabsTrigger>
-                    <TabsTrigger value="topGainers">
+                    <TabsTrigger value="topGainers" className="cursor-pointer">
                         <div className="flex items-center gap-2">
                             <span><Codesandbox></Codesandbox></span>
                             <span>Graduated</span>
@@ -85,7 +89,7 @@ export default function Home() {
                     <Trending></Trending>
                 </TabsContent>
                 <TabsContent value="presale">
-                        <PresaleComponent></PresaleComponent>
+                    <PresaleComponent></PresaleComponent>
                 </TabsContent>
                 <TabsContent value="topGainers">
                     <GraduateComponent></GraduateComponent>

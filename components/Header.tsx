@@ -61,9 +61,12 @@ export const Header = () => {
                         </div>
 
                         <div className='flex items-center gap-2'>
-                            <Button  className="text-black hover:bg-green-400  justify-start p-2 bg-green-500 w-[130px]">
+                                                <Link href={'/launch'} className="cursor-pointer">
+
+                            <Button  className="text-black hover:bg-green-400  justify-start cursor-pointer p-2 bg-green-500 w-[130px]">
                                 <Plus color="black" size={10}></Plus>  create coin
                             </Button>
+                            </Link>
                             <div>
                                 <Button
                                     variant="outline"
