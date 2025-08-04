@@ -1,6 +1,12 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { Header } from "@/components/Header";
+import { ThemeProvider } from "@/components/theme-provider";
+import { TrendingSidebar } from "@/components/TrendingSidebar";
+import WagmiProviders from "@/components/walletConnector/WalletProvider";
+import StoreProvider from "@/redux/reduxProvider";
+import { Toaster } from 'sonner';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,11 +30,38 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
-      </body>
+      <WagmiProviders>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <StoreProvider>
+            <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+              <Header />
+
+              <div className="flex pt-16 min-h-screen">
+                <div className="hidden lg:block lg:w-100 lg:sticky lg:top-16 lg:h-[calc(100vh-4rem)] lg:overflow-y-auto">
+                  {/* left sidebar content */}
+                </div>
+
+                <div className="flex-1 max-w-2xl mx-auto w-full min-w-0 px-4 py-6 overflow-y-auto pt-10">
+                  <main className="w-full">
+                    <Toaster position="top-center" />
+
+                    {children}
+                  </main>
+                </div>
+
+                <div className="hidden lg:block lg:w-100 lg:sticky lg:top-16 lg:h-[calc(100vh-4rem)] lg:overflow-y-auto pt-[23px]">
+                  <TrendingSidebar />
+                </div>
+              </div>
+            </body>
+          </StoreProvider>
+        </ThemeProvider>
+      </WagmiProviders>
     </html>
   );
 }
