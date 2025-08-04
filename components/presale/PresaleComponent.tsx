@@ -125,19 +125,19 @@ const TokenCard = ({
 
                             <div className="text-muted-foreground text-xs flex gap-1 mt-1">
                                 <div className="relative group">
-                                    <Badge className="p-1 h-4 bg-transparent border border-gray-600  text-green-500"> <User size={10}></User>14</Badge>
+                                    <Badge className="p-1 h-4 bg-transparent border border-gray-600  text-green-500 cursor-pointer"> <User size={10}></User>14</Badge>
                                     <div className="absolute bottom-full z-20 left-1/2 -translate-x-1/2 mb-2 px-2 py-1 text-xs rounded bg-gray-800 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
                                         Total number of holder
                                     </div>
                                 </div>
                                 <div className="relative group">
-                                    <Badge className="p-1 h-4 bg-transparent border border-gray-600  text-green-500"> <ChefHat size={100}></ChefHat>1%</Badge>
+                                    <Badge className="p-1 h-4 bg-transparent border border-gray-600  text-green-500 cursor-pointer"> <ChefHat size={100}></ChefHat>1%</Badge>
                                     <div className="absolute bottom-full z-20 left-1/2 -translate-x-1/2 mb-2 px-2 py-1 text-xs rounded bg-gray-800 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
                                         The percentage hold by dev team                                    </div>
                                 </div>
 
                                 <div className="relative group">
-                                    <Badge className="p-1 h-4 bg-transparent border border-gray-600  text-green-500"> <Crown size={10}></Crown>2%</Badge>
+                                    <Badge className="p-1 h-4 bg-transparent border border-gray-600  text-green-500 cursor-pointer"> <Crown size={10}></Crown>2%</Badge>
 
                                     <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 text-xs rounded bg-gray-800 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
                                         Top 10 holder percentage
@@ -145,7 +145,7 @@ const TokenCard = ({
                                 </div>
 
                                 <div className="relative group">
-                                    <Badge className="p-1 h-4 bg-transparent border border-gray-600 text-green-500">
+                                    <Badge className="p-1 h-4 bg-transparent border border-gray-600 text-green-500 cursor-pointer">
                                         <Sprout size={10} className="inline mr-1" />3s
                                     </Badge>
                                     <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 text-xs rounded bg-gray-800 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">

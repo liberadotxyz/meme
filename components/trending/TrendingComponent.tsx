@@ -53,7 +53,7 @@ export const TokenCard = ({
     const isProfitable = pnl && parseFloat(pnl.replace(/[^0-9.-]/g, "")) > 0;
 
     return (
-        <Card className="bg-gradient-card border-border  p-4 shadow-card hover:border-primary/20 transition-all duration-300">
+        <Card className="bg-gradient-card border-border gap-1  p-4 shadow-card hover:border-primary/20 transition-all duration-300">
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                     <div className="">
@@ -138,8 +138,8 @@ export const TokenCard = ({
                     </div>
                 </div>
                 <div>
-                    <div className="text-md text-muted-foreground">
-                        24H <ArrowUpDown size={20} color="green"></ArrowUpDown>
+                    <div className="text-md text-muted-foreground flex items-center">
+                        24H <ArrowUpDown size={18} color="green"></ArrowUpDown>
                     </div>
                     <div className="text-sm text-green-500">
                         10%

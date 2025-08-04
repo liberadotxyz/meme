@@ -1,8 +1,8 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ArrowUp, Copy, ArrowUpDown, Plus } from "lucide-react";
-
+import { ArrowUp, Copy, ArrowUpDown, Plus, User } from "lucide-react";
+import { Badge } from "lucide-react";
 interface TokenCardProps {
     name: string;
     symbol: string;
@@ -29,7 +29,7 @@ export const TokenCard = ({
     const isProfitable = pnl && parseFloat(pnl.replace(/[^0-9.-]/g, "")) > 0;
 
     return (
-        <Card className="bg-gradient-card border-border  p-4 shadow-card hover:border-primary/20 transition-all duration-300">
+        <Card className="bg-gradient-card border-border gap-1 p-4 shadow-card hover:border-primary/20 transition-all duration-300">
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                     <div className="">
@@ -45,16 +45,6 @@ export const TokenCard = ({
                         <h3 className="font-bold text-foreground text-lg">{name}</h3>
                         <div className="flex items-center gap-2">
                             <span className="text-muted-foreground text-sm">{symbol}</span>
-                            {/* {address && (
-                                <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    className="h-5 w-5 p-0 hover:bg-primary/10"
-                                    onClick={() => navigator.clipboard.writeText(address)}
-                                >
-                                    <Copy className="h-3 w-3" />
-                                </Button>
-                            )} */}
                         </div>
                     </div>
                 </div>
@@ -64,31 +54,13 @@ export const TokenCard = ({
                         <div className="text-muted-foreground text-sm"> <span className="text-white text-md font-medium">{marketCap}</span> MCAP</div>
                     </div>
 
-                    {/* {showBoost && (
-                        <Button  size="sm" className="px-6">
-                            Boost
-                        </Button>
-                    )} */}
+
                 </div>
             </div>
 
-            {showPnl && pnl && pnlPercentage && (
-                <div className="mt-4 pt-4 border-t border-border/50">
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                            <span className="text-muted-foreground">P&L:</span>
-                            <div className={`flex items-center gap-1 ${isProfitable ? 'text-trading-success' : 'text-trading-danger'}`}>
-                                <span className="font-bold">{pnl}</span>
-                                <ArrowUp className={`h-4 w-4 ${!isProfitable && 'rotate-180'}`} />
-                                <span className="font-semibold">{pnlPercentage}</span>
-                            </div>
-                        </div>
-                        <div className="text-muted-foreground text-sm">{marketCap} MC</div>
-                    </div>
-                </div>
-            )}
 
-            <div className="flex items-center justify-between mt-4">
+            <div className="flex items-center justify-between mt-1">
+
                 <div>
                     <div className="text-md text-muted-foreground">
                         Holders
