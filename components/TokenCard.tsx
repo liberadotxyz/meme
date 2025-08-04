@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ArrowUp, Copy } from "lucide-react";
+import { ArrowUp, Copy, ArrowUpDown } from "lucide-react";
 
 interface TokenCardProps {
     name: string;
@@ -99,7 +99,7 @@ export const TokenCard = ({
                 </div>
                 <div>
                     <div className="text-md text-muted-foreground">
-                        24hrs Volume
+                        24H Volume
                     </div>
                     <div className="text-sm">
                         $12,345
@@ -114,8 +114,8 @@ export const TokenCard = ({
                     </div>
                 </div>
                 <div>
-                    <div className="text-md text-muted-foreground">
-                        24hr Changes
+                    <div className="text-md text-muted-foreground flex items-center gap-1">
+                        24H <ArrowUpDown color="green" size={20}></ArrowUpDown>
                     </div>
                     <div className="text-sm text-green-500">
                         10%

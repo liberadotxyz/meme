@@ -41,22 +41,15 @@ export default function RootLayout({
             <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
               <Header />
 
-              <div className="flex pt-16 min-h-screen">
-                <div className="hidden lg:block lg:w-100 lg:sticky lg:top-16 lg:h-[calc(100vh-4rem)] lg:overflow-y-auto">
-                  {/* left sidebar content */}
-                </div>
-
-                <div className="flex-1 max-w-2xl mx-auto w-full min-w-0 px-4 py-6 overflow-y-auto pt-10">
-                  <main className="w-full">
+              <div className="flex pt-16 min-h-screen max-w-3xl m-auto">
+                <main className="w-full mt-10">
                     <Toaster position="top-center" />
 
                     {children}
                   </main>
-                </div>
 
-                <div className="hidden lg:block lg:w-100 lg:sticky lg:top-16 lg:h-[calc(100vh-4rem)] lg:overflow-y-auto pt-[23px]">
-                  <TrendingSidebar />
-                </div>
+                
+              
               </div>
             </body>
           </StoreProvider>

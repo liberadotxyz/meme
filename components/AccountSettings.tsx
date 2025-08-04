@@ -32,7 +32,7 @@ const AccountSettings = () => {
     };
 
     return (
-        <div className="min-h-screen bg-background text-foreground mt-10 mx-auto max-w-2xl p-6">
+        <div className="min-h-screen bg-background text-foreground mx-auto ">
             <p className="text-2xl font-semibold mb-3">
                 Settings
             </p>
