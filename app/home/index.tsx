@@ -17,7 +17,8 @@ export default function Home() {
                     <CardTitle className="text-3xl font-bold text-center">Launch on Bora</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3 flex-col flex items-center gap-2">
-                    <div className="text-center"> Earn royalties when peeple buy and sell</div>
+                    <div className="text-center"> Earn royalties from every buy and sell of your meme coin.
+</div>
                     <Link href={'/launch'} className="cursor-pointer">
                      <Button className="text-black hover:bg-green-400 cursor-pointer justify-start p-2 bg-green-500 w-[130px]">
                         <Plus color="black" size={10}></Plus>  create coin
