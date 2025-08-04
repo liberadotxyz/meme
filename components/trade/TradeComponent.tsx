@@ -1,9 +1,43 @@
-"use client";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ArrowUp, Copy, ArrowUpDown, Plus, User,Sprout , ChefHat, Crown, Globe} from "lucide-react";
-import { Badge } from "lucide-react";
-import { FaTelegram, FaDiscord, FaTwitter  } from "react-icons/fa";
+import { ArrowUp, Copy, EyeOff, Search, User, Crown, ChefHat, Plus, Dot, Globe, Sprout } from "lucide-react";
+import { Badge } from "@/components/ui/badge"
+import { FaTelegram, FaTwitter, FaDiscord } from "react-icons/fa";
+import { TradingCard } from "@/components/TradingCard";
+
+export default function TradeComponent() {
+    return (
+        <div className="flex flex-col items-center justify-items-center gap-0 ">
+            {
+                [1, 2, 3, 4, 6].map((item) => (
+                    <div className="p-2 w-full max-w-3xl gap-0">
+                        <TradingCard
+                                        tokenName="DAREALFNTRAP"
+                                        tokenIcon={"/images/aaa.png"}
+                                        price="0.06 ETH"
+                                        marketCap="$1.14M"
+                                        timestamp="26m"
+                                    />
+
+                        <TokenCard
+                            name="SAILANA"
+                            symbol="Shiba Inu"
+                            icon={"/images/aaa.png"}
+                            marketCap="$1.13M"
+                            address="dWd8...BAGS"
+                            showBoost={true}
+                        />
+                    </div>
+
+                ))
+            }
+
+        </div>
+    );
+}
+
+
+
 interface TokenCardProps {
     name: string;
     symbol: string;
@@ -16,7 +50,7 @@ interface TokenCardProps {
     showPnl?: boolean;
 }
 
-export const TokenCard = ({
+const TokenCard = ({
     name,
     symbol,
     icon,
@@ -28,23 +62,19 @@ export const TokenCard = ({
     showPnl = false,
 }: TokenCardProps) => {
     const isProfitable = pnl && parseFloat(pnl.replace(/[^0-9.-]/g, "")) > 0;
-    let progress = 50;
-    const radius = 20;
-    const circumference = 2 * Math.PI * radius;
-    const strokeDashoffset = circumference - (progress / 100) * circumference;
+
     return (
         <Card className="bg-gradient-card border-border  p-4 shadow-card hover:border-primary/20 transition-all duration-300">
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                    <div className="w-15 h-15 flex justify-center items-center relative " >
-                        
+                    <div className="">
                         <img
                             src={icon}
                             alt={name}
-                            className="w-12 h-12 rounded-full object-cover border-2 border-primary/20 relative "
+                            className="w-12 h-12 rounded-full object-cover border-2 border-primary/20"
                         />
+                        <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-gradient-purple rounded-full border-2 border-background"></div>
                     </div>
-
 
                     <div className="flex flex-col">
                         <div className="flex items-center">
@@ -63,8 +93,7 @@ export const TokenCard = ({
                                 <FaDiscord size={12}></FaDiscord>
                                 <Globe size={12}></Globe>
                             </div>
-                            
-                            <div className="text-muted-foreground text-xs flex items-center hover:text-green-400 ">
+                            <div className="text-muted-foreground text-xs flex items-center">
                                 Awqr...dx11
                                 <Button
                                     variant="ghost"
@@ -76,9 +105,9 @@ export const TokenCard = ({
                                 </Button>
                             </div>
 
-                            <div className="text-muted-foreground text-xs flex gap-1 mt-1">
+                             <div className="text-muted-foreground text-xs flex gap-1 mt-1">
                                 <div className="relative group">
-                                    <Badge className=" bg-transparent border border-gray-600  text-green-500 cursor-pointer"> <User size={10}></User>14</Badge>
+                                    <Badge className="p-1 h-4 bg-transparent border border-gray-600  text-green-500 cursor-pointer"> <User size={10}></User>14</Badge>
                                     <div className="absolute bottom-full z-20 left-1/2 -translate-x-1/2 mb-2 px-2 py-1 text-xs rounded bg-gray-800 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
                                         Total number of holder
                                     </div>
