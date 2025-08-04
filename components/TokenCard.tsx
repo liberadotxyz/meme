@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ArrowUp, Copy, ArrowUpDown } from "lucide-react";
+import { ArrowUp, Copy, ArrowUpDown, Plus } from "lucide-react";
 
 interface TokenCardProps {
     name: string;
@@ -122,10 +122,18 @@ export const TokenCard = ({
                     </div>
                 </div>
             </div>
-
-                <Button className="bg-green-500">
-                    Buy
+            <div className="flex justify-end">
+                <Button
+                    // variant="ghost"
+                    size="sm"
+                    className="h-6 gap-0 w-13 px-3 mt-2 p-0 bg-green-500 hover:bg-green-600 text-black"
+                >
+                    <Plus color="black"></Plus>
+                    0.01
                 </Button>
+            </div>
+
+
         </Card>
     );
 };
