@@ -24,7 +24,7 @@ export const TradingCard = ({
 
   return (
     <div className="space-y-4">
-      <div className="bg-gradient-card p-4 shadow-card">
+      <div className="bg-gradient-card p-1 shadow-card">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <img

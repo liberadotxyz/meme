@@ -53,22 +53,22 @@ export const TokenCard = ({
     const isProfitable = pnl && parseFloat(pnl.replace(/[^0-9.-]/g, "")) > 0;
 
     return (
-        <Card className="bg-gradient-card border-border gap-1  p-4 shadow-card hover:border-primary/20 transition-all duration-300">
+        <Card className="bg-gradient-card border-border gap-1  p-2 shadow-card hover:border-primary/20 transition-all duration-300">
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                     <div className="">
                         <img
                             src={icon}
                             alt={name}
-                            className="w-12 h-12 rounded-full object-cover border-2 border-primary/20"
+                            className="w-10 h-10 rounded-full object-cover border-2 border-primary/20"
                         />
                         <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-gradient-purple rounded-full border-2 border-background"></div>
                     </div>
 
                     <div className="flex flex-col">
-                        <h3 className="font-bold text-foreground text-lg">{name}</h3>
+                        <h3 className="font-bold text-foreground text-sm">{name}</h3>
                         <div className="flex items-center gap-2">
-                            <span className="text-muted-foreground text-sm">{symbol}</span>
+                            <span className="text-muted-foreground text-xs">{symbol}</span>
                             {address && (
                                 <Button
                                     variant="ghost"
@@ -112,7 +112,7 @@ export const TokenCard = ({
                 </div>
             )}
 
-            <div className="flex items-center justify-between mt-4">
+            <div className="flex items-center justify-between mt-1">
                 <div>
                     <div className="text-md text-muted-foreground">
                         Holders
