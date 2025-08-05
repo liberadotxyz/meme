@@ -84,49 +84,51 @@ const TokenCard = ({
                                 <FaDiscord size={12}></FaDiscord>
                                 <Globe size={12}></Globe>
                             </div>
-                            <div className="text-muted-foreground text-xs flex items-center">
+                           <div className="text-muted-foreground text-xs flex items-center mb-1 hover:text-green-500">
                                 Awqr...dx11
                                 <Button
                                     variant="ghost"
                                     size="sm"
-                                    className="h-4 w-4 p-0 hover:bg-primary/10"
-                                // onClick={() => navigator.clipboard.writeText(address)}
+                                    className="h-4 w-4 p-0 hover:text-green-500 ml-1"
                                 >
                                     <Copy className="h-3 w-3" />
                                 </Button>
                             </div>
 
-                             <div className="text-muted-foreground text-xs flex gap-1 mt-1">
+                            <div className="text-muted-foreground text-xs flex gap-1 mt-1">
                                 <div className="relative group">
-                                    <Badge className="p-1 h-4 bg-transparent border border-gray-600  text-green-500 cursor-pointer"> <User size={10}></User>14</Badge>
-                                    <div className="absolute bottom-full z-20 left-1/2 -translate-x-1/2 mb-2 px-2 py-1 text-xs rounded bg-gray-800 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
+                                    <Badge className="p-1 h-4 bg-transparent border border-gray-600 text-green-500 cursor-pointer">
+                                        <User size={10}></User>14
+                                    </Badge>
+                                    <div className="absolute bottom-full z-20 left-1/2 -translate-x-1/2 mb-2 px-2 py-1 text-xs rounded bg-gray-800 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none">
                                         Total number of holder
                                     </div>
                                 </div>
                                 <div className="relative group">
-                                    <Badge className="p-1 h-4 bg-transparent border border-gray-600  text-green-500 cursor-pointer"> <ChefHat size={100}></ChefHat>1%</Badge>
-                                    <div className="absolute bottom-full z-20 left-1/2 -translate-x-1/2 mb-2 px-2 py-1 text-xs rounded bg-gray-800 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
-                                        The percentage hold by dev team                                    </div>
+                                    <Badge className="p-1 h-4 bg-transparent border border-gray-600 text-green-500 cursor-pointer">
+                                        <ChefHat size={10}></ChefHat>1%
+                                    </Badge>
+                                    <div className="absolute bottom-full z-20 left-1/2 -translate-x-1/2 mb-2 px-2 py-1 text-xs rounded bg-gray-800 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none">
+                                        The percentage hold by dev team
+                                    </div>
                                 </div>
-
                                 <div className="relative group">
-                                    <Badge className="p-1 h-4 bg-transparent border border-gray-600  text-green-500 cursor-pointer"> <Crown size={10}></Crown>2%</Badge>
-
-                                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 text-xs rounded bg-gray-800 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
+                                    <Badge className="p-1 h-4 bg-transparent border border-gray-600 text-green-500 cursor-pointer">
+                                        <Crown size={10}></Crown>2%
+                                    </Badge>
+                                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 text-xs rounded bg-gray-800 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none">
                                         Top 10 holder percentage
                                     </div>
                                 </div>
-
                                 <div className="relative group">
                                     <Badge className="p-1 h-4 bg-transparent border border-gray-600 text-green-500 cursor-pointer">
                                         <Sprout size={10} className="inline mr-1" />3s
                                     </Badge>
-                                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 text-xs rounded bg-gray-800 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
+                                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 text-xs rounded bg-gray-800 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none">
                                         created 3s before
                                     </div>
                                 </div>
                             </div>
-
 
 
 
