@@ -21,16 +21,15 @@ export const TradingCard = ({
   timestamp = "26m",
 }: TradingCardProps) => {
   const [tradeAmount, setTradeAmount] = useState("0.01");
-
   return (
     <div className="space-y-4">
-      <div className="bg-gradient-card p-4 shadow-card">
+      <div className="bg-gradient-card p-1 shadow-card">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <img
               src={tokenIcon}
               alt={tokenName}
-              className="w-10 h-10 rounded-full object-cover border-2 border-primary/20"
+              className="w-8 h-8 rounded-full object-cover border-2 border-primary/20"
             />
             <div>
               <h3 className="font-bold text-foreground text-sm">{tokenName}  <Button   className="px-4 text-xs bg-green-400 h-4">

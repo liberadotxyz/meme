@@ -20,7 +20,7 @@ import {
 
 function NotificationPage() {
     return (
-        <div className="flex w-full max-w-3xl m-auto flex-col gap-6 mt-10">
+        <div className="flex w-full  m-auto flex-col gap-6 ">
             <p className="text-2xl font-semibold">
                 Notification
             </p>
