@@ -62,15 +62,13 @@ const TokenCard = ({
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                     <div className="w-15 h-15 flex justify-center items-center relative " >
-                            {/* Background circle */}
-                           
-                            {/* Progress circle */}
-                           
+                          
                         <img
                             src={icon}
                             alt={name}
-                            className="w-12 h-12 rounded-full object-cover border-2 border-primary/20 relative z-10"
+                            className="w-12 h-12 rounded-full object-cover border-2 border-primary/20 relative"
                         />
+                        
                     </div>
 
 

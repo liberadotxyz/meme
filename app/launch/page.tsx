@@ -197,8 +197,8 @@ const TokenCreationForm = () => {
                     </div>
 
                     {/* Verify Button */}
-                    <Button className="w-full gradient-button text-primary-foreground font-medium py-3 rounded-lg">
-                        𝕏 Verify with X
+                    <Button className="w-full gradient-button text-primary-foreground font-medium py-3 rounded-lg bg-green-500">
+                        Submit
                     </Button>
                 </div>
             </div>

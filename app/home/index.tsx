@@ -1,4 +1,3 @@
-import { TradingCard } from "@/components/TradingCard";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Plus } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -18,17 +17,17 @@ export default function Home() {
                 </CardHeader>
                 <CardContent className="space-y-3 flex-col flex items-center gap-2">
                     <div className="text-center"> Earn royalties from every buy and sell of your meme coin.
-</div>
+                    </div>
                     <Link href={'/launch'} className="cursor-pointer">
-                     <Button className="text-black hover:bg-green-400 cursor-pointer justify-start p-2 bg-green-500 w-[130px]">
-                        <Plus color="black" size={10}></Plus>  create coin
-                    </Button>
+                        <Button className="text-black hover:bg-green-400 cursor-pointer justify-start p-2 bg-green-500 w-[130px]">
+                            <Plus color="black" size={10}></Plus>  create coin
+                        </Button>
                     </Link>
-                   
+
                 </CardContent>
             </Card>
-            <Tabs defaultValue="trade" className="w-full">
-                <TabsList className="grid w-full grid-cols-4 h-12 sticky top-20 z-10 ">
+            <Tabs defaultValue="trade" className="w-full ">
+                <TabsList className="grid w-full grid-cols-4 h-12 sticky top-20 z-1 ">
                     <TabsTrigger value="trade" className="cursor-pointer">
                         <div className="flex items-center gap-2">
                             <span><ChartBarStacked></ChartBarStacked></span>
@@ -56,10 +55,9 @@ export default function Home() {
 
                 </TabsList>
 
-                {/* Tab contents would go here */}
                 <TabsContent value="trade">
-                <TradeComponent></TradeComponent>
-                  
+                    <TradeComponent></TradeComponent>
+
                 </TabsContent>
                 <TabsContent value="trending">
                     <Trending></Trending>

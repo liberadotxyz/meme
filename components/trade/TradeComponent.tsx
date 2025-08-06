@@ -1,9 +1,11 @@
+"use client"
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ArrowUp, Copy, EyeOff, Search, User, Crown, ChefHat, Plus, Dot, Globe, Sprout } from "lucide-react";
 import { Badge } from "@/components/ui/badge"
 import { FaTelegram, FaTwitter, FaDiscord } from "react-icons/fa";
 import { TradingCard } from "@/components/TradingCard";
+import { useSession } from "next-auth/react";
 
 export default function TradeComponent() {
     return (
@@ -62,12 +64,14 @@ const TokenCard = ({
     showPnl = false,
 }: TokenCardProps) => {
     const isProfitable = pnl && parseFloat(pnl.replace(/[^0-9.-]/g, "")) > 0;
-
+    const { data: session, status } = useSession();
+    console.log("session", session, status)
     return (
         <Card className="bg-gradient-card border-border  p-4 shadow-card hover:border-primary/20 transition-all duration-300">
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                     <div className="">
+                       
                         <img
                             src={icon}
                             alt={name}

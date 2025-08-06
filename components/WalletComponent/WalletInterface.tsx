@@ -7,6 +7,8 @@ import { WalletBalance } from './WalletBalance';
 import { DepositScreen } from './DepositeScreen';
 import { SendScreen } from './SendScreen';
 import { ReceiveScreen } from './ReceiveScreen';
+import { useConnectModal } from '@rainbow-me/rainbowkit';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 
 type WalletView = 'main' | 'deposit' | 'send' | 'receive';
 

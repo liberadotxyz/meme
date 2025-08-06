@@ -7,7 +7,7 @@ import { TrendingSidebar } from "@/components/TrendingSidebar";
 import WagmiProviders from "@/components/walletConnector/WalletProvider";
 import StoreProvider from "@/redux/reduxProvider";
 import { Toaster } from 'sonner';
-
+import SessionProviderWrapper from "@/components/session-provider";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -30,31 +30,36 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <WagmiProviders>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <StoreProvider>
-            <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-              <Header />
+      <SessionProviderWrapper>
+        <WagmiProviders>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <StoreProvider>
+              <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+                
+                <Header />
 
-              <div className="flex pt-16 min-h-screen max-w-3xl m-auto">
-                <main className="w-full mt-10">
+                <div className="flex pt-16 min-h-screen max-w-3xl m-auto">
+
+                  <main className="w-full mt-10">
+
                     <Toaster position="top-center" />
 
                     {children}
                   </main>
 
-                
-              
-              </div>
-            </body>
-          </StoreProvider>
-        </ThemeProvider>
-      </WagmiProviders>
+
+
+                </div>
+              </body>
+            </StoreProvider>
+          </ThemeProvider>
+        </WagmiProviders>
+      </SessionProviderWrapper>
     </html>
   );
 }
