@@ -1,32 +1,33 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { ArrowUpDown,  } from "lucide-react";
+import { ArrowUpDown, } from "lucide-react";
 import { ArrowUp, Copy, EyeOff, Search, User, Crown, ChefHat, Plus, Dot, Globe, Sprout } from "lucide-react";
 import { Badge } from "@/components/ui/badge"
 import { FaTelegram, FaTwitter, FaDiscord } from "react-icons/fa";
 import { Card } from "@/components/ui/card";
+import { CopyableEthText } from "../ui/copy-text";
 export default function Trending() {
-  return (
-    <div className="flex flex-col items-center justify-items-center min-h-screen gap-0 ">
-      {
-        [1, 2, 3, 4, 5].map((item) => (
-          <div className="p-2 w-full max-w-3xl gap-0">
-            
-            <TokenCard
-              name="SAILANA"
-              symbol="123..3456"
-              icon={"/images/aaa.png"}
-              marketCap="$1.13M"
-              address="dWd8...BAGS"
-              showBoost={true}
-            />
-          </div>
+    return (
+        <div className="flex flex-col items-center justify-items-center min-h-screen gap-0 ">
+            {
+                [1, 2, 3, 4, 5].map((item) => (
+                    <div className="p-2 w-full max-w-3xl gap-0">
 
-        ))
-      }
+                        <TokenCard
+                            name="SAILANA"
+                            symbol="123..3456"
+                            icon={"/images/aaa.png"}
+                            marketCap="$1.13M"
+                            address="dWd8...BAGS"
+                            showBoost={true}
+                        />
+                    </div>
 
-    </div>
-  );
+                ))
+            }
+
+        </div>
+    );
 }
 
 interface TokenCardProps {
@@ -62,13 +63,13 @@ const TokenCard = ({
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                     <div className="w-15 h-15 flex justify-center items-center relative " >
-                          
+
                         <img
                             src={icon}
                             alt={name}
                             className="w-12 h-12 rounded-full object-cover border-2 border-primary/20 relative"
                         />
-                        
+
                     </div>
 
 
@@ -89,15 +90,8 @@ const TokenCard = ({
                                 <FaDiscord size={12}></FaDiscord>
                                 <Globe size={12}></Globe>
                             </div>
-                             <div className="text-muted-foreground text-xs flex items-center mb-1 hover:text-green-500">
-                                Awqr...dx11
-                                <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    className="h-4 w-4 p-0 hover:text-green-500 ml-1"
-                                >
-                                    <Copy className="h-3 w-3" />
-                                </Button>
+                            <div className="text-muted-foreground text-xs flex items-center mb-1 hover:text-green-500">
+                                <CopyableEthText text="Awqr...dx11" />
                             </div>
 
                             <div className="text-muted-foreground text-xs flex gap-1 mt-1">

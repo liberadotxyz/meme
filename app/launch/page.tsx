@@ -90,30 +90,30 @@ const TokenCreationForm = () => {
                     <div className="space-y-4">
                         <div className="space-y-2">
                             <label className="text-md text-muted-foreground">Initial Buy</label>
-                            <div className="relative">
-                                <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-primary font-medium">
+                            <div className="relative flex">
+                                {/* <span className=" left-3 top-1/2 transform -translate-y-1/2 text-primary font-medium">
                                     ◎
-                                </span>
+                                </span> */}
                                 <Input
                                     value={solAmount}
                                     onChange={(e) => setSolAmount(e.target.value)}
-                                    className="form-input bg-input border-border text-foreground pl-8 p-2 h-12"
+                                    className="form-input  bg-input border-border text-foreground pl-8 p-2 h-12"
                                     placeholder="0.00"
                                 />
                                 <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground ">
-                                    SOL
+                                    ETH
                                 </span>
                             </div>
                         </div>
 
                         <p className="text-xs text-muted-foreground">
-                            Make sure to leave ~0.05 SOL for tx fees
+                            Make sure to leave ~0.05 ETH for tx fees
                         </p>
 
                         <div className="flex items-center justify-between text-sm">
                             <div className="flex items-center gap-2">
                                 <span className="w-2 h-2 rounded-full bg-primary"></span>
-                                <span className="text-muted-foreground">0 SOL</span>
+                                <span className="text-muted-foreground">0 ETH</span>
                             </div>
                             <span className="text-foreground">$0</span>
                         </div>

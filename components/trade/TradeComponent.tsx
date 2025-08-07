@@ -6,15 +6,15 @@ import { Badge } from "@/components/ui/badge"
 import { FaTelegram, FaTwitter, FaDiscord } from "react-icons/fa";
 import { TradingCard } from "@/components/TradingCard";
 import { useSession } from "next-auth/react";
-
+import { CopyableEthText } from "../ui/copy-text";
 export default function TradeComponent() {
     return (
         <div className="flex flex-col items-center justify-items-center gap-0 ">
             {
-                [1, 2, 3, 4, 6].map((item) => (
+                [1, 11, 333, 4444, 66666].map((item) => (
                     <div className="p-2 w-full max-w-3xl gap-0">
                         <TradingCard
-                            tokenName="DAREALFNTRAP"
+                            tokenName={`DAREALFNTRAP${item}`}
                             tokenIcon={"/images/aaa.png"}
                             price="0.06 ETH"
                             marketCap="$1.14M"
@@ -98,14 +98,15 @@ const TokenCard = ({
                                 <Globe size={12}></Globe>
                             </div>
                             <div className="text-muted-foreground text-xs flex items-center mb-1 hover:text-green-500">
-                                Awqr...dx11
-                                <Button
+                                {/* Awqr...dx11 */}
+                                <CopyableEthText text="Awqr...dx11"></CopyableEthText>
+                                {/* <Button
                                     variant="ghost"
                                     size="sm"
                                     className="h-4 w-4 p-0 hover:text-green-500 ml-1"
                                 >
                                     <Copy className="h-3 w-3" />
-                                </Button>
+                                </Button> */}
                             </div>
 
                             <div className="text-muted-foreground text-xs flex gap-1 mt-1">

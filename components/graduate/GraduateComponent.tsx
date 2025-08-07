@@ -1,8 +1,10 @@
+"use client"
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ArrowUp, Copy, EyeOff, Search, User, Crown, ChefHat, Plus, Dot, Globe, Sprout } from "lucide-react";
 import { Badge } from "@/components/ui/badge"
 import { FaTelegram, FaTwitter, FaDiscord } from "react-icons/fa";
+import { CopyableEthText } from "../ui/copy-text";
 export default function GraduateComponent() {
     return (
         <div className="flex flex-col items-center justify-items-center gap-0 ">
@@ -84,15 +86,9 @@ const TokenCard = ({
                                 <FaDiscord size={12}></FaDiscord>
                                 <Globe size={12}></Globe>
                             </div>
-                           <div className="text-muted-foreground text-xs flex items-center mb-1 hover:text-green-500">
-                                Awqr...dx11
-                                <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    className="h-4 w-4 p-0 hover:text-green-500 ml-1"
-                                >
-                                    <Copy className="h-3 w-3" />
-                                </Button>
+                            <div className="text-muted-foreground text-xs flex items-center mb-1 hover:text-green-500">
+                                <CopyableEthText text="Awqr...dx11"></CopyableEthText>
+
                             </div>
 
                             <div className="text-muted-foreground text-xs flex gap-1 mt-1">
@@ -168,21 +164,7 @@ const TokenCard = ({
                 </div>
             </div>
 
-            {showPnl && pnl && pnlPercentage && (
-                <div className="mt-4 pt-4 border-t border-border/50">
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                            <span className="text-muted-foreground">P&L:</span>
-                            <div className={`flex items-center gap-1 ${isProfitable ? 'text-trading-success' : 'text-trading-danger'}`}>
-                                <span className="font-bold">{pnl}</span>
-                                <ArrowUp className={`h-4 w-4 ${!isProfitable && 'rotate-180'}`} />
-                                <span className="font-semibold">{pnlPercentage}</span>
-                            </div>
-                        </div>
-                        <div className="text-muted-foreground text-sm">{marketCap} MC</div>
-                    </div>
-                </div>
-            )}
+
 
 
         </Card>
