@@ -18,7 +18,7 @@ export const CopyableEthText = ({ text, showExplorer = false }: Props) => {
   const shouldShowExplorerLink = showExplorer && isValidEthAddress;
 
   return (
-    <div className="flex w-full select-none items-center gap-2 rounded-lg  p-2">
+    <div className="flex w-full select-none items-center gap-2 rounded-lg">
       <div className="min-w-0 flex truncate">
         <span className="block font-mono text-sm">{text}</span>
       </div>
