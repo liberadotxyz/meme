@@ -9,8 +9,8 @@ import { SendScreen } from './SendScreen';
 import { ReceiveScreen } from './ReceiveScreen';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-
-type WalletView = 'main' | 'deposit' | 'send' | 'receive';
+import { TransferScreen } from './Transfer';
+type WalletView = 'main' | 'deposit' | 'send' | 'receive' | 'transfer';
 
 interface Token {
     symbol: string;
@@ -62,10 +62,11 @@ export const WalletInterface = ({ onClose }: WalletInterfaceProps) => {
                 return <SendScreen onBack={handleBack} />;
             case 'receive':
                 return <ReceiveScreen onBack={handleBack} />;
+            case 'transfer':
+                return <TransferScreen onBack={handleBack}></TransferScreen>
             default:
                 return (
                     <div className="space-y-6">
-                        {/* Header */}
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-3">
 
@@ -88,7 +89,7 @@ export const WalletInterface = ({ onClose }: WalletInterfaceProps) => {
                         <div className="grid grid-cols-3 gap-4">
                             <Button
                                 variant="outline"
-                                className="flex items-center gap-2 h-12"
+                                className="flex items-center gap-2 h-12 cursor-pointer"
                                 onClick={() => setCurrentView('deposit')}
                             >
                                 <Plus className="w-4 h-4" />
@@ -96,7 +97,7 @@ export const WalletInterface = ({ onClose }: WalletInterfaceProps) => {
                             </Button>
                             <Button
                                 variant="outline"
-                                className="flex items-center gap-2 h-12"
+                                className="flex items-center gap-2 h-12 cursor-pointer"
                                 onClick={() => setCurrentView('send')}
                             >
                                 <Send className="w-4 h-4" />
@@ -104,7 +105,7 @@ export const WalletInterface = ({ onClose }: WalletInterfaceProps) => {
                             </Button>
                             <Button
                                 variant="outline"
-                                className="flex items-center gap-2 h-12"
+                                className="flex items-center gap-2 h-12 cursor-pointer"
                                 onClick={() => setCurrentView('receive')}
                             >
                                 <ArrowDown className="w-4 h-4" />
@@ -146,7 +147,9 @@ export const WalletInterface = ({ onClose }: WalletInterfaceProps) => {
 
                                     <div className="space-y-1">
                                         {mockTokens.map((token) => (
-                                            <div key={token.symbol} className="flex items-center justify-between p-3 rounded-lg hover:bg-wallet-bg transition-colors">
+                                            <div key={token.symbol} className="flex items-center justify-between p-3 rounded-lg hover:bg-[#262626] cursor-pointer transition-colors"
+                                                onClick={() => setCurrentView('transfer')}
+                                            >
                                                 <div className="flex items-center gap-3">
                                                     <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
                                                         {token.symbol === 'ETH' && <span className="text-sm">Ξ</span>}

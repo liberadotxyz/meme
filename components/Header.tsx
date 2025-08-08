@@ -75,7 +75,7 @@ export const Header = () => {
 
                                 <Button
                                     variant="outline"
-                                    className="w-full sm:w-auto"
+                                    className="w-full sm:w-auto cursor-pointer"
                                     onClick={() => setIsSendDialogOpen(true)}
                                     disabled={isLoading}
                                 >

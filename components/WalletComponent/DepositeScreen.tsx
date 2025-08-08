@@ -48,20 +48,24 @@ export const DepositScreen = ({ onBack }: DepositScreenProps) => {
       </div>
 
       {/* Amount Input */}
-      <div className="space-y-4">
+      <div className="space-y-4 ">
         <div className="flex justify-between items-center">
           <span className="text-sm font-medium">Amount</span>
           <span className="text-sm text-text-secondary">Balance 0.0002949484 ETH</span>
         </div>
-        
-        <div className="flex items-center gap-4">
+
+        <div className="flex group items-center gap-4 p-2 bg-[#262626] rounded-md  focus-within:outline-2 focus-within:outline-white">
           <Input
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
-            className="text-4xl font-light border-none bg-transparent px-0 h-auto text-left"
+            className="text-4xl font-light border-none bg-[#262626] px-0 h-auto text-left focus:outline-none focus:ring-0"
             placeholder="0"
+            style={{
+              background:"#262626",
+              
+            }}
           />
-          <div className="flex items-center gap-2 px-3 py-2 bg-crypto-blue text-crypto-blue-foreground rounded-lg">
+          <div className="flex items-center gap-2 px-3 py-2 bg-crypto-blue text-crypto-blue-foreground rounded-lg bg-black">
             <div className="w-4 h-4 rounded-full bg-white"></div>
             <span className="font-medium">ETH</span>
             <span className="text-xs">▼</span>

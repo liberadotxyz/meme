@@ -37,13 +37,16 @@ export const SendScreen = ({ onBack }: SendScreenProps) => {
 
       {/* Amount Input */}
       <div className="space-y-4">
-        <div className="flex items-center gap-4 p-4 bg-wallet-bg rounded-lg">
-          <div className="flex-1">
+        <div className="flex items-center gap-4 p-4 bg-wallet-bg rounded-lg bg-[#262626] group  focus-within:outline-1 focus-within:outline-white">
+          <div className="flex-1 bg-[#262626]">
             <Input
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
-              className="text-4xl font-light border-none bg-transparent px-0 h-auto"
+              className="text-4xl font-light border-none bg-[#262626] px-0 h-auto focus:outline-none"
               placeholder="$0"
+              style={{
+                background:"#262626"
+              }}
             />
           </div>
           <div className="flex items-center gap-2 px-3 py-2 bg-crypto-blue text-crypto-blue-foreground rounded-lg">
