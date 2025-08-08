@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Settings, Minus, Zap, BarChart3, PieChart, Fuel, Copy } from "lucide-react";
+import { Settings, Minus, Zap, BarChart3, PieChart, Fuel, Copy, Wallet } from "lucide-react";
 import { Card } from "../ui/card";
 const TradingPanel = () => {
   const [activeTab, setActiveTab] = useState("buy");
@@ -18,7 +18,7 @@ const TradingPanel = () => {
       <div className="grid grid-cols-3 gap-1">
         <div className="col-span-2">
           <Card className="h-100  rounded-none">
-s
+            s
           </Card>
         </div>
         <div className="col-span-1">
@@ -60,9 +60,11 @@ s
                 <TabsContent value="buy" className="mt-0 space-y-4">
                   <div className="space-y-2 ">
                     <div className="flex items-center justify-end">
-                      <div className="flex items-center space-x-1">
+                      <div className="flex items-center">
+                        <Wallet className="h-3 w-3"></Wallet>
                         <Button variant="ghost" size="sm" className="h-5 w-5 p-0">
                           <Minus className="h-3 w-3" />
+
                         </Button>
                         <span className="text-xs text-muted-foreground">($-)</span>
                       </div>
@@ -91,7 +93,7 @@ s
                         className="h-8 text-xs cursor-pointer  border-border bg-surface hover:bg-surface-elevated hover:text-green-500"
                         onClick={() => setAmount(value)}
                         style={{
-                          paddingLeft:"20px"
+                          paddingLeft: "20px"
                         }}
                       >
                         {value}
@@ -146,7 +148,9 @@ s
                 <TabsContent value="sell" className="mt-0 space-y-4">
                   <div className="space-y-2 ">
                     <div className="flex items-center justify-end">
-                      <div className="flex items-center space-x-1">
+                      <div className="flex items-center ">
+                        <Wallet className="h-3 w-3"></Wallet>
+
                         <Button variant="ghost" size="sm" className="h-5 w-5 p-0">
                           <Minus className="h-3 w-3" />
                         </Button>
