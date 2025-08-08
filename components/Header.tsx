@@ -182,39 +182,47 @@ const WalletType = ({ onClose }: { onClose: any }) => {
     const searchParams = useSearchParams();
     const error = searchParams.get('error');
     return (
-        <div className="w-full max-w-md mx-auto bg-gray-900 rounded-2xl p-6 text-white">
+        <div className="w-full 
+        max-w-md 
+        mx-auto
+         bg-gray-900
+          rounded-2xl
+           p-6
+            text-white h-[320px]
+            flex
+            flex-direction
+            ">
 
-            <div className="space-y-6">
-                <div className=" flex flex-col items-center justify-center bg-gray-900 p-4">
-                    <div className="w-full max-w-sm space-y-8 mx-8">
-                        <div className="grid grid-cols-2 gap-4">
-                            <Button className='bg-gray-800 h-15 p-6 border border-gray-700 hover:bg-gray-700' onClick={() => signIn("google")}>
-                                <GoogleIcon />
-                            </Button>
-                            <Button className='bg-gray-800 h-15 p-6 border border-gray-700 hover:bg-gray-700' onClick={() => {
-                                signIn("twitter", {
-                                    callbackUrl: "/", // or any specific route you want to return to
-                                })
-                            }}>
-                                <TwitterIcon />
-                            </Button>
+            <div className=" flex flex-col items-center justify-center bg-gray-900 p-4">
+                <div className="w-full max-w-sm space-y-8 mx-8">
+                    <div className="grid grid-cols-2 gap-4">
+                        <Button className='bg-gray-800 h-15 p-6 border border-gray-700 hover:bg-gray-700' onClick={() => signIn("google")}>
+                            <GoogleIcon />
+                        </Button>
+                        <Button className='bg-gray-800 h-15 p-6 border border-gray-700 hover:bg-gray-700' onClick={() => {
+                            signIn("twitter", {
+                                callbackUrl: "/", // or any specific route you want to return to
+                            })
+                        }}>
+                            <TwitterIcon />
+                        </Button>
+                    </div>
+                    <div className="relative">
+                        <div className="absolute inset-0 flex items-center">
+                            <span className="w-full border-t border-gray-700" />
                         </div>
-                        <div className="relative">
-                            <div className="absolute inset-0 flex items-center">
-                                <span className="w-full border-t border-gray-700" />
-                            </div>
-                            <div className="relative flex justify-center text-xs uppercase">
-                                <span className="bg-gray-900 px-2 text-gray-400">or</span>
-                            </div>
+                        <div className="relative flex justify-center text-xs uppercase">
+                            <span className="bg-gray-900 px-2 text-gray-400">or</span>
                         </div>
-                        <div className="space-y-4">
-                            <div className="flex items-center justify-center w-full">
-                                <ConnectButton />
-                            </div>
+                    </div>
+                    <div className="space-y-4">
+                        <div className="flex items-center justify-center w-full">
+                            <ConnectButton />
                         </div>
                     </div>
                 </div>
             </div>
+
         </div>
     );
 };
