@@ -12,7 +12,7 @@ export default function TradeComponent() {
         <div className="flex flex-col items-center justify-items-center gap-0 ">
             {
                 [1, 11, 333, 4444, 66666].map((item) => (
-                    <div className="p-2 w-full max-w-3xl gap-0">
+                    <div className="p-2 w-full max-w-4xl gap-0">
                         <TradingCard
                             tokenName={`DAREALFNTRAP${item}`}
                             tokenIcon={"/images/aaa.png"}
@@ -67,7 +67,7 @@ const TokenCard = ({
     const { data: session, status } = useSession();
     console.log("session", session, status)
     return (
-        <Card className="bg-gradient-card border-border  p-4 shadow-card hover:border-primary/20 transition-all duration-300">
+        <Card className="bg-gradient-card w-full border-border  p-4 shadow-card hover:border-primary/20 transition-all duration-300">
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                     <div className="">

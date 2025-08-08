@@ -10,7 +10,7 @@ export default function GraduateComponent() {
         <div className="flex flex-col items-center justify-items-center gap-0 ">
             {
                 [1, 2, 3, 4, 6].map((item) => (
-                    <div className="p-2 w-full max-w-3xl gap-0">
+                    <div className="p-2 w-full max-w-4xl gap-0">
 
                         <TokenCard
                             name="SAILANA"

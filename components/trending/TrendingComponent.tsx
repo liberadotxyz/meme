@@ -8,10 +8,10 @@ import { Card } from "@/components/ui/card";
 import { CopyableEthText } from "../ui/copy-text";
 export default function Trending() {
     return (
-        <div className="flex flex-col items-center justify-items-center min-h-screen gap-0 ">
+        <div className="flex flex-col items-center justify-items-center min-h-screen gap-0 max-w-4xl ">
             {
                 [1, 2, 3, 4, 5].map((item) => (
-                    <div className="p-2 w-full max-w-3xl gap-0">
+                    <div className="p-2 w-full max-w-4xl gap-0">
 
                         <TokenCard
                             name="SAILANA"

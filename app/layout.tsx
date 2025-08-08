@@ -43,7 +43,7 @@ export default function RootLayout({
                 
                 <Header />
 
-                <div className="flex pt-16 min-h-screen max-w-3xl m-auto">
+                <div className="flex pt-16 min-h-screen max-w-4xl m-auto">
 
                   <main className="w-full mt-10">
 
