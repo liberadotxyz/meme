@@ -27,7 +27,7 @@ export default function Home() {
                 </CardContent>
             </Card>
             <Tabs defaultValue="trade" className="max-w-4xl">
-                <TabsList className="grid w-full grid-cols-4 h-12 sticky top-20 z-1 ">
+                <TabsList className="grid w-full grid-cols-4 h-12 sticky top-22 z-1 ">
                     <TabsTrigger value="trade" className="cursor-pointer">
                         <div className="flex items-center gap-2">
                             <span><ChartBarStacked></ChartBarStacked></span>
