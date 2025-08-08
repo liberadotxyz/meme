@@ -17,12 +17,12 @@ const TradingPanel = () => {
 
       <div className="grid grid-cols-3 gap-1">
         <div className="col-span-2">
-          <Card className="h-100  rounded-none">
+          <Card className="h-110  rounded-none border border-green-500">
             s
           </Card>
         </div>
         <div className="col-span-1">
-          <div className="p-2 border border-gray">
+          <div className="p-2 border border-green-500">
             <div className="flex flex-col gap-2 items-center justify-between">
               <div className="flex  items-center gap-2">
                 <h2 className="text-lg font-semibold">Deploy On Gtz </h2>
@@ -39,7 +39,7 @@ const TradingPanel = () => {
             </div>
           </div>
           {/* middle */}
-          <div className="p-2 border border-gray border-t-0">
+          <div className="p-2 border border-green-500 border-t-0">
             <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col ">
               <TabsList className="grid w-full grid-cols-2 mt-4 mb-2">
                 <TabsTrigger
@@ -236,7 +236,7 @@ const TradingPanel = () => {
           </div>
 
           {/* last */}
-          <div className="p-2 border border-gray mt-2">
+          <div className="p-2 border border-green-500 mt-2">
             <Tabs value={info} onValueChange={setInfo} className="flex-1 flex flex-col">
               <TabsList className="grid w-full grid-cols-2 mt-4 mb-2">
                 <TabsTrigger
