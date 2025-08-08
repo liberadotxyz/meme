@@ -4,7 +4,7 @@ import { Copy, ExternalLink, Star, Share2, Eye } from "lucide-react";
 
 const TokenHeader = () => {
   return (
-    <div className="bg-surface-elevated border-b border-border p-4">
+    <div className="bg-surface-elevated border-b border-border p-4 mb-1">
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
           {/* Token Logo and Info */}

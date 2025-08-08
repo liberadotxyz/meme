@@ -10,16 +10,16 @@ import { FaDiscord, FaTelegram, FaTwitter } from "react-icons/fa";
 import { TbWorld } from "react-icons/tb";
 
 type FormData = {
-  image: File | null;
-  name: string;
-  ticker: string;
-  description: string;
-  twitterFeeShare: string;
-  initialBuy: string;
-  websiteLink: string;
-  twitterLink: string;
-  telegramLink: string;
-  discordLink: string;
+    image: File | null;
+    name: string;
+    ticker: string;
+    description: string;
+    twitterFeeShare: string;
+    initialBuy: string;
+    websiteLink: string;
+    twitterLink: string;
+    telegramLink: string;
+    discordLink: string;
 };
 
 const TokenCreationForm = () => {
@@ -36,7 +36,7 @@ const TokenCreationForm = () => {
         telegramLink: "",
         discordLink: ""
     });
-    
+
     const [imagePreview, setImagePreview] = useState<string | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -44,7 +44,7 @@ const TokenCreationForm = () => {
         const file = event.target.files?.[0];
         if (file) {
             setFormData(prev => ({ ...prev, image: file }));
-            
+
             // Create preview URL
             const reader = new FileReader();
             reader.onloadend = () => {
@@ -61,7 +61,7 @@ const TokenCreationForm = () => {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        
+
         // Prepare the payload
         const payload = {
             ...formData,
@@ -69,7 +69,7 @@ const TokenCreationForm = () => {
             image: imagePreview,
             initialBuy: parseFloat(formData.initialBuy) || 0
         };
-        
+
         console.log("Submitting form with payload:", payload);
         // Here you would typically send the payload to your API
         // Example:
@@ -86,7 +86,7 @@ const TokenCreationForm = () => {
         // } catch (error) {
         //     console.error("Error creating token:", error);
         // }
-        
+
         // For demo purposes, we'll just log to console
         alert("Form submitted successfully! Check console for payload.");
     };
@@ -106,9 +106,9 @@ const TokenCreationForm = () => {
                             className="upload-area flex flex-col items-center justify-center h-32 rounded-lg cursor-pointer border border-dashed border-border hover:border-primary transition-colors"
                         >
                             {imagePreview ? (
-                                <img 
-                                    src={imagePreview} 
-                                    alt="Preview" 
+                                <img
+                                    src={imagePreview}
+                                    alt="Preview"
                                     className="w-full h-full object-cover rounded-lg"
                                 />
                             ) : (
@@ -273,7 +273,7 @@ const TokenCreationForm = () => {
                                         />
                                     </div>
                                 </div>
-                                
+
                                 {/* Telegram Link */}
                                 <div className="space-y-2">
                                     <label htmlFor="telegramLink" className="text-sm text-muted-foreground">Telegram link (optional)</label>
@@ -314,7 +314,7 @@ const TokenCreationForm = () => {
                     </div>
 
                     {/* Submit Button */}
-                    <Button 
+                    <Button
                         type="submit"
                         className="w-full gradient-button text-primary-foreground font-medium py-3 rounded-lg bg-green-500 hover:bg-green-600 transition-colors"
                     >
