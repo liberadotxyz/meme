@@ -1,6 +1,14 @@
 import TokenHeader from "@/components/detalpage/TreadingHeader";
 import TradingPanel from "@/components/detalpage/TradingPanel";
 import { getDetail } from "@/api/topToken";
+interface Params {
+  id: string;
+}
+
+interface Props {
+  params: Params;
+  searchParams?: Record<string, string | string[] | undefined>;
+}
 const getTokenDetail = async (id: string) => {
     try {
         const { data } = await getDetail(id);
@@ -18,11 +26,7 @@ const getTokenDetail = async (id: string) => {
 };
 
 
-export default async function TokenCreationForm({
-    params,
-}: {
-    params: { id: string };
-}) {
+export default async function TokenCreationForm({ params }: Props) {
     const { id } = params;
     const tokenData = await getTokenDetail(id);
 
