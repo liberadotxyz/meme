@@ -1,39 +1,29 @@
+import { Metadata, ResolvingMetadata } from 'next'
 import TokenHeader from "@/components/detalpage/TreadingHeader";
 import TradingPanel from "@/components/detalpage/TradingPanel";
 import { getDetail } from "@/api/topToken";
 
-interface Params {
-  id: string;
-}
-
-interface Props {
-  params: Params;
-  searchParams?: Record<string, string | string[] | undefined>;
+type Props = {
+  params: { id: string }
+  searchParams: { [key: string]: string | string[] | undefined }
 }
 
 const getTokenDetail = async (id: string) => {
     try {
         const { data } = await getDetail(id);
-
-        if (!data) {
-            console.warn(`No data found for token ID: ${id}`);
-            return null;
-        }
-
-        return data;
+        return data || null;
     } catch (error) {
         console.error("Error fetching token detail:", error);
         return null;
     }
 };
 
-export default async function TokenCreationForm({ params }: Props) {
-    const { id } = params; // Remove the await here - params is not a promise
-    const tokenData = await getTokenDetail(id);
+export default async function TokenDetailPage({ params }: Props) {
+    const tokenData = await getTokenDetail(params.id);
 
     if (!tokenData) {
         return <div className="min-h-screen flex items-center justify-center text-red-500">
-            Token data not found for ID: {id}
+            Token data not found for ID: {params.id}
         </div>;
     }
 
