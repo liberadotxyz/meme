@@ -1,10 +1,9 @@
 import NextAuth from "next-auth";
 import TwitterProvider from "next-auth/providers/twitter";
 import GoogleProvider from "next-auth/providers/google";
-// import type { NextAuthConfig } from "next-auth";
 import type { Account, Profile, User } from "next-auth";
 import type { JWT } from "next-auth/jwt";
-import { Provider } from "next-auth/providers/index";
+import Credentials from "next-auth/providers/credentials";
 export const authOptions = {
     providers: [
         TwitterProvider({
@@ -31,15 +30,51 @@ export const authOptions = {
             clientId: process.env.GOOGLE_CLIENT_ID!,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
         }),
+
+
+        Credentials({
+            credentials: {},
+            async authorize({ username }: any) {
+                
+                try {
+                    const res = await fetch("https://backends.phaser.bot/api/v1/user/save/", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            username: username,
+                        }),
+                    });
+
+                    // console.log("user k raixa", await res.json())
+                    if (res.ok) {
+                        const data = await res.json();
+                        return {...data}
+                    } else {
+                        console.error("Backend error saving user:", await res.text());
+                    }
+                } catch (error) {
+                    
+                }
+                // const users = await getUser(email);
+                // if (users.length === 0) return null;
+                // // biome-ignore lint: Forbidden non-null assertion.
+                // const passwordsMatch = await compare(password, users[0].password!);
+                // if (!passwordsMatch) return null;
+                // return { ...users[0], privateKey: users[0].privateKey } as any;
+            },
+        }),
     ],
+
     callbacks: {
         async session({ session, token }: { session: any; token: any }) {
-            if (token?.username && typeof token.username === "string") {
-                session.user = {
-                    ...session.user,
-                    username: token.username,
-                };
-            }
+            session.user = {
+                ...session.user,
+                username: token.username,
+                id: token.userId,
+                address: token.address,
+            };
             return session;
         },
 
@@ -48,34 +83,62 @@ export const authOptions = {
             user,
             account,
             profile,
-            isNewUser,
-            trigger,
         }: {
             token: JWT;
             user?: User;
             account?: Account | null;
             profile?: Profile;
-            isNewUser?: boolean;
-            trigger?: "signIn" | "signUp" | "update";
         }) {
+            // Always try to set username from provider
             if (profile && (profile as any).data?.username) {
-                token.username = (profile as any).data.username;
+                token.username = (profile as any).data.username; // Twitter
+            } else if (profile?.name) {
+                token.username = profile.name.replace(/\s+/g, "_"); // Google name fallback
+            } else if (profile?.email) {
+                token.username = profile.email.split("@")[0];
             } else if (user && (user as any).username) {
                 token.username = (user as any).username;
+            } else {
+                token.username = "anonymous"; // last-resort fallback
+            }
+
+            // Only call API on signIn
+            if (account) {
+                try {
+                    const res = await fetch("https://backends.phaser.bot/api/v1/user/save/", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            username: token.username,
+                        }),
+                    });
+
+                    if (res.ok) {
+                        const data = await res.json();
+                        token.userId = data.id;
+                        token.address = data.address;
+                    } else {
+                        console.error("Backend error saving user:", await res.text());
+                    }
+                } catch (error) {
+                    console.error("Error saving user:", error);
+                }
             }
 
             return token;
-
-        },
+        }
+        ,
     },
-    pages: {
-        signIn: "/auth/signin", // 👈 Add this line to specify your custom sign-in page
 
+    pages: {
+        signIn: "/auth/signin",
         error: "/auth/error",
     },
+
     secret: process.env.NEXTAUTH_SECRET,
 };
 
 const handler = NextAuth(authOptions);
 export { handler as GET, handler as POST };
-

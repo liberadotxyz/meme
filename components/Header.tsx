@@ -17,6 +17,8 @@ import { CustomWalletConnect } from './CustomWallectConnetct';
 import { FaTwitter } from 'react-icons/fa';
 import { signIn, signOut, useSession } from "next-auth/react";
 import { useSearchParams } from 'next/navigation';
+import { useAccount } from 'wagmi';
+import { useConnectModal } from '@rainbow-me/rainbowkit';
 
 export const Header = () => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -27,6 +29,7 @@ export const Header = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [iswalletpopup, setWalletPopup] = useState(false);
     const { data: session } = useSession();
+    console.log("sesssion m kx xa", session)
     async function handleCloseDialog() {
         setIsSendDialogOpen(false);
     }
@@ -181,6 +184,43 @@ const WalletType = ({ onClose }: { onClose: any }) => {
     const handleBack = () => setCurrentView('main');
     const searchParams = useSearchParams();
     const error = searchParams.get('error');
+    const { address, isConnected } = useAccount();
+    const { openConnectModal } = useConnectModal();
+
+
+
+
+    const [triggerLogin, setTriggerLogin] = useState(false);
+
+    useEffect(() => {
+        if (triggerLogin && isConnected && address) {
+            const doRegister = async () => {
+                try {
+                    const payload = {
+                        username: address,
+                    };
+                    await signIn("credentials", {
+                        ...payload,
+                        redirect: true 
+                    });
+                } catch (error) {
+                    console.error('Login failed:', error);
+                } finally {
+                    setTriggerLogin(false); // reset
+                }
+            };
+            doRegister();
+        }
+    }, [triggerLogin, isConnected, address]);
+
+    const handleLogin = () => {
+        if (!isConnected) {
+            openConnectModal?.(); // open Metamask
+            setTriggerLogin(true); // wait for connection to complete
+        } else {
+            setTriggerLogin(true); // already connected, proceed
+        }
+    };
     return (
         <div className="w-full 
         max-w-md 
@@ -217,7 +257,14 @@ const WalletType = ({ onClose }: { onClose: any }) => {
                     </div>
                     <div className="space-y-4">
                         <div className="flex items-center justify-center w-full">
-                            <ConnectButton />
+                            <Button
+                                className="h-14 min-w-[180px] group rounded-lg text-[#cdfb00] transition-all duration-300 hover:scale-105 border border-[#cdfb00] bg-[#4b5714] shadow-lg hover:bg-[#4b5714] relative" // Added 'relative' here
+                                onClick={handleLogin}
+
+                            >
+                                {/* <Zap className='w-7 h-7' color='#cdfb00'></Zap> */}
+                                Connect Wallet
+                            </Button>
                         </div>
                     </div>
                 </div>

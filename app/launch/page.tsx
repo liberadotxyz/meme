@@ -8,14 +8,15 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { ChevronUp, ChevronDown, ImagePlus } from "lucide-react";
 import { FaDiscord, FaTelegram, FaTwitter } from "react-icons/fa";
 import { TbWorld } from "react-icons/tb";
-
+import { deployToken } from "@/api/topToken";
+import { useRouter } from "next/navigation";
 type FormData = {
     image: File | null;
     name: string;
-    ticker: string;
+    symbol: string;
     description: string;
     twitterFeeShare: string;
-    initialBuy: string;
+    eth_amount_eth: string;
     websiteLink: string;
     twitterLink: string;
     telegramLink: string;
@@ -23,14 +24,15 @@ type FormData = {
 };
 
 const TokenCreationForm = () => {
+    const router = useRouter()
     const [isLessOptionsOpen, setIsLessOptionsOpen] = useState(false);
     const [formData, setFormData] = useState<FormData>({
         image: null,
         name: "",
-        ticker: "",
+        symbol: "",
         description: "",
         twitterFeeShare: "",
-        initialBuy: "0.00",
+        eth_amount_eth: "0.00",
         websiteLink: "",
         twitterLink: "",
         telegramLink: "",
@@ -59,18 +61,24 @@ const TokenCreationForm = () => {
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async(e: React.FormEvent) => {
         e.preventDefault();
 
         // Prepare the payload
         const payload = {
-            ...formData,
+            // ...formData,
             // Convert image to base64 if needed for backend
-            image: imagePreview,
-            initialBuy: parseFloat(formData.initialBuy) || 0
+            // image: imagePreview,
+            name:"lll",
+            symbol:"ssss",
+            metadata:"sss",
+            eth_amount_eth: parseFloat(formData.eth_amount_eth) || 0
         };
 
         console.log("Submitting form with payload:", payload);
+        let data = await deployToken(payload);
+        console.log("deploued token", data)
+        router.push(`/detail/${data.token_address}`)
         // Here you would typically send the payload to your API
         // Example:
         // try {
@@ -88,7 +96,7 @@ const TokenCreationForm = () => {
         // }
 
         // For demo purposes, we'll just log to console
-        alert("Form submitted successfully! Check console for payload.");
+        // alert("Form submitted successfully! Check console for payload.");
     };
 
     const triggerFileInput = () => {
@@ -145,11 +153,11 @@ const TokenCreationForm = () => {
 
                     {/* Ticker Field */}
                     <div className="space-y-2">
-                        <label htmlFor="ticker" className="text-md text-muted-foreground">Ticker</label>
+                        <label htmlFor="symbol" className="text-md text-muted-foreground">Ticker</label>
                         <Input
-                            id="ticker"
-                            name="ticker"
-                            value={formData.ticker}
+                            id="symbol"
+                            name="symbol"
+                            value={formData.symbol}
                             onChange={handleInputChange}
                             placeholder="Token symbol"
                             className="form-input bg-input border-border text-foreground h-12 p-2"
@@ -198,9 +206,9 @@ const TokenCreationForm = () => {
                             <div className="relative flex">
                                 <Input
                                     id="initialBuy"
-                                    name="initialBuy"
+                                    name="eth_amount_eth"
                                     type="number"
-                                    value={formData.initialBuy}
+                                    value={formData.eth_amount_eth}
                                     onChange={handleInputChange}
                                     className="form-input bg-input border-border text-foreground pl-8 p-2 h-12"
                                     placeholder="0.00"

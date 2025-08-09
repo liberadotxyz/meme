@@ -43,13 +43,13 @@ export default function Home() {
                     <TabsTrigger value="presale" className="cursor-pointer">
                         <div className="flex items-center gap-2">
                             <span><BadgeDollarSign></BadgeDollarSign></span>
-                            <span>Pre-sale</span>
+                            <span>Top Tokens</span>
                         </div>
                     </TabsTrigger>
                     <TabsTrigger value="topGainers" className="cursor-pointer">
                         <div className="flex items-center gap-2">
                             <span><Codesandbox></Codesandbox></span>
-                            <span>Graduated</span>
+                            <span>Recent</span>
                         </div>
                     </TabsTrigger>
 

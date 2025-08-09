@@ -22,11 +22,13 @@ import {
     User
 } from 'lucide-react';
 import { signIn, signOut, useSession } from "next-auth/react";
-
+import { useDisconnect } from 'wagmi';
 export function Wallet() {
     const [open, setOpen] = useState(false);
     const { data: session } = useSession()
     const [clickBuy, setClickBuy] = useState(false);
+      const { disconnect } = useDisconnect();
+
     return (
         <DropdownMenu open={open} onOpenChange={setOpen}>
 
@@ -36,7 +38,7 @@ export function Wallet() {
                     className="flex items-center gap-3 px-4 py-1 h-auto rounded-md border border-border bg-card hover:bg-accent transition-colors"
                 >
                     <Avatar className="w-8 h-7">
-                        <AvatarImage src="/lovable-uploads/1440f4c0-7c35-4b80-ad71-a260ff5985b7.png" alt="Sardor" />
+                        {/* <AvatarImage src="/lovable-uploads/1440f4c0-7c35-4b80-ad71-a260ff5985b7.png" alt="Sardor" /> */}
                         <AvatarFallback><User className="w-4 h-4" /></AvatarFallback>
                     </Avatar>
                     <span className="font-medium text-foreground">0X12222</span>
@@ -95,6 +97,9 @@ export function Wallet() {
 
                     <DropdownMenuItem className="flex items-center gap-3 px-3 py-3 cursor-pointer text-destructive focus:text-destructive"
                         onClick={() => {
+                            disconnect();
+                            localStorage.removeItem('wagmi.connected');
+                            localStorage.removeItem('wagmi.wallet'); // optional
                             signOut()
                         }}
                     >
