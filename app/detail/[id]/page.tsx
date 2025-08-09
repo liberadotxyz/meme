@@ -4,13 +4,13 @@ import TokenHeader from "@/components/detalpage/TreadingHeader";
 import TradingPanel from "@/components/detalpage/TradingPanel";
 import { getDetail } from "@/api/topToken";
 
-interface TokenDetailPageProps {
+interface MyTokenPageProps {
   params: {
     id: string;
   };
 }
 
-const getTokenDetail = async (id: string) => {
+const getTokenDetail = async (id: any) => {
   try {
     const { data } = await getDetail(id);
     return data || null;
@@ -20,7 +20,7 @@ const getTokenDetail = async (id: string) => {
   }
 };
 
-export default async function TokenDetailPage({ params }: TokenDetailPageProps) {
+export default async function TokenDetailPage({ params }: any) {
   const tokenData = await getTokenDetail(params.id);
 
   if (!tokenData) {
