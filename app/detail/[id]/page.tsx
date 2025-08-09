@@ -23,7 +23,7 @@ export default async function TokenCreationForm({
 }: {
     params: { id: string };
 }) {
-    const { id } = await params;
+    const { id } = params;
     const tokenData = await getTokenDetail(id);
 
     if (!tokenData) {
