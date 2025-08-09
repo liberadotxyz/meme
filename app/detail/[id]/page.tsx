@@ -27,7 +27,7 @@ const getTokenDetail = async (id: string) => {
 
 
 export default async function TokenCreationForm({ params }: Props) {
-    const { id } = params;
+    const { id } = await params;
     const tokenData = await getTokenDetail(id);
 
     if (!tokenData) {
