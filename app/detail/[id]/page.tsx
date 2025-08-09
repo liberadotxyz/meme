@@ -19,7 +19,7 @@ const getTokenDetail = async (id: string) => {
 };
 
 export default async function TokenDetailPage({ params }: Props) {
-    const tokenData = await getTokenDetail(params.id);
+    const tokenData = await getTokenDetail(await params.id);
 
     if (!tokenData) {
         return <div className="min-h-screen flex items-center justify-center text-red-500">
