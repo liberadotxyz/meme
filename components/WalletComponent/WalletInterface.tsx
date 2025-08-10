@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -10,6 +10,9 @@ import { ReceiveScreen } from './ReceiveScreen';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { TransferScreen } from './Transfer';
+import { getBalance } from '@/api/topToken';
+import { useSession } from 'next-auth/react';
+import { CopyableEthText } from '../ui/copy-text';
 type WalletView = 'main' | 'deposit' | 'send' | 'receive' | 'transfer';
 
 interface Token {
@@ -46,14 +49,31 @@ interface WalletInterfaceProps {
     onClose: () => void;
 }
 
+interface BalanceProp  {
+    token_address:string,
+    name:string,
+    symbol:string,
+    balance:string,
+    logo:string
+}
+
 export const WalletInterface = ({ onClose }: WalletInterfaceProps) => {
     const [currentView, setCurrentView] = useState<WalletView>('main');
     const [activeTab, setActiveTab] = useState('balance');
-
+    const { data: session } = useSession();
+    const [balance, setBalance] = useState<BalanceProp[]>([])
     const handleBack = () => {
         setCurrentView('main');
     };
 
+    const getUserBalance = async () => {
+        let data = await getBalance(session?.user.address || "");
+        setBalance(data)
+    }
+
+    useEffect(() => {
+        getUserBalance()
+    }, [])
     const renderCurrentView = () => {
         switch (currentView) {
             case 'deposit':
@@ -75,15 +95,16 @@ export const WalletInterface = ({ onClose }: WalletInterfaceProps) => {
 
                                     <div className="flex items-center gap-2 text-sm text-text-secondary">
 
-                                        <span>0xcc0c...e129</span>
-                                        <Copy className="w-4 h-4 cursor-pointer hover:text-foreground" />
+                                        {/* <span>{session?.user.address?.slice(0,5)}...{session?.user.address?.slice(-4)}</span> */}
+                                        <CopyableEthText text={session?.user.address || ""}></CopyableEthText>
+                                        {/* <Copy className="w-4 h-4 cursor-pointer hover:text-foreground" /> */}
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                         {/* Balance */}
-                        <WalletBalance />
+                        <WalletBalance balance={balance[0]} />
 
                         {/* Action Buttons */}
                         <div className="grid grid-cols-3 gap-4">

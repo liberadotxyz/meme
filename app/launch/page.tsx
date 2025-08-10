@@ -1,5 +1,7 @@
 "use client";
 import { useState, useRef } from "react";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -9,109 +11,174 @@ import { ChevronUp, ChevronDown, ImagePlus } from "lucide-react";
 import { FaDiscord, FaTelegram, FaTwitter } from "react-icons/fa";
 import { TbWorld } from "react-icons/tb";
 import { deployToken } from "@/api/topToken";
-import { useRouter } from "next/navigation";
+import { Loader2 } from "lucide-react";
+import { saveToken } from "@/api/topToken";
+const PINATA_API_KEY = process.env.PINATA_API_KEY!;
+const PINATA_API_SECRET = process.env.PINATA_API_SECRET!;
+import { useSession } from "next-auth/react";
 type FormData = {
     image: File | null;
     name: string;
     symbol: string;
     description: string;
-    twitterFeeShare: string;
-    eth_amount_eth: string;
-    websiteLink: string;
     twitterLink: string;
+    websiteLink: string;
     telegramLink: string;
     discordLink: string;
+    eth_amount_eth: string;
 };
 
 const TokenCreationForm = () => {
-    const router = useRouter()
-    const [isLessOptionsOpen, setIsLessOptionsOpen] = useState(false);
+    const router = useRouter();
+    const {data:session} = useSession()
     const [formData, setFormData] = useState<FormData>({
         image: null,
         name: "",
         symbol: "",
         description: "",
-        twitterFeeShare: "",
-        eth_amount_eth: "0.00",
-        websiteLink: "",
         twitterLink: "",
+        websiteLink: "",
         telegramLink: "",
-        discordLink: ""
+        discordLink: "",
+        eth_amount_eth: "0.00",
     });
-
+    const [loading, setLoading] = useState(false)
     const [imagePreview, setImagePreview] = useState<string | null>(null);
+    const [isLessOptionsOpen, setIsLessOptionsOpen] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
-    const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0];
+    const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0] || null;
+        setFormData((prev) => ({ ...prev, image: file }));
         if (file) {
-            setFormData(prev => ({ ...prev, image: file }));
-
-            // Create preview URL
             const reader = new FileReader();
-            reader.onloadend = () => {
-                setImagePreview(reader.result as string);
-            };
+            reader.onload = () => setImagePreview(reader.result as string);
             reader.readAsDataURL(file);
+        } else {
+            setImagePreview(null);
         }
     };
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const handleInputChange = (
+        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    ) => {
         const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
+        setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleSubmit = async(e: React.FormEvent) => {
-        e.preventDefault();
+    const uploadFileToPinata = async (file: File) => {
+        const url = `https://api.pinata.cloud/pinning/pinFileToIPFS`;
 
-        // Prepare the payload
-        const payload = {
-            // ...formData,
-            // Convert image to base64 if needed for backend
-            // image: imagePreview,
-            name:"lll",
-            symbol:"ssss",
-            metadata:"sss",
-            eth_amount_eth: parseFloat(formData.eth_amount_eth) || 0
+        const data = new FormData();
+        data.append("file", file);
+
+        const metadata = JSON.stringify({
+            name: file.name,
+        });
+        data.append("pinataMetadata", metadata);
+
+        const res = await axios.post(url, data, {
+            maxBodyLength: Infinity,
+            headers: {
+                "Content-Type": "multipart/form-data",
+                pinata_api_key: "d86aa0fa71d8ae0e415b",
+                pinata_secret_api_key: "c1cbfd9c7eb3ac8ece55a90d3e26c8d1cee24136104ae452285b316621c216fd",
+            },
+        });
+
+        return res.data.IpfsHash;
+    };
+
+    const uploadJSONToPinata = async (json: object) => {
+        const url = `https://api.pinata.cloud/pinning/pinJSONToIPFS`;
+
+        const res = await axios.post(url, json, {
+            headers: {
+                pinata_api_key: "d86aa0fa71d8ae0e415b",
+                pinata_secret_api_key: "c1cbfd9c7eb3ac8ece55a90d3e26c8d1cee24136104ae452285b316621c216fd",
+            },
+        });
+
+        return res.data.IpfsHash;
+    };
+
+    const uploadToPinata = async () => {
+        if (!formData.image) throw new Error("No image selected");
+        // Upload image first
+        const imageCID = await uploadFileToPinata(formData.image);
+
+        // Create metadata JSON linking to imageCID
+        const metadata = {
+            name: formData.name,
+            description: formData.description || "",
+            image: `ipfs://${imageCID}`,
+            properties: {
+                website: formData.websiteLink,
+                twitter: formData.twitterLink,
+                telegram: formData.telegramLink,
+                discord: formData.discordLink,
+            },
         };
 
-        console.log("Submitting form with payload:", payload);
-        let data = await deployToken(payload);
-        console.log("deploued token", data)
-        router.push(`/detail/${data.token_address}`)
-        // Here you would typically send the payload to your API
-        // Example:
-        // try {
-        //     const response = await fetch('/api/create-token', {
-        //         method: 'POST',
-        //         body: JSON.stringify(payload),
-        //         headers: {
-        //             'Content-Type': 'application/json'
-        //         }
-        //     });
-        //     const data = await response.json();
-        //     console.log("Token created:", data);
-        // } catch (error) {
-        //     console.error("Error creating token:", error);
-        // }
+        // Upload metadata JSON
+        const metadataCID = await uploadJSONToPinata(metadata);
 
-        // For demo purposes, we'll just log to console
-        // alert("Form submitted successfully! Check console for payload.");
+        return {
+            imageCID,
+            metadataCID,
+            metadataURI: metadataCID,
+        };
     };
 
-    const triggerFileInput = () => {
-        fileInputRef.current?.click();
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setLoading(true)
+
+        try {
+            const { metadataURI } = await uploadToPinata();
+            console.log("Metadata URI:", metadataURI);
+
+            const payload = {
+                name: formData.name,
+                symbol: formData.symbol,
+                metadata: metadataURI,
+                eth_amount_eth: parseFloat(formData.eth_amount_eth) || 0,
+            };
+
+            console.log("Payload:", payload);
+            // Example: call deployToken(payload) or send to your backend
+            const data = await deployToken(payload);
+            let payload2 = {
+                username: session?.user.address,
+                token_address: data.token_address,
+                pool_address: data.pool_address,
+                name: formData.name,
+                symbol: formData.symbol
+            }
+
+            await saveToken(payload2)
+            router.push(`/detail/${data.pool_address}`);
+        } catch (error) {
+            console.error("Pinata upload failed:", error);
+            alert("Upload failed: " + (error as Error).message);
+            setLoading(false)
+
+        }
     };
+
+    const triggerFileInput = () => fileInputRef.current?.click();
 
     return (
         <div className="min-h-screen p-4 md:p-8">
-            <div className="max-w-4xl mx-auto ">
-                <form onSubmit={handleSubmit} className="p-6 space-y-6 bg-card border-none rounded-md">
-                    {/* Image Upload */}
+            <div className="max-w-4xl mx-auto">
+                <form
+                    onSubmit={handleSubmit}
+                    className="p-6 bg-card space-y-6 rounded-md"
+                >
                     <div className="space-y-2">
                         <div
                             onClick={triggerFileInput}
-                            className="upload-area flex flex-col items-center justify-center h-32 rounded-lg cursor-pointer border border-dashed border-border hover:border-primary transition-colors"
+                            className="upload-area flex items-center justify-center h-32 border-dashed border rounded-lg cursor-pointer hover:border-primary transition-colors"
                         >
                             {imagePreview ? (
                                 <img
@@ -122,211 +189,166 @@ const TokenCreationForm = () => {
                             ) : (
                                 <>
                                     <ImagePlus className="w-8 h-8 text-primary mb-2" />
-                                    <span className="text-sm text-muted-foreground">Upload image</span>
+                                    <span className="text-sm text-muted-foreground">
+                                        Upload image
+                                    </span>
                                 </>
                             )}
                             <input
-                                ref={fileInputRef}
-                                id="image-upload"
-                                name="image"
                                 type="file"
                                 accept="image/*"
                                 onChange={handleImageUpload}
                                 className="hidden"
+                                ref={fileInputRef}
                             />
                         </div>
                     </div>
 
-                    {/* Name Field */}
-                    <div className="space-y-2">
-                        <label htmlFor="name" className="text-md text-muted-foreground">Name</label>
-                        <Input
-                            id="name"
-                            name="name"
-                            value={formData.name}
-                            onChange={handleInputChange}
-                            placeholder="Token name"
-                            className="form-input bg-input border-border text-foreground p-2 h-12"
-                            required
-                        />
-                    </div>
-
-                    {/* Ticker Field */}
-                    <div className="space-y-2">
-                        <label htmlFor="symbol" className="text-md text-muted-foreground">Ticker</label>
-                        <Input
-                            id="symbol"
-                            name="symbol"
-                            value={formData.symbol}
-                            onChange={handleInputChange}
-                            placeholder="Token symbol"
-                            className="form-input bg-input border-border text-foreground h-12 p-2"
-                            required
-                        />
-                    </div>
-
-                    {/* Description Field */}
-                    <div className="space-y-2">
-                        <label htmlFor="description" className="text-md text-muted-foreground">Description</label>
-                        <Textarea
-                            id="description"
-                            name="description"
-                            value={formData.description}
-                            onChange={handleInputChange}
-                            placeholder="Token description"
-                            className="form-input bg-input border-border text-foreground min-h-[80px] resize-none"
-                            required
-                        />
-                    </div>
-
-                    {/* Share Fees Section */}
+                    {/* Name, Symbol, Description fields */}
                     <div className="space-y-4">
-                        <div className="space-y-2">
-                            <label htmlFor="twitterFeeShare" className="text-md text-muted-foreground">
-                                @ Share fees with a twitter account (optional)
-                            </label>
+                        <div>
+                            <label className="text-md text-muted-foreground">Name</label>
                             <Input
-                                id="twitterFeeShare"
-                                name="twitterFeeShare"
-                                value={formData.twitterFeeShare}
+                                name="name"
+                                value={formData.name}
                                 onChange={handleInputChange}
-                                placeholder="Twitter username"
-                                className="form-input bg-input border-border text-foreground h-12 p-2"
+                                required
                             />
                         </div>
-                        <p className="text-xs text-muted-foreground">
-                            The twitter user above will be able to claim 90% of the fees generated by this coin, you will receive the remaining 10%
-                        </p>
+                        <div>
+                            <label className="text-md text-muted-foreground">Ticker</label>
+                            <Input
+                                name="symbol"
+                                value={formData.symbol}
+                                onChange={handleInputChange}
+                                required
+                            />
+                        </div>
+                        <div>
+                            <label className="text-md text-muted-foreground">
+                                Description
+                            </label>
+                            <Textarea
+                                name="description"
+                                value={formData.description}
+                                onChange={handleInputChange}
+                            />
+                        </div>
                     </div>
 
-                    {/* Initial Buy Section */}
-                    <div className="space-y-4">
-                        <div className="space-y-2">
-                            <label htmlFor="initialBuy" className="text-md text-muted-foreground">Initial Buy</label>
-                            <div className="relative flex">
-                                <Input
-                                    id="initialBuy"
-                                    name="eth_amount_eth"
-                                    type="number"
-                                    value={formData.eth_amount_eth}
-                                    onChange={handleInputChange}
-                                    className="form-input bg-input border-border text-foreground pl-8 p-2 h-12"
-                                    placeholder="0.00"
-                                    min="0"
-                                    step="0.01"
-                                    required
-                                />
-                                <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground">
-                                    ETH
-                                </span>
-                            </div>
+                    {/* ETH amount */}
+                    <div>
+                        <label className="text-md text-muted-foreground">Initial Buy</label>
+                        <div className="relative flex">
+                            <Input
+                                type="number"
+                                name="eth_amount_eth"
+                                value={formData.eth_amount_eth}
+                                onChange={handleInputChange}
+                                step="0.01"
+                                min="0"
+                                required
+                            />
+                            <span className="absolute right-3 top-1/2 -translate-y-1/2">
+                                ETH
+                            </span>
                         </div>
-
-                        <p className="text-xs text-muted-foreground">
-                            Make sure to leave ~0.05 ETH for tx fees
-                        </p>
-
-                        <div className="flex items-center justify-between text-sm">
-                            <div className="flex items-center gap-2">
-                                <span className="w-2 h-2 rounded-full bg-primary"></span>
-                                <span className="text-muted-foreground">0 ETH</span>
-                            </div>
-                            <span className="text-foreground">$0</span>
-                        </div>
-
-                        {/* Less Options */}
-                        <Collapsible open={isLessOptionsOpen} onOpenChange={setIsLessOptionsOpen}>
-                            <CollapsibleTrigger className="flex items-center gap-2 text-primary hover:text-primary/80 transition-colors">
-                                {isLessOptionsOpen ? (
-                                    <ChevronUp className="w-4 h-4" />
-                                ) : (
-                                    <ChevronDown className="w-4 h-4" />
-                                )}
-                                <span className="text-sm font-medium">Less options</span>
-                            </CollapsibleTrigger>
-
-                            <CollapsibleContent className="mt-4 space-y-4">
-                                {/* Website Link */}
-                                <div className="space-y-2">
-                                    <label htmlFor="websiteLink" className="text-sm text-muted-foreground">Website link (optional)</label>
-                                    <div className="relative flex-1">
-                                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
-                                            <TbWorld />
-                                        </span>
-                                        <Input
-                                            id="websiteLink"
-                                            name="websiteLink"
-                                            value={formData.websiteLink}
-                                            onChange={handleInputChange}
-                                            placeholder="https://yourwebsite.com"
-                                            className="pl-8 bg-input border-border h-12"
-                                        />
-                                    </div>
-                                </div>
-
-                                {/* Twitter/X Link */}
-                                <div className="space-y-2">
-                                    <label htmlFor="twitterLink" className="text-sm text-muted-foreground">Twitter/X link (optional)</label>
-                                    <div className="relative flex-1">
-                                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
-                                            <FaTwitter />
-                                        </span>
-                                        <Input
-                                            id="twitterLink"
-                                            name="twitterLink"
-                                            value={formData.twitterLink}
-                                            onChange={handleInputChange}
-                                            placeholder="https://twitter.com/username"
-                                            className="pl-8 bg-input border-border h-12"
-                                        />
-                                    </div>
-                                </div>
-
-                                {/* Telegram Link */}
-                                <div className="space-y-2">
-                                    <label htmlFor="telegramLink" className="text-sm text-muted-foreground">Telegram link (optional)</label>
-                                    <div className="relative flex-1">
-                                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
-                                            <FaTelegram />
-                                        </span>
-                                        <Input
-                                            id="telegramLink"
-                                            name="telegramLink"
-                                            value={formData.telegramLink}
-                                            onChange={handleInputChange}
-                                            placeholder="https://t.me/username"
-                                            className="pl-8 bg-input border-border h-12"
-                                        />
-                                    </div>
-                                </div>
-
-                                {/* Discord Link */}
-                                <div className="space-y-2">
-                                    <label htmlFor="discordLink" className="text-sm text-muted-foreground">Discord link (optional)</label>
-                                    <div className="relative flex-1">
-                                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
-                                            <FaDiscord />
-                                        </span>
-                                        <Input
-                                            id="discordLink"
-                                            name="discordLink"
-                                            value={formData.discordLink}
-                                            onChange={handleInputChange}
-                                            placeholder="https://discord.gg/invitecode"
-                                            className="pl-8 bg-input border-border h-12"
-                                        />
-                                    </div>
-                                </div>
-                            </CollapsibleContent>
-                        </Collapsible>
                     </div>
 
-                    {/* Submit Button */}
-                    <Button
-                        type="submit"
-                        className="w-full gradient-button text-primary-foreground font-medium py-3 rounded-lg bg-green-500 hover:bg-green-600 transition-colors"
+                    {/* Optional links */}
+                    <Collapsible
+                        open={isLessOptionsOpen}
+                        onOpenChange={setIsLessOptionsOpen}
                     >
-                        Submit
+                        <CollapsibleTrigger className="flex items-center gap-2">
+                            {isLessOptionsOpen ? <ChevronUp /> : <ChevronDown />}
+                            <span>More Options</span>
+                        </CollapsibleTrigger>
+                        <CollapsibleContent className="mt-4 space-y-4">
+                            {/* Website Link */}
+                            <div className="space-y-2">
+                                <label htmlFor="websiteLink" className="text-sm text-muted-foreground">Website link (optional)</label>
+                                <div className="relative flex-1">
+                                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                                        <TbWorld />
+                                    </span>
+                                    <Input
+                                        id="websiteLink"
+                                        name="websiteLink"
+                                        value={formData.websiteLink}
+                                        onChange={handleInputChange}
+                                        placeholder="https://yourwebsite.com"
+                                        className="pl-8 bg-input border-border h-12"
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Twitter/X Link */}
+                            <div className="space-y-2">
+                                <label htmlFor="twitterLink" className="text-sm text-muted-foreground">Twitter/X link (optional)</label>
+                                <div className="relative flex-1">
+                                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                                        <FaTwitter />
+                                    </span>
+                                    <Input
+                                        id="twitterLink"
+                                        name="twitterLink"
+                                        value={formData.twitterLink}
+                                        onChange={handleInputChange}
+                                        placeholder="https://twitter.com/username"
+                                        className="pl-8 bg-input border-border h-12"
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Telegram Link */}
+                            <div className="space-y-2">
+                                <label htmlFor="telegramLink" className="text-sm text-muted-foreground">Telegram link (optional)</label>
+                                <div className="relative flex-1">
+                                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                                        <FaTelegram />
+                                    </span>
+                                    <Input
+                                        id="telegramLink"
+                                        name="telegramLink"
+                                        value={formData.telegramLink}
+                                        onChange={handleInputChange}
+                                        placeholder="https://t.me/username"
+                                        className="pl-8 bg-input border-border h-12"
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Discord Link */}
+                            <div className="space-y-2">
+                                <label htmlFor="discordLink" className="text-sm text-muted-foreground">Discord link (optional)</label>
+                                <div className="relative flex-1">
+                                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                                        <FaDiscord />
+                                    </span>
+                                    <Input
+                                        id="discordLink"
+                                        name="discordLink"
+                                        value={formData.discordLink}
+                                        onChange={handleInputChange}
+                                        placeholder="https://discord.gg/invitecode"
+                                        className="pl-8 bg-input border-border h-12"
+                                    />
+                                </div>
+                            </div>
+                        </CollapsibleContent>
+
+                    </Collapsible>
+
+                    <Button type="submit" className="w-full bg-green-500 hover:bg-green-600">
+                        {
+                            loading ? <>
+                                <Loader2 className="h-5 w-5 animate-spin" />
+                                Uploading...
+                            </> : "Submit"
+                        }
+
+
                     </Button>
                 </form>
             </div>

@@ -49,7 +49,7 @@ export default function Home() {
                     <TabsTrigger value="topGainers" className="cursor-pointer">
                         <div className="flex items-center gap-2">
                             <span><Codesandbox></Codesandbox></span>
-                            <span>Recent</span>
+                            <span>Latest</span>
                         </div>
                     </TabsTrigger>
 

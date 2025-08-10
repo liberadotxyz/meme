@@ -20,13 +20,17 @@ const getTokenDetail = async (id: any) => {
   }
 };
 
-export default async function TokenDetailPage({ params }: any) {
-  const tokenData = await getTokenDetail(params.id);
+export default async function TokenDetailPage(props: { params: Promise<{ id: string }> }) {
+  const { id } = await props.params;
+  console.log("aaaa", id);
+
+  const tokenData = await getTokenDetail(id);
+
 
   if (!tokenData) {
     return (
       <div className="min-h-screen flex items-center justify-center text-red-500">
-        Token data not found for ID: {params.id}
+        Token data not found for ID: {id}
       </div>
     );
   }

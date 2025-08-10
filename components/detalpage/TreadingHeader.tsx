@@ -75,7 +75,7 @@ const TokenHeader = ({ token, stats }: TokenHeaderProps) => {
             <div>
               <div className="text-xs text-muted-foreground">Holders</div>
               <div className="text-sm font-medium">
-                {token?.holders.count.toLocaleString()}
+                {token?.holders.count || ""}
               </div>
             </div>
             <div>

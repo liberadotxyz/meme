@@ -16,11 +16,13 @@ export const CopyableEthText = ({ text, showExplorer = false }: Props) => {
 
   const isValidEthAddress = /^0x[a-fA-F0-9]{40}$/.test(text);
   const shouldShowExplorerLink = showExplorer && isValidEthAddress;
-
+const formattedAddress = text
+          ? `${text.slice(0, 4)}...${text.slice(-4)}`
+          : "";
   return (
     <div className="flex w-full select-none items-center gap-2 rounded-lg">
       <div className="min-w-0 flex truncate">
-        <span className="block font-mono text-sm">{text}</span>
+        <span className="block font-mono text-sm">{formattedAddress}</span>
       </div>
       <div className="flex shrink-0 items-center gap-1">
         <Button
