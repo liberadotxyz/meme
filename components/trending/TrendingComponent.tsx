@@ -171,7 +171,7 @@ const TokenCard = ({
       "address_swapping_from": "0x0000000000000000000000000000000000000000",
       "address_swapping_to": address,
       "amount": Number(value),
-      "slippage": 50
+      // "slippage": 50
     }
     let result = await swap(payload);
     console.log("result k aayo", result)
