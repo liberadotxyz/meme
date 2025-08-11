@@ -9,6 +9,7 @@ declare module "next-auth" {
       username?: string | null;
       id?: string | null;       // Added user ID from backend
       address?: string | null;  // Added wallet address from backend
+      quick_buy_amount?: string | null;
     };
   }
 
@@ -16,6 +17,8 @@ declare module "next-auth" {
     username?: string | null;
     id?: string | null;
     address?: string | null;
+    quick_buy_amount?: string | null;
+
   }
 }
 
@@ -24,5 +27,7 @@ declare module "next-auth/jwt" {
     username?: string | null;
     userId?: string | null;     // Matches `id` returned from backend
     address?: string | null;    // Matches `address` returned from backend
+    quick_buy_amount?: string | null;
+
   }
 }

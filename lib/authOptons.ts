@@ -74,6 +74,7 @@ export const authOptions = {
                 username: token.username,
                 id: token.userId,
                 address: token.address,
+                quick_buy_amount:token.quick_buy_amount
             };
             return session;
         },
@@ -119,6 +120,7 @@ export const authOptions = {
                         const data = await res.json();
                         token.userId = data.id;
                         token.address = data.address;
+                        token.quick_buy_amount  = data.quick_buy_amount
                     } else {
                         console.error("Backend error saving user:", await res.text());
                     }

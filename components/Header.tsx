@@ -2,18 +2,13 @@
 
 'use client';
 import { useRef, useState, useEffect } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { Input } from './ui/input';
 import { Search } from 'lucide-react';
 import { Menu, WalletMinimal, Plus } from 'lucide-react';
 import { Wallet } from './Wallet';
 import { WalletDialog } from './WalletComponent/WalletDalog';
-import { PopupWalletDialog } from './walletSection/Wallet';
-import { ConnectButton } from '@rainbow-me/rainbowkit';
-import { CustomWalletConnect } from './CustomWallectConnetct';
 import { FaTwitter } from 'react-icons/fa';
 import { signIn, signOut, useSession } from "next-auth/react";
 import { useSearchParams } from 'next/navigation';
@@ -63,8 +58,8 @@ export const Header = () => {
                                 className="w-full border-0 bg-transparent font-bold focus:outline-none focus:ring-0 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400"
                                 placeholder="Search"
                                 value={search}
-                                onChange={(e) => {setSearch(e.target.value)}}
-                                // onFocus={(e) => e.currentTarget.parentElement?.focus()}
+                                onChange={(e) => { setSearch(e.target.value) }}
+                            // onFocus={(e) => e.currentTarget.parentElement?.focus()}
                             />
                         </div>
 
@@ -79,16 +74,16 @@ export const Header = () => {
 
                             <div>
                                 {
-                                    session?.user  &&  <Button
-                                    variant="outline"
-                                    className="w-full sm:w-auto cursor-pointer"
-                                    onClick={() => setIsSendDialogOpen(true)}
-                                    disabled={isLoading}
-                                >
-                                    <WalletMinimal size={25} className=" h-8 w-8" />
-                                </Button>
+                                    session?.user && <Button
+                                        variant="outline"
+                                        className="w-full sm:w-auto cursor-pointer"
+                                        onClick={() => setIsSendDialogOpen(true)}
+                                        disabled={isLoading}
+                                    >
+                                        <WalletMinimal size={25} className=" h-8 w-8" />
+                                    </Button>
                                 }
-                               
+
 
                             </div>
 
@@ -206,7 +201,7 @@ const WalletType = ({ onClose }: { onClose: any }) => {
                     };
                     await signIn("credentials", {
                         ...payload,
-                        redirect: true 
+                        redirect: true
                     });
                 } catch (error) {
                     console.error('Login failed:', error);

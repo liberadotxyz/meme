@@ -227,20 +227,20 @@ export default function TopComponent() {
       {tokens.map(({ pool_info, token_detail }) => (
         <div key={pool_info.id} className="p-2 w-full max-w-4xl gap-0">
           <TokenCard
-            name={token_detail.name}
-            symbol={token_detail.symbol}
-            icon={token_detail.image_url}
-            marketCap={`$${(pool_info.market_cap_usd / 1_000_000).toFixed(2)}M`}
-            address={token_detail.address}
-            holdersCount={token_detail.holders.count}
+            name={token_detail?.name}
+            symbol={token_detail?.symbol}
+            icon={token_detail?.image_url}
+            marketCap={`$${(pool_info?.market_cap_usd / 1_000_000).toFixed(2)}M`}
+            address={token_detail?.address}
+            holdersCount={token_detail?.holders.count}
             devPercent={"1"} // placeholder
-            top10Percent={token_detail.holders.distribution_percentage.top_10}
-            createdAgo={timeAgo(pool_info.pool_created_at)}
+            top10Percent={token_detail?.holders.distribution_percentage.top_10}
+            createdAgo={timeAgo(pool_info?.pool_created_at)}
             social={{
-              telegram: token_detail.telegram_handle || undefined,
-              twitter: token_detail.twitter_handle || undefined,
-              discord: token_detail.discord_url || undefined,
-              website: token_detail.websites[0] || undefined,
+              telegram: token_detail?.telegram_handle || undefined,
+              twitter: token_detail?.twitter_handle || undefined,
+              discord: token_detail?.discord_url || undefined,
+              website: token_detail?.websites[0] || undefined,
             }}
           />
         </div>
