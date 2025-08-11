@@ -13,6 +13,7 @@ import { State } from '@/redux';
 import { useSelector } from 'react-redux';
 import { swap } from "@/api/topToken";
 import { useSession } from "next-auth/react";
+import { toast } from "sonner";
 export default function Trending() {
   const [loading, setLoading] = useState(false);
   const [tokens, setTokens] = useState<any[]>([]);
@@ -170,9 +171,11 @@ const TokenCard = ({
       "address_swapping_from": "0x0000000000000000000000000000000000000000",
       "address_swapping_to": address,
       "amount": value,
-      "slippage": 50
+      "slippage": 1
     }
-    await swap(payload);
+    let result = await swap(payload);
+    console.log("result k aayo", result)
+    toast(`succssfully buy worth of ${value} of ${name}`)
   }
   return (
     <Link href={`/detail/${pairAddress}`}>
@@ -278,7 +281,9 @@ const TokenCard = ({
                 variant="ghost"
                 size="sm"
                 className="h-6 gap-0 w-13 px-3 mt-2 p-0 bg-green-500 hover:bg-green-600 text-black"
-                onClick={() => {
+                onClick={(e) => {
+                  e.preventDefault(); // prevents navigation
+                  e.stopPropagation();
                   buyToken()
                 }}
               >
