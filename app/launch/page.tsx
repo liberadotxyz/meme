@@ -33,7 +33,7 @@ type FormData = {
 
 const TokenCreationForm = () => {
     const router = useRouter();
-    const {data:session} = useSession()
+    const { data: session } = useSession()
     const [formData, setFormData] = useState<FormData>({
         image: null,
         name: "",
@@ -187,7 +187,7 @@ const TokenCreationForm = () => {
                     <div className="space-y-2">
                         <div
                             onClick={triggerFileInput}
-                            className="upload-area flex items-center justify-center h-32 border-dashed border rounded-lg cursor-pointer hover:border-primary transition-colors"
+                            className="upload-area flex items-center justify-center h-32 border-dashed border border-white rounded-lg cursor-pointer hover:border-primary transition-colors"
                         >
                             {imagePreview ? (
                                 <img
@@ -222,6 +222,7 @@ const TokenCreationForm = () => {
                                 value={formData.name}
                                 onChange={handleInputChange}
                                 required
+                                className="h-12"
                             />
                         </div>
                         <div>
@@ -231,6 +232,8 @@ const TokenCreationForm = () => {
                                 value={formData.symbol}
                                 onChange={handleInputChange}
                                 required
+                                className="h-12"
+
                             />
                         </div>
                         <div>
@@ -241,6 +244,8 @@ const TokenCreationForm = () => {
                                 name="description"
                                 value={formData.description}
                                 onChange={handleInputChange}
+                                className="h-20"
+
                             />
                         </div>
                     </div>
@@ -257,6 +262,8 @@ const TokenCreationForm = () => {
                                 step="0.01"
                                 min="0"
                                 required
+                                className="h-12"
+
                             />
                             <span className="absolute right-3 top-1/2 -translate-y-1/2">
                                 ETH

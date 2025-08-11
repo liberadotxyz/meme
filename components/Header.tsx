@@ -25,6 +25,7 @@ export const Header = () => {
     const router = useRouter();
     const [showTooltip, setShowTooltip] = useState(false);
     const [triggerLogin, setTriggerLogin] = useState(false);
+    const [search, setSearch] = useState("")
     const [isSendDialogOpen, setIsSendDialogOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [iswalletpopup, setWalletPopup] = useState(false);
@@ -61,7 +62,9 @@ export const Header = () => {
                             <input
                                 className="w-full border-0 bg-transparent font-bold focus:outline-none focus:ring-0 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400"
                                 placeholder="Search"
-                                onFocus={(e) => e.currentTarget.parentElement?.focus()}
+                                value={search}
+                                onChange={(e) => {setSearch(e.target.value)}}
+                                // onFocus={(e) => e.currentTarget.parentElement?.focus()}
                             />
                         </div>
 

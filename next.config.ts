@@ -14,7 +14,8 @@ const nextConfig: NextConfig = {
       "www.datocms-assets.com",
       "cdn.moralis.io",
       "logo.moralis.io",
-      "img.reservoir.tools"
+      "img.reservoir.tools",
+      "raw.githubusercontent.com"
     ],
   },
 };
