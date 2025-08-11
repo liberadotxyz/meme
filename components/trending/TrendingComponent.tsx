@@ -167,7 +167,7 @@ const TokenCard = ({
   const { value } = useSelector((state: State) => state.buy)
   const buyToken = async () => {
     let payload = {
-      "username": session?.user.address,
+      "username": session?.user.username,
       "address_swapping_from": "0x0000000000000000000000000000000000000000",
       "address_swapping_to": address,
       "amount": Number(value),

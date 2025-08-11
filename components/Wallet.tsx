@@ -36,13 +36,13 @@ export function Wallet() {
     const dispatch = useDispatch()
     const setPrice = async () => {
         let payload = {
-            "username": session?.user.username,
+            "username": session?.user.address,
             "amount": value
         }
         await quickBuySetting(payload);
-         dispatch(setBuy({
-          value: value
-          
+        dispatch(setBuy({
+            value: value
+
         }));
         setClickBuy(false)
     }
@@ -90,7 +90,9 @@ export function Wallet() {
                             <Input value={value} onChange={(e) => {
                                 setValue(e.target.value)
                             }} />
-                            <Button onClick={() => {
+                            <Button onClick={(e) => {
+                                e.preventDefault(); // prevents navigation
+                                e.stopPropagation();
                                 setPrice();
                             }}>Set</Button>
                         </div>
