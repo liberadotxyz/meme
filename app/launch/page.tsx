@@ -13,6 +13,7 @@ import { TbWorld } from "react-icons/tb";
 import { deployToken } from "@/api/topToken";
 import { Loader2 } from "lucide-react";
 import { saveToken } from "@/api/topToken";
+import { NotLoggedIn } from "@/components/NotLoggedIn";
 const PINATA_API_KEY = process.env.PINATA_API_KEY!;
 const PINATA_API_SECRET = process.env.PINATA_API_SECRET!;
 import { useSession } from "next-auth/react";
@@ -27,6 +28,8 @@ type FormData = {
     discordLink: string;
     eth_amount_eth: string;
 };
+
+
 
 const TokenCreationForm = () => {
     const router = useRouter();
@@ -167,6 +170,12 @@ const TokenCreationForm = () => {
     };
 
     const triggerFileInput = () => fileInputRef.current?.click();
+
+    if(!session?.user.address){
+        return (
+            <NotLoggedIn />
+        )
+    }
 
     return (
         <div className="min-h-screen p-4 md:p-8">

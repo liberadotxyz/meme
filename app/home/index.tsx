@@ -4,8 +4,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ChartBarStacked, TrendingUpDown, BadgeDollarSign, Codesandbox } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Trending from "@/components/trending/TrendingComponent";
-import PresaleComponent from "@/components/presale/PresaleComponent";
-import GraduateComponent from "@/components/graduate/GraduateComponent";
+import TopComponent from "@/components/top/TopComponent";
+import LatestComponent from "@/components/latest/LatestComponent";
 import Link from "next/link";
 import TradeComponent from "@/components/trade/TradeComponent";
 export default function Home() {
@@ -63,10 +63,10 @@ export default function Home() {
                     <Trending></Trending>
                 </TabsContent>
                 <TabsContent value="presale">
-                    <PresaleComponent></PresaleComponent>
+                    <TopComponent></TopComponent>
                 </TabsContent>
                 <TabsContent value="topGainers">
-                    <GraduateComponent></GraduateComponent>
+                    <LatestComponent></LatestComponent>
                 </TabsContent>
 
             </Tabs>
