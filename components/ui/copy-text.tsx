@@ -10,15 +10,16 @@ interface Props {
 
 export const CopyableEthText = ({ text, showExplorer = false }: Props) => {
   const handleCopy = (text: string) => {
+
     navigator.clipboard.writeText(text);
     toast.success('Address copied to clipboard');
   };
 
   const isValidEthAddress = /^0x[a-fA-F0-9]{40}$/.test(text);
   const shouldShowExplorerLink = showExplorer && isValidEthAddress;
-const formattedAddress = text
-          ? `${text.slice(0, 4)}...${text.slice(-4)}`
-          : "";
+  const formattedAddress = text
+    ? `${text.slice(0, 4)}...${text.slice(-4)}`
+    : "";
   return (
     <div className="flex w-full select-none items-center gap-2 rounded-lg">
       <div className="min-w-0 flex truncate">
@@ -27,12 +28,16 @@ const formattedAddress = text
       <div className="flex shrink-0 items-center gap-1">
         <Button
           variant="ghost"
-          onClick={() => handleCopy(text)}
+          onClick={(e) => {
+            e.preventDefault(); // prevents navigation
+            e.stopPropagation();
+            handleCopy(text)
+          }}
           className="h-4 w-6 hover:bg-sidebar-accent/50"
         >
           <Copy className="h-3.5 w-3.5" />
         </Button>
-       
+
       </div>
     </div>
   );
