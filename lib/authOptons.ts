@@ -99,8 +99,8 @@ export const authOptions = {
                 token.username = profile.email.split("@")[0];
             } else if (user && (user as any).username) {
                 token.username = (user as any).username;
-            } else {
-                token.username = "anonymous"; // last-resort fallback
+            } else{
+                
             }
 
             // Only call API on signIn
