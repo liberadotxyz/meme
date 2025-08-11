@@ -56,6 +56,7 @@ export default function Home() {
                 </TabsList>
 
                 <TabsContent value="trade">
+
                     <TradeComponent></TradeComponent>
 
                 </TabsContent>

@@ -75,8 +75,8 @@ export const Header = () => {
                             </Link>
 
                             <div>
-
-                                <Button
+                                {
+                                    session?.user  &&  <Button
                                     variant="outline"
                                     className="w-full sm:w-auto cursor-pointer"
                                     onClick={() => setIsSendDialogOpen(true)}
@@ -84,6 +84,8 @@ export const Header = () => {
                                 >
                                     <WalletMinimal size={25} className=" h-8 w-8" />
                                 </Button>
+                                }
+                               
 
                             </div>
 
