@@ -170,7 +170,7 @@ const TokenCard = ({
       "username": session?.user.address,
       "address_swapping_from": "0x0000000000000000000000000000000000000000",
       "address_swapping_to": address,
-      "amount": value,
+      "amount": Number(value),
       "slippage": 1
     }
     let result = await swap(payload);
