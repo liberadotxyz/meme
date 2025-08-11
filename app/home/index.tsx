@@ -8,6 +8,7 @@ import TopComponent from "@/components/top/TopComponent";
 import LatestComponent from "@/components/latest/LatestComponent";
 import Link from "next/link";
 import TradeComponent from "@/components/trade/TradeComponent";
+import OurPlatform from "@/components/our/OurPlatform";
 export default function Home() {
     return (
         <div>
@@ -27,7 +28,7 @@ export default function Home() {
                 </CardContent>
             </Card>
             <Tabs defaultValue="trade" className="max-w-4xl">
-                <TabsList className="grid w-full grid-cols-4 h-12 sticky top-22 z-1 ">
+                <TabsList className="grid w-full grid-cols-5 h-12 sticky top-22 z-1 ">
                     <TabsTrigger value="trade" className="cursor-pointer">
                         <div className="flex items-center gap-2">
                             <span><ChartBarStacked></ChartBarStacked></span>
@@ -38,6 +39,12 @@ export default function Home() {
                         <div className="flex items-center gap-2">
                             <span><TrendingUpDown></TrendingUpDown></span>
                             <span>Trending</span>
+                        </div>
+                    </TabsTrigger>
+                    <TabsTrigger value="recent" className="cursor-pointer">
+                        <div className="flex items-center gap-2">
+                            <span><TrendingUpDown></TrendingUpDown></span>
+                            <span>Platform</span>
                         </div>
                     </TabsTrigger>
                     <TabsTrigger value="presale" className="cursor-pointer">
@@ -62,6 +69,9 @@ export default function Home() {
                 </TabsContent>
                 <TabsContent value="trending">
                     <Trending></Trending>
+                </TabsContent>
+                 <TabsContent value="recent">
+                    <OurPlatform></OurPlatform>
                 </TabsContent>
                 <TabsContent value="presale">
                     <TopComponent></TopComponent>

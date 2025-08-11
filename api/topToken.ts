@@ -32,6 +32,23 @@ export async function getTrendingToken() {
   }
 }
 
+export async function getRecent() {
+  const url = `https://backends.phaser.bot/api/v1/platform-launches/recent/`;
+  const res = await fetch(url, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+
+    },
+
+  });
+  if (res.status < 400) {
+    return await res.json();
+  } else {
+    return null;
+  }
+}
+
 export async function getLatestToken() {
   const url = `https://backends.phaser.bot/api/v1/token-latest/`;
   const res = await fetch(url, {
