@@ -9,6 +9,10 @@ import { useEffect, useState } from "react";
 import { getTrendingToken } from "@/api/topToken";
 import SkeletonLoader from "../SkeletonLoader";
 import Link from "next/link";
+import { State } from '@/redux';
+import { useSelector } from 'react-redux';
+import { swap } from "@/api/topToken";
+import { useSession } from "next-auth/react";
 export default function Trending() {
   const [loading, setLoading] = useState(false);
   const [tokens, setTokens] = useState<any[]>([]);
@@ -53,7 +57,7 @@ export default function Trending() {
           : "";
 
 
-        
+
         // Get social links
         const discordUrl = tokenDetail?.discord_url || "";
         const twitterHandle = tokenDetail?.twitter_handle
@@ -88,7 +92,7 @@ export default function Trending() {
               address={tokenDetail?.address}
               formattedAddress={formattedAddress}
               priceChange24h={priceChange24h}
-              pairAddress = {tokenStats?.address}
+              pairAddress={tokenStats?.address}
               isPriceUp={isPriceUp}
               volume24h={volume24h}
               holdersCount={tokenDetail?.holders?.count || 0}
@@ -127,7 +131,7 @@ interface TokenCardProps {
   pnlPercentage?: string;
   showBoost?: boolean;
   showPnl?: boolean;
-  pairAddress?:string
+  pairAddress?: string
 }
 
 const TokenCard = ({
@@ -156,9 +160,20 @@ const TokenCard = ({
   const isProfitable = pnl && parseFloat(pnl.replace(/[^0-9.-]/g, "")) > 0;
   const progress = 50;
   const radius = 20;
+  const { data: session } = useSession()
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset = circumference - (progress / 100) * circumference;
-
+  const { value } = useSelector((state: State) => state.buy)
+  const buyToken = async () => {
+    let payload = {
+      "username": session?.user.username,
+      "address_swapping_from": "0x0000000000000000000000000000000000000000",
+      "address_swapping_to": address,
+      "amount": value,
+      "slippage": 50
+    }
+    await swap(payload);
+  }
   return (
     <Link href={`/detail/${pairAddress}`}>
       <Card className="bg-gradient-card border-border gap-0 p-4 shadow-card hover:border-primary/20 transition-all duration-300">
@@ -263,9 +278,12 @@ const TokenCard = ({
                 variant="ghost"
                 size="sm"
                 className="h-6 gap-0 w-13 px-3 mt-2 p-0 bg-green-500 hover:bg-green-600 text-black"
+                onClick={() => {
+                  buyToken()
+                }}
               >
                 <Plus color="black" size={14} />
-                0.01
+                {value}
               </Button>
             </div>
           </div>

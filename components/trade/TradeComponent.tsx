@@ -10,6 +10,7 @@ import { useState, useEffect } from "react";
 import { CopyableEthText } from "../ui/copy-text";
 import { State } from '@/redux';
 import { useSelector } from 'react-redux';
+import { swap } from "@/api/topToken";
 export default function TradeComponent() {
     return (
         <div className="flex flex-col items-center justify-items-center gap-0 ">
@@ -78,6 +79,16 @@ const TokenCard = ({
     //         setBuyValue(storedValue);
     //     }
     // }, []);
+
+    const buyToken = async () => {
+        let payload = {
+            "username": "string",
+            "address_swapping_from": "string",
+            "address_swapping_to": "string",
+            "amount": 0,
+            "slippage": 50
+        }
+    }
 
     return (
         <Card className="bg-gradient-card w-full border-border  p-4 shadow-card hover:border-primary/20 transition-all duration-300">
@@ -187,8 +198,8 @@ const TokenCard = ({
                             className="h-6 gap-0 w-13 px-3 mt-2 p-0 bg-green-500 hover:bg-green-600 text-black"
                         >
                             <Plus color="black"></Plus>
-                           
-                           {/* {
+
+                            {/* {
                             session?.user.quick_buy_amount ? 
                            } */}
                             {value}

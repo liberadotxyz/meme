@@ -128,7 +128,7 @@ export async function getDetail(id: any) {
 
 
 export async function getBalance(address: string) {
-  const url = `https://backends.phaser.bot/api/v1/user/0xEd0C643D95CBc85AF609665F97a7c5724f3d0ce5/balance/`;
+  const url = `https://backends.phaser.bot/api/v1/user/${address}/balance/`;
   const res = await fetch(url, {
     method: "GET",
     headers: {
