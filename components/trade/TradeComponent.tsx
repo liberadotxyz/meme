@@ -6,7 +6,10 @@ import { Badge } from "@/components/ui/badge"
 import { FaTelegram, FaTwitter, FaDiscord } from "react-icons/fa";
 import { TradingCard } from "@/components/TradingCard";
 import { useSession } from "next-auth/react";
+import { useState, useEffect } from "react";
 import { CopyableEthText } from "../ui/copy-text";
+import { State } from '@/redux';
+import { useSelector } from 'react-redux';
 export default function TradeComponent() {
     return (
         <div className="flex flex-col items-center justify-items-center gap-0 ">
@@ -63,15 +66,25 @@ const TokenCard = ({
     showBoost = false,
     showPnl = false,
 }: TokenCardProps) => {
+
     const isProfitable = pnl && parseFloat(pnl.replace(/[^0-9.-]/g, "")) > 0;
     const { data: session, status } = useSession();
-    console.log("session", session, status)
+    console.log("session", session, status);
+    const { value } = useSelector((state: State) => state.buy)
+    // const [buyValue, setBuyValue] = useState("");
+    // useEffect(() => {
+    //     const storedValue = localStorage.getItem("buy");
+    //     if (storedValue) {
+    //         setBuyValue(storedValue);
+    //     }
+    // }, []);
+
     return (
         <Card className="bg-gradient-card w-full border-border  p-4 shadow-card hover:border-primary/20 transition-all duration-300">
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                     <div className="">
-                       
+
                         <img
                             src={icon}
                             alt={name}
@@ -170,12 +183,15 @@ const TokenCard = ({
 
                         </div>
                         <Button
-                            variant="ghost"
                             size="sm"
                             className="h-6 gap-0 w-13 px-3 mt-2 p-0 bg-green-500 hover:bg-green-600 text-black"
                         >
                             <Plus color="black"></Plus>
-                            0.01
+                           
+                           {/* {
+                            session?.user.quick_buy_amount ? 
+                           } */}
+                            {value}
                         </Button>
                     </div>
 

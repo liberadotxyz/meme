@@ -25,20 +25,25 @@ import {
     ArrowLeft
 } from 'lucide-react';
 import { quickBuySetting } from '@/api/topToken';
-
+import { useDispatch } from 'react-redux';
+import { setBuy } from '@/redux/quickbuy';
 export function Wallet() {
     const [open, setOpen] = useState(false);
     const { data: session } = useSession();
     const [clickBuy, setClickBuy] = useState(false);
     const { disconnect } = useDisconnect();
     const [value, setValue] = useState("0.001")
-
+    const dispatch = useDispatch()
     const setPrice = async () => {
         let payload = {
             "username": session?.user.username,
             "amount": value
         }
         await quickBuySetting(payload);
+         dispatch(setBuy({
+          value: value
+          
+        }));
         setClickBuy(false)
     }
 

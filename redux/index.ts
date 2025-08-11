@@ -1,33 +1,33 @@
-import { configureStore } from "@reduxjs/toolkit";
-import userReducer from './authSlice'
-
-import { AuthState } from "./authSlice";
-import { BalanceState } from "./balanceSlice";
-import balanceReducer from './balanceSlice'
-// import { GameState } from "./gameSlice";
-// import gameReducer from './gameSlice';
-import dialogReducer from './dailogSlice';
-// import { DailogState } from "./dailogSlice";
-import { DialogState } from "./dailogSlice";
-
+// store.ts
+import { configureStore, combineReducers } from "@reduxjs/toolkit";
+import { persistReducer, persistStore } from "redux-persist";
+import storage from "redux-persist/lib/storage";
+import buyReducer from './quickbuy';
+import { BuyState } from "./quickbuy";
 export type State = {
-    user:AuthState,
-    balance:BalanceState,
-    // game:GameState,
-    dialog:DialogState
+   buy:BuyState
 }
-
-const reducer = {
-    user:userReducer,
-    balance:balanceReducer,
-    // game:gameReducer,
-    dialog:dialogReducer
-}
-
-export const store = configureStore({
-    reducer
+const rootReducer = combineReducers({
+  buy: buyReducer,
 });
 
-export type RootState = ReturnType<typeof store.getState>
-// Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
-export type AppDispatch = typeof store.dispatch
+const persistConfig = {
+  key: "root",
+  storage,
+  whitelist: [ "buy"], 
+};
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
+export const store = configureStore({
+  reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false, // redux-persist requirement
+    }),
+});
+
+export const persistor = persistStore(store);
+
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;

@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { TrendingSidebar } from "@/components/TrendingSidebar";
 import WagmiProviders from "@/components/walletConnector/WalletProvider";
 import StoreProvider from "@/redux/reduxProvider";
+
 import { Toaster } from 'sonner';
 import SessionProviderWrapper from "@/components/session-provider";
 const geistSans = Geist({
@@ -23,43 +24,31 @@ export const metadata: Metadata = {
   description: "Create and trade meme coins with one click using Apple Pay, Google Pay or credit cards. Trade any coin on Base Chain. No crypto experience needed.",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <SessionProviderWrapper>
-        <WagmiProviders>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <StoreProvider>
-              <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-                
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <SessionProviderWrapper>
+          <WagmiProviders>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              <StoreProvider>
                 <Header />
-
                 <div className="flex pt-16 min-h-screen max-w-4xl m-auto">
-
                   <main className="w-full mt-10">
-
                     <Toaster position="top-center" />
-
                     {children}
                   </main>
-
-
-
                 </div>
-              </body>
-            </StoreProvider>
-          </ThemeProvider>
-        </WagmiProviders>
-      </SessionProviderWrapper>
+              </StoreProvider>
+            </ThemeProvider>
+          </WagmiProviders>
+        </SessionProviderWrapper>
+      </body>
     </html>
   );
 }
