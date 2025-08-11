@@ -35,7 +35,7 @@ export function Wallet() {
 
     const setPrice = async () => {
         let payload = {
-            "username": session?.user.address,
+            "username": session?.user.username,
             "amount": value
         }
         await quickBuySetting(payload);
