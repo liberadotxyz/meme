@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -9,13 +9,32 @@ import { Card } from "../ui/card";
 import { swap } from "@/api/topToken";
 import { useSession } from "next-auth/react";
 import { toast } from "sonner";
+import { formatEther } from "viem";
+import { fetchBalance } from "@/api/topToken";
+import { getBalance } from "viem/actions";
+import { createPublicClient } from "viem";
+import { createConfig, http } from 'wagmi';
+
+import {
+  base,
+} from 'wagmi/chains';
+
 interface TokenHeaderProps {
   token: any;
   stats: any;
 }
 
 const TradingPanel = ({ token, stats }: TokenHeaderProps) => {
+
+  const client = createPublicClient({
+    chain: base,
+    transport: http(),
+  })
+
+  // "6.942"
   const [activeTab, setActiveTab] = useState("buy");
+  const [balance, setBalance] = useState("0")
+  const [selectedTokenAmount, setSelectedTokenAddress] = useState()
   const [amount, setAmount] = useState("");
   const [sellAmount, setSellAmount] = useState("")
   const [info, setInfo] = useState("info");
@@ -69,6 +88,37 @@ const TradingPanel = ({ token, stats }: TokenHeaderProps) => {
     // toast(`succssfully buy worth of ${amount} of ${name}`)
   }
 
+  const getBalances = async () => {
+    const balance = await getBalance(client, {
+      address: session?.user?.address as `0x${string}`,
+    });
+
+    console.log("aaaaa", balance)
+    const balanceAsEther = formatEther(balance)
+    console.log("aaaaa", balance, balanceAsEther)
+    setBalance(balanceAsEther)
+
+  }
+
+  useEffect(() => {
+    if (!session?.user) return
+    getBalances()
+  }, [session])
+
+
+  const userWallet = async () => {
+    let data = await fetchBalance(session?.user.address || "");
+    data.map((item:any, index:any) => {
+      if(item.token_address == token.address) {
+        setSelectedTokenAddress(token.balance)
+      }
+    })
+    // setBalance(data)
+  }
+  useEffect(() => {
+    if (!session?.user) return
+    userWallet()
+  }, [session])
   return (
     <div className="bg-surface-elevated p-1">
       <div className="grid grid-cols-3 gap-1">
@@ -125,7 +175,7 @@ const TradingPanel = ({ token, stats }: TokenHeaderProps) => {
                           <Minus className="h-3 w-3" />
                         </Button>
                         <span className="text-xs text-muted-foreground">
-                          (${formatNumber(tokenStats?.base_token_price_usd || 0)})
+                          (${balance})
                         </span>
                       </div>
                     </div>
@@ -210,7 +260,8 @@ const TradingPanel = ({ token, stats }: TokenHeaderProps) => {
                           <Minus className="h-3 w-3" />
                         </Button>
                         <span className="text-xs text-muted-foreground">
-                          (${formatNumber(tokenStats?.base_token_price_usd || 0)})
+                          (${selectedTokenAmount || 0})
+                         
                         </span>
                       </div>
                     </div>

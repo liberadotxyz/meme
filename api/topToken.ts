@@ -160,6 +160,22 @@ export async function getBalance(address: string) {
     return null;
   }
 }
+export async function fetchBalance(address: string) {
+  const url = `https://backends.phaser.bot/api/v1/user/${address}/balance/`;
+  const res = await fetch(url, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+
+    },
+
+  });
+  if (res.status < 400) {
+    return await res.json();
+  } else {
+    return null;
+  }
+}
 
 
 
