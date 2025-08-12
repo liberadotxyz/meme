@@ -22,7 +22,8 @@ import {
     LogOut,
     ChevronUp,
     User,
-    ArrowLeft
+    ArrowLeft,
+    ArrowRight
 } from 'lucide-react';
 import { quickBuySetting } from '@/api/topToken';
 import { useDispatch } from 'react-redux';
@@ -106,14 +107,22 @@ export function Wallet() {
                                 setClickBuy(true);
                             }}
                         >
-                            <Settings className="w-5 h-5 text-muted-foreground" />
-                            <span className="font-medium">Quick Buy</span>
+                            <div className='flex items-center justify-between'>
+                                <div>
+                                    <Settings className="w-5 h-5 text-muted-foreground" />
+                                    <span className="font-medium">Quick Buy</span>
+                                </div>
+                                <div>
+                                    <ArrowRight size={15}></ArrowRight>
+                                </div>
+                            </div>
+
                         </DropdownMenuItem>
 
-                        <DropdownMenuItem className="flex items-center gap-3 px-3 py-3 cursor-pointer">
+                        {/* <DropdownMenuItem className="flex items-center gap-3 px-3 py-3 cursor-pointer">
                             <HelpCircle className="w-5 h-5 text-muted-foreground" />
                             <span className="font-medium">Preference</span>
-                        </DropdownMenuItem>
+                        </DropdownMenuItem> */}
 
                         <DropdownMenuItem className="flex items-center gap-3 px-3 py-3 cursor-pointer">
                             <Settings className="w-5 h-5 text-muted-foreground" />
@@ -125,10 +134,10 @@ export function Wallet() {
                             <span className="font-medium">Dark Mode</span>
                         </DropdownMenuItem>
 
-                        <DropdownMenuItem className="flex items-center gap-3 px-3 py-3 cursor-pointer">
+                        {/* <DropdownMenuItem className="flex items-center gap-3 px-3 py-3 cursor-pointer">
                             <TrendingUp className="w-5 h-5 text-muted-foreground" />
                             <span className="font-medium">Upgrade Plan</span>
-                        </DropdownMenuItem>
+                        </DropdownMenuItem> */}
 
                         <DropdownMenuSeparator />
 
