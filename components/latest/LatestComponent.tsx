@@ -8,7 +8,11 @@ import { useEffect, useState } from "react";
 import SkeletonLoader from "../SkeletonLoader";
 import { User, Crown, ChefHat, Globe, Sprout, Plus } from "lucide-react";
 import { FaTelegram, FaTwitter, FaDiscord } from "react-icons/fa";
-
+import { swap } from "@/api/topToken";
+import { useSelector } from "react-redux";
+import { State } from "@/redux";
+import { useSession } from "next-auth/react";
+import { toast } from "sonner";
 interface TokenData {
   address: string;
   name: string;
@@ -150,7 +154,21 @@ const TokenCard = ({
   socialLinks,
 }: TokenCardProps) => {
   const isProfitable = pnl && parseFloat(pnl) > 0;
-
+    const { data: session } = useSession()
+  
+  const { value } = useSelector((state: State) => state.buy)
+   const buyToken = async () => {
+    let payload = {
+      "username": session?.user.username,
+      "address_swapping_from": "0x0000000000000000000000000000000000000000",
+      "address_swapping_to": address,
+      "amount": Number(value),
+      // "slippage": 50
+    }
+    let result = await swap(payload);
+    console.log("result k aayo", result)
+    toast(`succssfully buy worth of ${value} of ${name}`)
+  }
   return (
     <Card className="bg-gradient-card border-border p-4 shadow-card hover:border-primary/20 transition-all duration-300">
       <div className="flex items-center justify-between">
@@ -196,7 +214,7 @@ const TokenCard = ({
           <div className="text-muted-foreground text-xs">TX <span className="text-white">{txCount}</span></div>
           {pnl && <div className={`text-xs mt-1 ${isProfitable ? "text-green-500" : "text-red-500"}`}>{parseFloat(pnl) > 0 ? "+" : ""}{pnl}%</div>}
           <Button className="h-6 px-3 bg-green-500 hover:bg-green-600 text-black">
-            <Plus size={14} /> 0.01
+            <Plus size={14} /> {value}
           </Button>
         </div>
       </div>

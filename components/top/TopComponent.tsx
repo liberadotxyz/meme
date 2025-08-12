@@ -8,7 +8,11 @@ import { CopyableEthText } from "../ui/copy-text";
 import { getTopToken } from "@/api/topToken";
 import { useState, useEffect } from "react";
 import SkeletonLoader from "../SkeletonLoader";
-
+import { State } from "@/redux";
+import { useSession } from "next-auth/react";
+import { toast } from "sonner";
+import { swap } from "@/api/topToken";
+import { useSelector } from "react-redux";
 // API types
 interface PoolInfo {
   id: string;
@@ -70,6 +74,21 @@ const TokenCard = ({
   createdAgo,
   social,
 }: TokenCardProps) => {
+  const { data: session } = useSession()
+
+  const { value } = useSelector((state: State) => state.buy)
+  const buyToken = async () => {
+    let payload = {
+      "username": session?.user.username,
+      "address_swapping_from": "0x0000000000000000000000000000000000000000",
+      "address_swapping_to": address,
+      "amount": Number(value),
+      // "slippage": 50
+    }
+    let result = await swap(payload);
+    console.log("result k aayo", result)
+    toast(`succssfully buy worth of ${value} of ${name}`)
+  }
   return (
     <Card className="bg-gradient-card border-border p-4 shadow-card hover:border-primary/20 transition-all duration-300">
       <div className="flex items-center justify-between">

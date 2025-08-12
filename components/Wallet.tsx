@@ -108,7 +108,7 @@ export function Wallet() {
                             }}
                         >
                             <div className='flex items-center justify-between'>
-                                <div>
+                                <div className='flex gap-1'>
                                     <Settings className="w-5 h-5 text-muted-foreground" />
                                     <span className="font-medium">Quick Buy</span>
                                 </div>
