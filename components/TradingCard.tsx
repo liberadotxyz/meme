@@ -1,8 +1,5 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Zap, BarChart3 } from "lucide-react";
 import { useState } from "react";
 
 interface TradingCardProps {

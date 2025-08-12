@@ -1,3 +1,22 @@
+export async function getTradeToken() {
+  const url = `https://backends.phaser.bot/api/v1/platform-launches/trades/`;
+  const res = await fetch(url, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+
+    },
+
+  });
+  if (res.status < 400) {
+    return await res.json();
+  } else {
+    return null;
+  }
+}
+
+
+
 export async function getTopToken() {
   const url = `https://backends.phaser.bot/api/v1/token-top/`;
   const res = await fetch(url, {

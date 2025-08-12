@@ -66,8 +66,8 @@ export const WalletInterface = ({ onClose }: WalletInterfaceProps) => {
     };
 
     const getUserBalance = async () => {
-        let data = await getBalance(session?.user.address || "");
-        setBalance(data)
+        let {result} = await getBalance(session?.user.address || "");
+        setBalance(result)
     }
     console.log("balance k aayo")
     useEffect(() => {

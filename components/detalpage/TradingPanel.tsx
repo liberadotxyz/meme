@@ -38,9 +38,9 @@ const TradingPanel = ({ token, stats }: TokenHeaderProps) => {
   const [amount, setAmount] = useState("");
   const [sellAmount, setSellAmount] = useState("")
   const [info, setInfo] = useState("info");
+  const [ethDeatil, setEthDetail] = useState<any>({})
   const quickAmounts = ["0.1", "0.5", "1", "2", "5"];
   const quickSellAmount = ["10%", "25%", "50%", "75%", "MAX"];
-
   // Extract token details
   const tokenDetails = token;
   const tokenStats = stats;
@@ -71,7 +71,9 @@ const TradingPanel = ({ token, stats }: TokenHeaderProps) => {
       // "slippage": 50
     }
     let result = await swap(payload);
-    console.log("result k aayo", result)
+    console.log("result k aayo", result);
+    getBalances();
+    userWallet();
     // toast(`succssfully buy worth of ${amount} of ${name}`)
   }
 
@@ -85,12 +87,15 @@ const TradingPanel = ({ token, stats }: TokenHeaderProps) => {
     }
     let result = await swap(payload);
     console.log("result k aayo", result)
+    getBalances();
+    userWallet()
     // toast(`succssfully buy worth of ${amount} of ${name}`)
   }
 
   const getBalances = async () => {
     const balance = await getBalance(client, {
       address: session?.user?.address as `0x${string}`,
+      // address:"0xAaff28f22ED65DdEE1a9e9cAF7c53E2721f26936"
     });
 
     console.log("aaaaa", balance)
@@ -107,13 +112,13 @@ const TradingPanel = ({ token, stats }: TokenHeaderProps) => {
 
 
   const userWallet = async () => {
-    let data = await fetchBalance(session?.user.address || "");
-    data.map((item:any, index:any) => {
-      if(item.address == tokenDetails.address) {
-        setSelectedTokenAddress(item.balance)
+    let {result} = await fetchBalance(session?.user?.address || "");
+    result.map((item: any, index: any) => {
+      if (item.token_address == tokenDetails.address) {
+        setSelectedTokenAddress(item.balance_formatted)
       }
     })
-    // setBalance(data)
+    setEthDetail(result[0])
   }
   useEffect(() => {
     if (!session?.user) return
@@ -188,7 +193,7 @@ const TradingPanel = ({ token, stats }: TokenHeaderProps) => {
                         className="bg-surface border-border"
                       />
                       <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sm text-muted-foreground">
-                        {tokenDetails?.symbol || 'TOKEN'}
+                        {'ETH'}
                       </div>
                     </div>
                   </div>
@@ -233,7 +238,9 @@ const TradingPanel = ({ token, stats }: TokenHeaderProps) => {
                       <span className="text-sm text-muted-foreground">~</span>
                       <div className="text-right text-xs font-mono">
                         <span className="text-xs text-muted-foreground"></span>
-                        {amount ? (parseFloat(amount) * parseFloat(tokenStats?.base_token_price_quote_token || '1')).toFixed(7) : '0.0000000'}
+                        {/* {tokenStats?.base_token_price_usd } */}
+                        {tokenDetails?.symbol} {(ethDeatil?.usd_price * Number(amount) )/ parseFloat(tokenStats?.base_token_price_usd || '1')}
+                        {/* {amount ? (parseFloat( ethDeatil.usd_price * Number(amount)) * parseFloat(tokenStats?.base_token_price_quote_token || '1')).toFixed(7) : '0.0000000'} */}
                       </div>
                     </div>
                   </div>
@@ -260,8 +267,8 @@ const TradingPanel = ({ token, stats }: TokenHeaderProps) => {
                           <Minus className="h-3 w-3" />
                         </Button>
                         <span className="text-xs text-muted-foreground">
-                          (${selectedTokenAmount || 0})
-                         
+                          ({selectedTokenAmount || 0})
+
                         </span>
                       </div>
                     </div>
@@ -270,7 +277,7 @@ const TradingPanel = ({ token, stats }: TokenHeaderProps) => {
                         type="text"
                         placeholder="Enter a custom amount"
                         value={amount}
-                        onChange={(e) => setAmount(e.target.value)}
+                        onChange={(e) => setSellAmount(e.target.value)}
                         className="bg-surface border-border"
                       />
                       <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sm text-muted-foreground">
@@ -287,7 +294,15 @@ const TradingPanel = ({ token, stats }: TokenHeaderProps) => {
                         variant="outline"
                         size="sm"
                         className="h-8 text-xs cursor-pointer border-border bg-surface hover:bg-surface-elevated hover:text-green-500"
-                        onClick={() => setAmount(value)}
+                        onClick={() => {
+                          if (value === "MAX") {
+                            setAmount(selectedTokenAmount || "0");
+                          } else {
+                            const percent = parseFloat(value) / 100;
+                            const tokenToSell = (parseFloat(selectedTokenAmount || "0") * percent).toFixed(7);
+                            setAmount(tokenToSell);
+                          }
+                        }}
                       >
                         {value}
                       </Button>
@@ -319,14 +334,16 @@ const TradingPanel = ({ token, stats }: TokenHeaderProps) => {
                       <span className="text-sm text-muted-foreground">~</span>
                       <div className="text-right text-xs font-mono">
                         <span className="text-xs text-muted-foreground"></span>
-                        {amount ? (parseFloat(amount) * parseFloat(tokenStats?.base_token_price_quote_token || '1')).toFixed(7) : '0.0000000'}
-                      </div>
+                        $ {amount
+                          ? (parseFloat(amount) * parseFloat(tokenStats?.base_token_price_usd || '1')).toFixed(7)
+                          : '0.0000000'
+                        }                      </div>
                     </div>
                   </div>
 
                   {/* Buy Button */}
                   <Button
-                    className="w-full h-12 cursor-pointer bg-green-500 hover:bg-green-400 text-white font-semibold"
+                    className="w-full h-12 cursor-pointer bg-red-500 hover:bg-red-400 text-white font-semibold"
                     size="lg"
                     onClick={() => {
                       sellToken()

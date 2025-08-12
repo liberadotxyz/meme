@@ -59,7 +59,7 @@ export function Wallet() {
                     <Avatar className="w-8 h-7">
                         <AvatarFallback><User className="w-4 h-4" /></AvatarFallback>
                     </Avatar>
-                    <span className="font-medium text-foreground">0X12222</span>
+                    <span className="font-medium text-foreground">{session?.user.address?.slice(0,4)}...{session?.user.address?.slice(-4)}</span>
                     <ChevronUp className={`w-4 h-4 text-muted-foreground transition-transform duration-200 ${open ? 'rotate-180' : ''}`} />
                 </Button>
             </DropdownMenuTrigger>

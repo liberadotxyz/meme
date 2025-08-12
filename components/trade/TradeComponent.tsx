@@ -1,59 +1,88 @@
-"use client"
+"use client";
+
+import { useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
+import { useSelector } from "react-redux";
+import { State } from "@/redux";
+import { getTradeToken } from "@/api/topToken";
+
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ArrowUp, Copy, EyeOff, Search, User, Crown, ChefHat, Plus, Dot, Globe, Sprout } from "lucide-react";
-import { Badge } from "@/components/ui/badge"
+import { ArrowUp, User, Crown, ChefHat, Plus, Globe, Sprout } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { FaTelegram, FaTwitter, FaDiscord } from "react-icons/fa";
-import { TradingCard } from "@/components/TradingCard";
-import { useSession } from "next-auth/react";
-import { useState, useEffect } from "react";
 import { CopyableEthText } from "../ui/copy-text";
-import { State } from '@/redux';
-import { useSelector } from 'react-redux';
-import { swap } from "@/api/topToken";
-export default function TradeComponent() {
-    return (
-        <div className="flex flex-col items-center justify-items-center gap-0 ">
-            {
-                [1, 11, 333, 4444, 66666].map((item) => (
-                    <div className="p-2 w-full max-w-4xl gap-0">
-                        <TradingCard
-                            tokenName={`DAREALFNTRAP${item}`}
-                            tokenIcon={"/images/aaa.png"}
-                            price="0.06 ETH"
-                            marketCap="$1.14M"
-                            timestamp="26m"
-                        />
 
-                        <TokenCard
-                            name="SAILANA"
-                            symbol="Shiba Inu"
-                            icon={"/images/aaa.png"}
-                            marketCap="$1.13M"
-                            address="dWd8...BAGS"
-                            showBoost={true}
-                        />
-                    </div>
-
-                ))
-            }
-
-        </div>
-    );
+// ========== Trading Card Component ==========
+interface TradingCardProps {
+    tokenName: string;
+    tokenIcon?: string;
+    price: string;
+    marketCap?: string;
+    timestamp?: string;
+    buyer?: string;
+    type: string
 }
 
+const getTokenColor = (tokenName: string) => {
+    let hash = 0;
+    for (let i = 0; i < tokenName.length; i++) {
+        hash = tokenName.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const h = Math.abs(hash) % 360;
+    const s = 30 + Math.abs(hash) % 40;
+    const l = 40 + Math.abs(hash) % 30;
+    return `hsl(${h}, ${s}%, ${l}%)`;
+};
 
+export const TradingCard = ({
+    buyer,
+    tokenName,
+    tokenIcon,
+    price,
+    marketCap,
+    timestamp = "26m",
+    type
+}: TradingCardProps) => {
+    const tokenColor = getTokenColor(tokenName);
+    return (
+        <div className="space-y-4">
+            <div className="bg-gradient-card p-1 shadow-card">
+                <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                        <div
+                            className="w-8 h-8 rounded-full border-2 border-primary/20"
+                            style={{ backgroundColor: tokenColor }}
+                        ></div>
+                        <div>
+                            <h3 className="font-bold text-foreground text-sm">
+                                {buyer?.slice(0,4)}...{buyer?.slice(-4)}{" "}
+                                <Button className="px-4 text-xs bg-green-400 h-4">{type}</Button>
+                            </h3>
+                            <div className="text-xs text-foreground">
+                                {price} USD at {marketCap} market cap
+                            </div>
+                        </div>
+                    </div>
+                    <span className="text-xs text-muted-foreground">{timestamp}</span>
+                </div>
+            </div>
+        </div>
+    );
+};
 
+// ========== Token Card Component ==========
 interface TokenCardProps {
     name: string;
     symbol: string;
     icon: string;
     marketCap: string;
-    pnl?: string;
-    pnlPercentage?: string;
     address?: string;
+    telegram?: string;
+    twitter?: string;
+    discord?: string;
+    website?: string;
     showBoost?: boolean;
-    showPnl?: boolean;
 }
 
 const TokenCard = ({
@@ -61,172 +90,157 @@ const TokenCard = ({
     symbol,
     icon,
     marketCap,
-    pnl,
-    pnlPercentage,
     address,
+    telegram,
+    twitter,
+    discord,
+    website,
     showBoost = false,
-    showPnl = false,
 }: TokenCardProps) => {
-
-    const isProfitable = pnl && parseFloat(pnl.replace(/[^0-9.-]/g, "")) > 0;
-    const { data: session, status } = useSession();
-    console.log("session", session, status);
-    const { value } = useSelector((state: State) => state.buy)
-    // const [buyValue, setBuyValue] = useState("");
-    // useEffect(() => {
-    //     const storedValue = localStorage.getItem("buy");
-    //     if (storedValue) {
-    //         setBuyValue(storedValue);
-    //     }
-    // }, []);
-
-    const buyToken = async () => {
-        let payload = {
-            "username": "string",
-            "address_swapping_from": "string",
-            "address_swapping_to": "string",
-            "amount": 0,
-            "slippage": 50
-        }
-    }
+    const { data: session } = useSession();
+    const { value } = useSelector((state: State) => state.buy);
 
     return (
-        <Card className="bg-gradient-card w-full border-border  p-4 shadow-card hover:border-primary/20 transition-all duration-300">
+        <Card className="bg-gradient-card w-full border-border p-4 shadow-card hover:border-primary/20 transition-all duration-300 mt-2">
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                    <div className="">
-
-                        <img
-                            src={icon}
-                            alt={name}
-                            className="w-12 h-12 rounded-full object-cover border-2 border-primary/20"
-                        />
-                        <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-gradient-purple rounded-full border-2 border-background"></div>
-                    </div>
-
+                    <img
+                        src={icon}
+                        alt={name}
+                        className="w-12 h-12 rounded-full object-cover border-2 border-primary/20"
+                    />
                     <div className="flex flex-col">
-                        <div className="flex items-center">
-                            <h3 className="font-bold text-foreground text-sm">{name}
+                        <div className="flex items-center gap-2">
+                            <h3 className="font-bold text-foreground text-sm">{name}</h3>
+                            <h3 className="font-bold text-muted-foreground text-sm ml-3">{symbol}</h3>
 
-                            </h3>
-                            <h3 className="font-bold text-muted-foreground text-sm ml-3">
-                                Rocket Guy
-                            </h3>
                         </div>
 
-                        <div className="flex flex-col gap-1">
-                            <div className="text-muted-foreground text-xs flex gap-2">
-                                <FaTelegram size={12}></FaTelegram>
-                                <FaTwitter size={12}></FaTwitter>
-                                <FaDiscord size={12}></FaDiscord>
-                                <Globe size={12}></Globe>
-                            </div>
+                        {/* Social Icons */}
+                        <div className="text-muted-foreground text-xs flex gap-2 mt-1">
+                            {telegram && (
+                                <a href={telegram} target="_blank">
+                                    <FaTelegram size={12} />
+                                </a>
+                            )}
+                            {twitter && (
+                                <a href={`https://twitter.com/${twitter}`} target="_blank">
+                                    <FaTwitter size={12} />
+                                </a>
+                            )}
+                            {discord && (
+                                <a href={discord} target="_blank">
+                                    <FaDiscord size={12} />
+                                </a>
+                            )}
+                            {website && (
+                                <a href={website} target="_blank">
+                                    <Globe size={12} />
+                                </a>
+                            )}
+                        </div>
+
+                        {/* Address */}
+                        {address && (
                             <div className="text-muted-foreground text-xs flex items-center mb-1 hover:text-green-500">
-                                {/* Awqr...dx11 */}
-                                <CopyableEthText text="Awqr...dx11"></CopyableEthText>
-                                {/* <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    className="h-4 w-4 p-0 hover:text-green-500 ml-1"
-                                >
-                                    <Copy className="h-3 w-3" />
-                                </Button> */}
+                                <CopyableEthText text={address} />
                             </div>
+                        )}
 
-                            <div className="text-muted-foreground text-xs flex gap-1 mt-1">
-                                <div className="relative group">
-                                    <Badge className="p-1 h-4 bg-transparent border border-gray-600 text-green-500 cursor-pointer">
-                                        <User size={10}></User>14
-                                    </Badge>
-                                    <div className="absolute bottom-full z-20 left-1/2 -translate-x-1/2 mb-2 px-2 py-1 text-xs rounded bg-gray-800 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none">
-                                        Total number of holder
-                                    </div>
-                                </div>
-                                <div className="relative group">
-                                    <Badge className="p-1 h-4 bg-transparent border border-gray-600 text-green-500 cursor-pointer">
-                                        <ChefHat size={10}></ChefHat>1%
-                                    </Badge>
-                                    <div className="absolute bottom-full z-20 left-1/2 -translate-x-1/2 mb-2 px-2 py-1 text-xs rounded bg-gray-800 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none">
-                                        The percentage hold by dev team
-                                    </div>
-                                </div>
-                                <div className="relative group">
-                                    <Badge className="p-1 h-4 bg-transparent border border-gray-600 text-green-500 cursor-pointer">
-                                        <Crown size={10}></Crown>2%
-                                    </Badge>
-                                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 text-xs rounded bg-gray-800 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none">
-                                        Top 10 holder percentage
-                                    </div>
-                                </div>
-                                <div className="relative group">
-                                    <Badge className="p-1 h-4 bg-transparent border border-gray-600 text-green-500 cursor-pointer">
-                                        <Sprout size={10} className="inline mr-1" />3s
-                                    </Badge>
-                                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 text-xs rounded bg-gray-800 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none">
-                                        created 3s before
-                                    </div>
-                                </div>
-                            </div>
-
-
-
-
-
+                        {/* Badges */}
+                        <div className="text-muted-foreground text-xs flex gap-1 mt-1">
+                            <Badge className="p-1 h-4 bg-transparent border border-gray-600 text-green-500 cursor-pointer">
+                                <User size={10} />14
+                            </Badge>
+                            <Badge className="p-1 h-4 bg-transparent border border-gray-600 text-green-500 cursor-pointer">
+                                <ChefHat size={10} />1%
+                            </Badge>
+                            <Badge className="p-1 h-4 bg-transparent border border-gray-600 text-green-500 cursor-pointer">
+                                <Crown size={10} />2%
+                            </Badge>
+                            <Badge className="p-1 h-4 bg-transparent border border-gray-600 text-green-500 cursor-pointer">
+                                <Sprout size={10} className="inline mr-1" />3s
+                            </Badge>
                         </div>
                     </div>
                 </div>
 
-                <div className="flex flex-col items-end gap-2">
-
-                    <div className="text-right">
-                        <div className="text-muted-foreground text-sm flex items-center gap-1">
-                            <div>
-                                V
-                                <span className="text-white text-sm font-medium"> 15K</span>
-
-                            </div>
-                            MCAP
-                            <span className="text-green-500 text-sm font-medium"> {marketCap}</span>
-                        </div>
-                        <div className="text-muted-foreground text-xs flex items-center gap-1 justify-end">
-                            TX
-                            <span className="text-white text-xs font-medium"> 25K</span>
-
-                        </div>
-                        <Button
-                            size="sm"
-                            className="h-6 gap-0 w-13 px-3 mt-2 p-0 bg-green-500 hover:bg-green-600 text-black"
-                        >
-                            <Plus color="black"></Plus>
-
-                            {/* {
-                            session?.user.quick_buy_amount ? 
-                           } */}
-                            {value}
-                        </Button>
+                {/* Right Side Info */}
+                <div className="text-right">
+                    <div className="text-muted-foreground text-sm flex items-center gap-1">
+                        MCAP <span className="text-green-500 text-sm font-medium">{marketCap}</span>
                     </div>
-
-
+                    <Button
+                        size="sm"
+                        className="h-6 gap-0 w-13 px-3 mt-2 p-0 bg-green-500 hover:bg-green-600 text-black"
+                    >
+                        <Plus color="black" />
+                        {value}
+                    </Button>
                 </div>
             </div>
-
-            {showPnl && pnl && pnlPercentage && (
-                <div className="mt-4 pt-4 border-t border-border/50">
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                            <span className="text-muted-foreground">P&L:</span>
-                            <div className={`flex items-center gap-1 ${isProfitable ? 'text-trading-success' : 'text-trading-danger'}`}>
-                                <span className="font-bold">{pnl}</span>
-                                <ArrowUp className={`h-4 w-4 ${!isProfitable && 'rotate-180'}`} />
-                                <span className="font-semibold">{pnlPercentage}</span>
-                            </div>
-                        </div>
-                        <div className="text-muted-foreground text-sm">{marketCap} MC</div>
-                    </div>
-                </div>
-            )}
-
-
         </Card>
     );
 };
+
+// ========== Main Trade Component ==========
+export default function TradeComponent() {
+    const [loading, setLoading] = useState(false);
+    const [tokens, setTokens] = useState<any[]>([]);
+
+    const fetchTokens = async () => {
+        setLoading(true);
+        try {
+            const { data } = await getTradeToken();
+            setTokens(data || []);
+        } catch (err) {
+            console.error("Failed to fetch tokens", err);
+        }
+        setLoading(false);
+    };
+
+    useEffect(() => {
+        fetchTokens();
+    }, []);
+
+    return (
+        <div className="flex flex-col items-center gap-4 w-full">
+            {loading && <div>Loading...</div>}
+            {!loading &&
+                tokens.map((item, idx) => {
+                    const token = item?.social_info[0];
+                    // const stats = item.token_details?.token_stats;
+
+                    return (
+                        <div key={idx} className="p-2 w-full max-w-4xl">
+                            <TradingCard
+                                buyer={item?.buyer}
+                                tokenName={token?.name || "Unknown"}
+                                // tokenIcon={token?.image?.large || "/images/aaa.png"}
+                                price={`${Number(item?.amount_usd || 0).toFixed(3)}`}
+                                // marketCap={`$${Number(stats?.fdv_usd || 0).toLocaleString()}`}
+                                // timestamp="26m"
+                                type={item?.trade_type}
+                            />
+                            <TokenCard
+                                name={token?.name || ""}
+                                symbol={token?.symbol || ""}
+                                icon={token?.image?.large || "/images/aaa.png"}
+                                marketCap={`$${Number(token?.fdv_usd || 0).toLocaleString()}`}
+                                address={token?.address || ""}
+                                telegram={
+                                    token?.telegram_handle
+                                        ? `https://t.me/${token.telegram_handle}`
+                                        : undefined
+                                }
+                                twitter={token?.twitter_handle || undefined}
+                                discord={token?.discord_url || undefined}
+                                website={token?.websites?.[0] || undefined}
+                                showBoost={true}
+                            />
+                        </div>
+                    );
+                })}
+        </div>
+    );
+}
