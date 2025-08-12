@@ -109,7 +109,7 @@ const TradingPanel = ({ token, stats }: TokenHeaderProps) => {
   const userWallet = async () => {
     let data = await fetchBalance(session?.user.address || "");
     data.map((item:any, index:any) => {
-      if(item.token_address == tokenDetails.address) {
+      if(item.address == tokenDetails.address) {
         setSelectedTokenAddress(item.balance)
       }
     })
