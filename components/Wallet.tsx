@@ -23,7 +23,8 @@ import {
     ChevronUp,
     User,
     ArrowLeft,
-    ArrowRight
+    ArrowRight,
+    Landmark
 } from 'lucide-react';
 import { quickBuySetting } from '@/api/topToken';
 import { useDispatch } from 'react-redux';
@@ -107,13 +108,13 @@ export function Wallet() {
                                 setClickBuy(true);
                             }}
                         >
-                            <div className='flex items-center justify-between'>
+                            <div className='flex items-center justify-between w-full'>
                                 <div className='flex gap-1'>
-                                    <Settings className="w-5 h-5 text-muted-foreground" />
+                                    <Landmark className="w-5 h-5 text-muted-foreground" />
                                     <span className="font-medium">Quick Buy</span>
                                 </div>
                                 <div>
-                                    <ArrowRight size={15}></ArrowRight>
+                                    <ArrowRight size={15} color='white'></ArrowRight>
                                 </div>
                             </div>
 

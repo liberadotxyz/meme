@@ -6,7 +6,9 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Settings, Minus, Zap, BarChart3, PieChart, Fuel, Copy, Wallet } from "lucide-react";
 import { Card } from "../ui/card";
-
+import { swap } from "@/api/topToken";
+import { useSession } from "next-auth/react";
+import { toast } from "sonner";
 interface TokenHeaderProps {
   token: any;
   stats: any;
@@ -15,6 +17,7 @@ interface TokenHeaderProps {
 const TradingPanel = ({ token, stats }: TokenHeaderProps) => {
   const [activeTab, setActiveTab] = useState("buy");
   const [amount, setAmount] = useState("");
+  const [sellAmount, setSellAmount] = useState("")
   const [info, setInfo] = useState("info");
   const quickAmounts = ["0.1", "0.5", "1", "2", "5"];
   const quickSellAmount = ["10%", "25%", "50%", "75%", "MAX"];
@@ -26,6 +29,7 @@ const TradingPanel = ({ token, stats }: TokenHeaderProps) => {
   const transactions = tokenStats?.transactions;
   const volume = tokenStats?.volume_usd;
   const holders = tokenDetails?.holders;
+  const { data: session } = useSession()
 
   // Format numbers
   const formatNumber = (num: string | number) => {
@@ -38,6 +42,32 @@ const TradingPanel = ({ token, stats }: TokenHeaderProps) => {
     }
     return `$${number}`;
   };
+
+  const buyToken = async () => {
+    let payload = {
+      "username": session?.user.username,
+      "address_swapping_from": "0x0000000000000000000000000000000000000000",
+      "address_swapping_to": tokenDetails?.address,
+      "amount": Number(amount),
+      // "slippage": 50
+    }
+    let result = await swap(payload);
+    console.log("result k aayo", result)
+    // toast(`succssfully buy worth of ${amount} of ${name}`)
+  }
+
+  const sellToken = async () => {
+    let payload = {
+      "username": session?.user.username,
+      "address_swapping_from": tokenDetails?.address,
+      "address_swapping_to": "0x0000000000000000000000000000000000000000",
+      "amount": Number(amount),
+      // "slippage": 50
+    }
+    let result = await swap(payload);
+    console.log("result k aayo", result)
+    // toast(`succssfully buy worth of ${amount} of ${name}`)
+  }
 
   return (
     <div className="bg-surface-elevated p-1">
@@ -162,6 +192,9 @@ const TradingPanel = ({ token, stats }: TokenHeaderProps) => {
                   <Button
                     className="w-full h-12 cursor-pointer bg-green-500 hover:bg-green-400 text-white font-semibold"
                     size="lg"
+                    onClick={() => {
+                      buyToken()
+                    }}
                   >
                     <Zap className="h-5 w-5 mr-2" />
                     Buy Now
@@ -169,8 +202,88 @@ const TradingPanel = ({ token, stats }: TokenHeaderProps) => {
                 </TabsContent>
 
                 <TabsContent value="sell" className="mt-0 space-y-4">
-                  {/* Similar structure as buy tab */}
-                  {/* ... */}
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-end">
+                      <div className="flex items-center">
+                        <Wallet className="h-3 w-3"></Wallet>
+                        <Button variant="ghost" size="sm" className="h-5 w-5 p-0">
+                          <Minus className="h-3 w-3" />
+                        </Button>
+                        <span className="text-xs text-muted-foreground">
+                          (${formatNumber(tokenStats?.base_token_price_usd || 0)})
+                        </span>
+                      </div>
+                    </div>
+                    <div className="relative">
+                      <Input
+                        type="text"
+                        placeholder="Enter a custom amount"
+                        value={amount}
+                        onChange={(e) => setAmount(e.target.value)}
+                        className="bg-surface border-border"
+                      />
+                      <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sm text-muted-foreground">
+                        {tokenDetails?.symbol || 'TOKEN'}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Quick Amount Buttons */}
+                  <div className="grid grid-cols-5 gap-2">
+                    {quickSellAmount.map((value) => (
+                      <Button
+                        key={value}
+                        variant="outline"
+                        size="sm"
+                        className="h-8 text-xs cursor-pointer border-border bg-surface hover:bg-surface-elevated hover:text-green-500"
+                        onClick={() => setAmount(value)}
+                      >
+                        {value}
+                      </Button>
+                    ))}
+                  </div>
+
+                  {/* Additional Info */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      <Fuel size={10}></Fuel>
+                      <span className="text-xs">2.2946 GWEI</span>
+                    </div>
+                    <div>
+                      <span className="text-muted-foreground text-xs">
+                        {priceChange?.h24 || '0'}%
+                      </span>
+                    </div>
+                    <div className="flex items-center">
+                      <Button variant="ghost" size="sm" className="h-4 w-4 p-0">
+                        <Settings size={10} />
+                      </Button>
+                      <span className="text-primary text-xs">Advanced</span>
+                    </div>
+                  </div>
+
+                  {/* You Receive */}
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-muted-foreground">~</span>
+                      <div className="text-right text-xs font-mono">
+                        <span className="text-xs text-muted-foreground"></span>
+                        {amount ? (parseFloat(amount) * parseFloat(tokenStats?.base_token_price_quote_token || '1')).toFixed(7) : '0.0000000'}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Buy Button */}
+                  <Button
+                    className="w-full h-12 cursor-pointer bg-green-500 hover:bg-green-400 text-white font-semibold"
+                    size="lg"
+                    onClick={() => {
+                      sellToken()
+                    }}
+                  >
+                    <Zap className="h-5 w-5 mr-2" />
+                    Sell Now
+                  </Button>
                 </TabsContent>
               </div>
             </Tabs>

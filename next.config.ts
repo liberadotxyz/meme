@@ -15,7 +15,7 @@ const nextConfig: NextConfig = {
       "cdn.moralis.io",
       "logo.moralis.io",
       "img.reservoir.tools",
-      "raw.githubusercontent.com"
+      "raw.githubusercontent.com",
     ],
   },
 };

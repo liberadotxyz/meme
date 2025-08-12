@@ -253,7 +253,7 @@ export default function TopComponent() {
             address={token_detail?.address}
             holdersCount={token_detail?.holders.count}
             devPercent={"1"} // placeholder
-            top10Percent={token_detail?.holders.distribution_percentage.top_10}
+            top10Percent={token_detail?.holders.distribution_percentage?.top_10}
             createdAgo={timeAgo(pool_info?.pool_created_at)}
             social={{
               telegram: token_detail?.telegram_handle || undefined,

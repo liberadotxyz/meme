@@ -7,12 +7,11 @@ import { WalletBalance } from './WalletBalance';
 import { DepositScreen } from './DepositeScreen';
 import { SendScreen } from './SendScreen';
 import { ReceiveScreen } from './ReceiveScreen';
-import { useConnectModal } from '@rainbow-me/rainbowkit';
-import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { TransferScreen } from './Transfer';
 import { getBalance } from '@/api/topToken';
 import { useSession } from 'next-auth/react';
 import { CopyableEthText } from '../ui/copy-text';
+import Image from 'next/image';
 type WalletView = 'main' | 'deposit' | 'send' | 'receive' | 'transfer';
 
 interface Token {
@@ -70,7 +69,7 @@ export const WalletInterface = ({ onClose }: WalletInterfaceProps) => {
         let data = await getBalance(session?.user.address || "");
         setBalance(data)
     }
-
+    console.log("balance k aayo")
     useEffect(() => {
         getUserBalance()
     }, [])
@@ -167,33 +166,31 @@ export const WalletInterface = ({ onClose }: WalletInterfaceProps) => {
                                     </p>
 
                                     <div className="space-y-1">
-                                        {mockTokens.map((token) => (
+                                        {balance.map((token) => (
                                             <div key={token.symbol} className="flex items-center justify-between p-3 rounded-lg hover:bg-[#262626] cursor-pointer transition-colors"
                                                 onClick={() => setCurrentView('transfer')}
                                             >
                                                 <div className="flex items-center gap-3">
                                                     <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
-                                                        {token.symbol === 'ETH' && <span className="text-sm">Ξ</span>}
-                                                        {token.symbol === 'ZORA' && <div className="w-4 h-4 rounded-full bg-gradient-to-br from-blue-500 to-purple-600"></div>}
-                                                        {token.symbol === 'USDC' && <span className="text-xs font-bold">US</span>}
+                                                        <Image src={`${token.logo}`} width={30} height={30} alt='token'></Image>
                                                     </div>
                                                     <div>
                                                         <h4 className="font-medium">
-                                                            {token.symbol === 'ETH' ? 'Ethereum' : token.symbol === 'ZORA' ? 'Zora' : 'USDC'}
+                                                            {token.symbol }
                                                         </h4>
                                                         <p className="text-sm text-text-secondary">
-                                                            {token.balance} {token.symbol}
+                                                            {token.balance}
                                                         </p>
                                                     </div>
                                                 </div>
                                                 <div className="text-right">
-                                                    <p className="font-medium">{token.value}</p>
-                                                    {token.change && (
+                                                    {/* <p className="font-medium">{token.value}</p> */}
+                                                    {/* {token.change && (
                                                         <div className="flex items-center gap-1 text-sm text-destructive">
                                                             <TrendingDown className="w-3 h-3" />
                                                             {token.change}
                                                         </div>
-                                                    )}
+                                                    )} */}
                                                 </div>
                                             </div>
                                         ))}
@@ -213,7 +210,7 @@ export const WalletInterface = ({ onClose }: WalletInterfaceProps) => {
     };
 
     return (
-        <div className="w-full max-w-md mx-auto bg-wallet-surface rounded-2xl p-6">
+        <div className="w-full max-w-2xl mx-auto bg-wallet-surface rounded-2xl p-2">
             {renderCurrentView()}
         </div>
     );
