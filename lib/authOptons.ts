@@ -4,6 +4,7 @@ import GoogleProvider from "next-auth/providers/google";
 import type { Account, Profile, User } from "next-auth";
 import type { JWT } from "next-auth/jwt";
 import Credentials from "next-auth/providers/credentials";
+
 export const authOptions = {
     providers: [
         TwitterProvider({
@@ -35,7 +36,7 @@ export const authOptions = {
         Credentials({
             credentials: {},
             async authorize({ username }: any) {
-                
+
                 try {
                     const res = await fetch("https://backends.phaser.bot/api/v1/user/save/", {
                         method: "POST",
@@ -50,12 +51,12 @@ export const authOptions = {
                     // console.log("user k raixa", await res.json())
                     if (res.ok) {
                         const data = await res.json();
-                        return {...data}
+                        return { ...data }
                     } else {
                         console.error("Backend error saving user:", await res.text());
                     }
                 } catch (error) {
-                    
+
                 }
                 // const users = await getUser(email);
                 // if (users.length === 0) return null;
@@ -74,7 +75,7 @@ export const authOptions = {
                 username: token.username,
                 id: token.userId,
                 address: token.address,
-                quick_buy_amount:token.quick_buy_amount
+                quick_buy_amount: token.quick_buy_amount
             };
             return session;
         },
@@ -99,11 +100,10 @@ export const authOptions = {
                 token.username = profile.email.split("@")[0];
             } else if (user && (user as any).username) {
                 token.username = (user as any).username;
-            } else{
-                
+            } else {
+
             }
 
-            // Only call API on signIn
             if (account) {
                 try {
                     const res = await fetch("https://backends.phaser.bot/api/v1/user/save/", {
@@ -120,7 +120,8 @@ export const authOptions = {
                         const data = await res.json();
                         token.userId = data.id;
                         token.address = data.address;
-                        token.quick_buy_amount  = data.quick_buy_amount
+                        token.quick_buy_amount = data.quick_buy_amount;
+                       
                     } else {
                         console.error("Backend error saving user:", await res.text());
                     }

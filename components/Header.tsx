@@ -14,10 +14,12 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import { useSearchParams } from 'next/navigation';
 import { useAccount } from 'wagmi';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
-
+import { useDispatch } from 'react-redux';
+import { setBuy } from '@/redux/quickbuy';
 export const Header = () => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const router = useRouter();
+    const dispatch = useDispatch()
     const [showTooltip, setShowTooltip] = useState(false);
     const [triggerLogin, setTriggerLogin] = useState(false);
     const [search, setSearch] = useState("")
@@ -26,6 +28,19 @@ export const Header = () => {
     const [iswalletpopup, setWalletPopup] = useState(false);
     const { data: session } = useSession();
     console.log("sesssion m kx xa", session)
+
+    const setQuickBuy = () => {
+        dispatch(setBuy({
+            value: session?.user?.quick_buy_amount || "0"
+
+        }));
+    }
+
+    useEffect(() => {
+        if (session?.user) {
+            setQuickBuy()
+        }
+    }, [session])
     async function handleCloseDialog() {
         setIsSendDialogOpen(false);
     }
