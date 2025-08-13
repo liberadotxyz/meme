@@ -81,7 +81,7 @@ const TradingPanel = ({ token, stats }: TokenHeaderProps) => {
     let payload = {
       "username": session?.user.username,
       "address_swapping_from": tokenDetails?.address,
-      "address_swapping_to": "0x0000000000000000000000000000000000000000",
+      "address_swapping_to": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
       "amount": Number(amount),
       // "slippage": 50
     }
