@@ -190,6 +190,7 @@ const TokenCard = ({
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-15 h-15 flex justify-center items-center relative">
+              
               <img
                 src={icon}
                 alt={name}

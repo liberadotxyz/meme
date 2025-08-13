@@ -180,13 +180,25 @@ const TokenCard = ({
             <Card className="bg-gradient-card w-full border-border p-4 shadow-card hover:border-primary/20 transition-all duration-300 mt-2">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                        <Image
+                        {
+                            metadata?.image ? <>
+                             <Image
                             src={`https://ipfs.io/ipfs/${metadata?.image.split("//")[1]}`}
                             alt=""
                             width={50}
                             height={50}
                             className="rounded-full"
                         ></Image>
+                            </> : <div className="w-13 h-13 rounded-full" style={{background:`${tokenColor}`}}>
+                            </div>
+                        }
+                        {/* <Image
+                            src={`https://ipfs.io/ipfs/${metadata?.image.split("//")[1]}`}
+                            alt=""
+                            width={50}
+                            height={50}
+                            className="rounded-full"
+                        ></Image> */}
                         <div className="flex flex-col">
                             <div className="flex items-center gap-2">
                                 <h3 className="font-bold text-foreground text-sm">{name}</h3>

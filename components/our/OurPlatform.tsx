@@ -240,13 +240,25 @@ const TokenCard = ({
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-15 h-15 flex justify-center items-center relative">
-              <Image 
+              {
+                metadata?.image ? <>
+                  <Image
+                    src={`https://ipfs.io/ipfs/${metadata?.image.split("//")[1]}`}
+                    alt=""
+                    width={50}
+                    height={50}
+                    className="rounded-full"
+                  ></Image>
+                </> : <div className="w-13 h-13 rounded-full" style={{ background: `${tokenColor}` }}>
+                </div>
+              }
+              {/* <Image 
               src={`https://ipfs.io/ipfs/${metadata?.image.split("//")[1]}`}
               alt=""
               width={50}
               height={50}
               className="rounded-full"
-              ></Image>
+              ></Image> */}
             </div>
 
             <div className="flex flex-col">
@@ -259,7 +271,7 @@ const TokenCard = ({
 
               <div className="flex flex-col gap-1">
                 <div className="text-muted-foreground text-xs flex gap-2">
-                   {metadata?.properties.telegram && (
+                  {metadata?.properties.telegram && (
                     <a href={metadata?.properties.telegram} onClick={(e) => e.stopPropagation()} target="_blank" rel="noopener noreferrer">
                       <FaTelegram size={12} className="hover:text-blue-400" />
                     </a>
