@@ -14,12 +14,14 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import { useSearchParams } from 'next/navigation';
 import { useAccount } from 'wagmi';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { State } from '@/redux';
 import { setBuy } from '@/redux/quickbuy';
 export const Header = () => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const router = useRouter();
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
+    const { value } = useSelector((state: State) => state.buy)
     const [search, setSearch] = useState("")
     const [isSendDialogOpen, setIsSendDialogOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -28,18 +30,35 @@ export const Header = () => {
     console.log("sesssion m kx xa", session)
 
     const setQuickBuy = () => {
-        dispatch(setBuy({
+        if (session?.user) {
+            if (value) {
+                dispatch(setBuy({ value: value }));
 
-            value: session?.user?.quick_buy_amount || "0"
+            } else {
+                dispatch(setBuy({ value: session.user.quick_buy_amount || "0" }));
 
-        }));
+            }
+        }
+
     }
 
     // useEffect(() => {
     //     if (session?.user) {
     //         setQuickBuy()
     //     }
-    // }, [session])
+    // }, [session]);
+
+    //  const setQuickBuys = () => {
+    //     dispatch(setBuy({
+
+    //         value: value
+
+    //     }));
+    // }
+
+    useEffect(() => {
+        setQuickBuy()
+    }, [value])
     async function handleCloseDialog() {
         setIsSendDialogOpen(false);
     }
