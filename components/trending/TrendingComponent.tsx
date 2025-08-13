@@ -211,17 +211,17 @@ const TokenCard = ({
               <div className="flex flex-col gap-1">
                 <div className="text-muted-foreground text-xs flex gap-2">
                   {twitterHandle && (
-                    <a href={twitterHandle} target="_blank" rel="noopener noreferrer">
+                    <a href={twitterHandle} onClick={(e) => e.stopPropagation()} target="_blank" rel="noopener noreferrer">
                       <FaTwitter size={12} className="hover:text-blue-400" />
                     </a>
                   )}
                   {discordUrl && (
-                    <a href={discordUrl} target="_blank" rel="noopener noreferrer">
+                    <a href={discordUrl} onClick={(e) => e.stopPropagation()} target="_blank" rel="noopener noreferrer">
                       <FaDiscord size={12} className="hover:text-purple-400" />
                     </a>
                   )}
                   {websiteUrl && (
-                    <a href={websiteUrl} target="_blank" rel="noopener noreferrer">
+                    <a href={websiteUrl} onClick={(e) => e.stopPropagation()} target="_blank" rel="noopener noreferrer">
                       <Globe size={12} className="hover:text-green-400" />
                     </a>
                   )}

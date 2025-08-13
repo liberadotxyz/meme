@@ -197,22 +197,22 @@ const TokenCard = ({
                             {/* Social Icons */}
                             <div className="text-muted-foreground text-xs flex gap-2 mt-1">
                                 {metadata?.properties.telegram && (
-                                    <a href={metadata?.properties.telegram} target="_blank" rel="noopener noreferrer">
+                                    <a href={metadata?.properties.telegram} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>
                                         <FaTelegram size={12} className="hover:text-blue-400" />
                                     </a>
                                 )}
                                 {metadata?.properties.twitter && (
-                                    <a href={metadata?.properties.twitter} target="_blank" rel="noopener noreferrer">
+                                    <a href={metadata?.properties.twitter} onClick={(e) => e.stopPropagation()} target="_blank" rel="noopener noreferrer">
                                         <FaTwitter size={12} className="hover:text-blue-400" />
                                     </a>
                                 )}
                                 {metadata?.properties.discord && (
-                                    <a href={metadata?.properties.discord} target="_blank" rel="noopener noreferrer">
+                                    <a href={metadata?.properties.discord} onClick={(e) => e.stopPropagation()} target="_blank" rel="noopener noreferrer">
                                         <FaDiscord size={12} className="hover:text-purple-400" />
                                     </a>
                                 )}
                                 {metadata?.properties.website && (
-                                    <a href={metadata?.properties.website} target="_blank" rel="noopener noreferrer">
+                                    <a href={metadata?.properties.website} onClick={(e) => e.stopPropagation()} target="_blank" rel="noopener noreferrer">
                                         <Globe size={12} className="hover:text-green-400" />
                                     </a>
                                 )}
