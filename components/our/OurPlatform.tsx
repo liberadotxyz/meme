@@ -13,6 +13,8 @@ import { useSelector } from 'react-redux';
 import { swap } from "@/api/topToken";
 import { useSession } from "next-auth/react";
 import { getRecent } from "@/api/topToken";
+import { toast } from "sonner";
+import { Loader2 } from "lucide-react";
 export default function OurPlatform() {
   const [loading, setLoading] = useState(false);
   const [tokens, setTokens] = useState<any[]>([]);
@@ -164,14 +166,24 @@ const TokenCard = ({
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset = circumference - (progress / 100) * circumference;
   const { value } = useSelector((state: State) => state.buy)
+  const [buyLoading, setBuyLoading] = useState(false)
   const buyToken = async () => {
-    let payload = {
-      "username": session?.user.username,
-      "address_swapping_from": "0x0000000000000000000000000000000000000000",
-      "address_swapping_to": address,
-      "amount": value,
+    setBuyLoading(true);
+    try {
+      let payload = {
+        "username": session?.user.username,
+        "address_swapping_from": "0x0000000000000000000000000000000000000000",
+        "address_swapping_to": address,
+        "amount": value,
+      }
+      let { message } = await swap(payload);
+      toast(message)
+    } catch (error) {
+
+    } finally {
+      setBuyLoading(false)
     }
-    await swap(payload);
+
   }
   return (
     <Link href={`/detail/${pairAddress}`}>
@@ -274,7 +286,6 @@ const TokenCard = ({
                 TX<span className="text-white text-xs font-medium"> {transactions24h > 1000 ? `${(transactions24h / 1000).toFixed(1)}K` : transactions24h}</span>
               </div>
               <Button
-                variant="ghost"
                 size="sm"
                 className="h-6 gap-0 w-13 px-3 mt-2 p-0 bg-green-500 hover:bg-green-600 text-black"
                 onClick={(e) => {
@@ -283,8 +294,14 @@ const TokenCard = ({
                   buyToken()
                 }}
               >
-                <Plus color="black" size={14} />
-                {value}
+
+                {
+                  buyLoading ? <Loader2></Loader2> :
+                    <>
+                      <Plus color="black" size={14} />{value}
+                    </>
+                }
+
               </Button>
             </div>
           </div>

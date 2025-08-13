@@ -13,6 +13,10 @@ import { Badge } from "@/components/ui/badge";
 import { FaTelegram, FaTwitter, FaDiscord } from "react-icons/fa";
 import { CopyableEthText } from "../ui/copy-text";
 import Link from "next/link";
+import SkeletonLoader from "../SkeletonLoader";
+import { Loader2 } from "lucide-react";
+import { swap } from "@/api/topToken";
+import { toast } from "sonner";
 // ========== Trading Card Component ==========
 interface TradingCardProps {
     tokenName: string;
@@ -104,7 +108,25 @@ const TokenCard = ({
 }: TokenCardProps) => {
     const { data: session } = useSession();
     const { value } = useSelector((state: State) => state.buy);
+    const [buyLoading, setBuyLoading] = useState(false)
+  const buyToken = async () => {
+    setBuyLoading(true);
+    try {
+      let payload = {
+        "username": session?.user.username,
+        "address_swapping_from": "0x0000000000000000000000000000000000000000",
+        "address_swapping_to": address,
+        "amount": value,
+      }
+      let { message } = await swap(payload);
+      toast(message)
+    } catch (error) {
 
+    } finally {
+      setBuyLoading(false)
+    }
+
+  }
     return (
         <Link href={`/detail/${pool_address}`}>
             <Card className="bg-gradient-card w-full border-border p-4 shadow-card hover:border-primary/20 transition-all duration-300 mt-2">
@@ -177,12 +199,24 @@ const TokenCard = ({
                             MCAP <span className="text-green-500 text-sm font-medium">{marketCap}</span>
                         </div>
                         <Button
-                            size="sm"
-                            className="h-6 gap-0 w-13 px-3 mt-2 p-0 bg-green-500 hover:bg-green-600 text-black"
-                        >
-                            <Plus color="black" />
-                            {value}
-                        </Button>
+                size="sm"
+                className="h-6 gap-0 w-13 px-3 mt-2 p-0 bg-green-500 hover:bg-green-600 text-black"
+                onClick={(e) => {
+                  e.preventDefault(); // prevents navigation
+                  e.stopPropagation();
+                  buyToken()
+                }}
+              >
+               
+
+                {
+                  buyLoading ? <Loader2></Loader2> :
+                    <>
+                       <Plus color="black" size={14} />{value}
+                    </>
+                }
+
+              </Button>
                     </div>
                 </div>
             </Card>
@@ -210,9 +244,16 @@ export default function TradeComponent() {
         fetchTokens();
     }, []);
 
+    if(loading){
+        return (
+             <SkeletonLoader></SkeletonLoader>
+        )
+    }
+
+    
     return (
         <div className="flex flex-col items-center gap-4 w-full">
-            {loading && <div>Loading...</div>}
+           
             {!loading &&
                 tokens.map((item, idx) => {
                     const token = item?.social_info[0];

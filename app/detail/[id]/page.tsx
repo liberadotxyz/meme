@@ -37,7 +37,7 @@ export default async function TokenDetailPage(props: { params: Promise<{ id: str
 
   return (
     <div className="min-h-screen">
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-6xl mx-auto">
         <div className="space-y-6 bg-card border-none">
           <TokenHeader token={token_detail} stats={token_stats} />
           <TradingPanel token={token_detail} stats={token_stats} />

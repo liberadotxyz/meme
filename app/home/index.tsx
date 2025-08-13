@@ -11,7 +11,7 @@ import TradeComponent from "@/components/trade/TradeComponent";
 import OurPlatform from "@/components/our/OurPlatform";
 export default function Home() {
     return (
-        <div>
+        <div className=" max-w-4xl mx-auto">
             <Card className="bg-muted/50 gap-3 mb-3">
                 <CardHeader className="pb-3 gap-0">
                     <CardTitle className="text-3xl font-bold text-center">Launch on Bora</CardTitle>
@@ -27,38 +27,51 @@ export default function Home() {
 
                 </CardContent>
             </Card>
-            <Tabs defaultValue="trade" className="max-w-4xl">
-                <TabsList className="grid w-full grid-cols-5 h-12 sticky top-22 z-1 ">
+            <Tabs defaultValue="trade" className="max-w-6xl">
+                <TabsList className="grid w-full grid-cols-3 h-12 sticky top-22 z-1 ">
                     <TabsTrigger value="trade" className="cursor-pointer">
                         <div className="flex items-center gap-2">
                             <span><ChartBarStacked></ChartBarStacked></span>
                             <span>Trades</span>
                         </div>
                     </TabsTrigger>
-                    <TabsTrigger value="trending" className="cursor-pointer">
+                    {/* <TabsTrigger value="trending" className="cursor-pointer">
                         <div className="flex items-center gap-2">
                             <span><TrendingUpDown></TrendingUpDown></span>
                             <span>Trending</span>
                         </div>
-                    </TabsTrigger>
-                    <TabsTrigger value="recent" className="cursor-pointer">
+                    </TabsTrigger> */}
+                    {/* <TabsTrigger value="recent" className="cursor-pointer">
                         <div className="flex items-center gap-2">
                             <span><TrendingUpDown></TrendingUpDown></span>
                             <span>Platform</span>
                         </div>
+                    </TabsTrigger> */}
+                    <TabsTrigger value="platform" className="cursor-pointer">
+                        <div className="flex items-center gap-2">
+                            <span><Codesandbox></Codesandbox></span>
+                            <span>Recent</span>
+                        </div>
                     </TabsTrigger>
-                    <TabsTrigger value="presale" className="cursor-pointer">
+                    <TabsTrigger value="explore" className="cursor-pointer">
+                        <div className="flex items-center gap-2">
+                            <span><TrendingUpDown></TrendingUpDown></span>
+                            <span>Explore</span>
+                        </div>
+                    </TabsTrigger>
+
+                    {/* <TabsTrigger value="presale" className="cursor-pointer">
                         <div className="flex items-center gap-2">
                             <span><BadgeDollarSign></BadgeDollarSign></span>
                             <span>Top Tokens</span>
                         </div>
-                    </TabsTrigger>
-                    <TabsTrigger value="topGainers" className="cursor-pointer">
+                    </TabsTrigger> */}
+                    {/* <TabsTrigger value="topGainers" className="cursor-pointer">
                         <div className="flex items-center gap-2">
                             <span><Codesandbox></Codesandbox></span>
                             <span>Latest</span>
                         </div>
-                    </TabsTrigger>
+                    </TabsTrigger> */}
 
                 </TabsList>
 
@@ -67,18 +80,14 @@ export default function Home() {
                     <TradeComponent></TradeComponent>
 
                 </TabsContent>
-                <TabsContent value="trending">
-                    <Trending></Trending>
-                </TabsContent>
-                 <TabsContent value="recent">
+               
+                <TabsContent value="platform">
                     <OurPlatform></OurPlatform>
                 </TabsContent>
-                <TabsContent value="presale">
-                    <TopComponent></TopComponent>
+                <TabsContent value="explore">
+                   <Trending></Trending>
                 </TabsContent>
-                <TabsContent value="topGainers">
-                    <LatestComponent></LatestComponent>
-                </TabsContent>
+               
 
             </Tabs>
         </div>

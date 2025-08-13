@@ -38,7 +38,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             >
               <StoreProvider>
                 <Header />
-                <div className="flex pt-16 min-h-screen max-w-4xl m-auto">
+                <div className="flex pt-16 min-h-screen m-auto">
                   <main className="w-full mt-10">
                     <Toaster position="top-center" />
                     {children}
