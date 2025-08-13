@@ -70,11 +70,11 @@ const TradingPanel = ({ token, stats }: TokenHeaderProps) => {
       "amount": Number(amount),
       // "slippage": 50
     }
-    let result = await swap(payload);
-    console.log("result k aayo", result);
+    let { message } = await swap(payload);
+    // console.log("result k aayo", result);
     getBalances();
     userWallet();
-    // toast(`succssfully buy worth of ${amount} of ${name}`)
+    toast(message)
   }
 
   const sellToken = async () => {
@@ -85,10 +85,12 @@ const TradingPanel = ({ token, stats }: TokenHeaderProps) => {
       "amount": Number(amount),
       // "slippage": 50
     }
-    let result = await swap(payload);
-    console.log("result k aayo", result)
+    let { message } = await swap(payload);
+    // console.log("result k aayo", result)
     getBalances();
-    userWallet()
+    userWallet();
+    toast(message)
+
     // toast(`succssfully buy worth of ${amount} of ${name}`)
   }
 
@@ -112,7 +114,7 @@ const TradingPanel = ({ token, stats }: TokenHeaderProps) => {
 
 
   const userWallet = async () => {
-    let {result} = await fetchBalance(session?.user?.address || "");
+    let { result } = await fetchBalance(session?.user?.address || "");
     result.map((item: any, index: any) => {
       if (item.token_address == tokenDetails.address) {
         setSelectedTokenAddress(item.balance_formatted)
@@ -239,7 +241,7 @@ const TradingPanel = ({ token, stats }: TokenHeaderProps) => {
                       <div className="text-right text-xs font-mono">
                         <span className="text-xs text-muted-foreground"></span>
                         {/* {tokenStats?.base_token_price_usd } */}
-                        {tokenDetails?.symbol} {(ethDeatil?.usd_price * Number(amount) )/ parseFloat(tokenStats?.base_token_price_usd || '1')}
+                        {tokenDetails?.symbol} {(ethDeatil?.usd_price * Number(amount)) / parseFloat(tokenStats?.base_token_price_usd || '1')}
                         {/* {amount ? (parseFloat( ethDeatil.usd_price * Number(amount)) * parseFloat(tokenStats?.base_token_price_quote_token || '1')).toFixed(7) : '0.0000000'} */}
                       </div>
                     </div>
