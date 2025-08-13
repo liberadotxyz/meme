@@ -3,10 +3,11 @@ interface BalanceProp  {
     name:string,
     symbol:string,
     balance:string,
-    logo:string
+    logo:string,
+    balance_formatted:string
 }
-export const WalletBalance = ({balance}:{balance:BalanceProp}) => {
-    const formattedBalance = Number(balance?.balance || 0).toFixed(3);
+export const WalletBalance = ({balance}:{balance:any}) => {
+    const formattedBalance = Number(balance?.balance_formatted || 0).toFixed(3);
 
   return (
     <div className="text-center space-y-2">

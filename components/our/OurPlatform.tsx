@@ -15,6 +15,16 @@ import { useSession } from "next-auth/react";
 import { getRecent } from "@/api/topToken";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
+const getTokenColor = (tokenName: string) => {
+  let hash = 0;
+  for (let i = 0; i < tokenName.length; i++) {
+    hash = tokenName.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  const h = Math.abs(hash) % 360;
+  const s = 30 + Math.abs(hash) % 40;
+  const l = 40 + Math.abs(hash) % 30;
+  return `hsl(${h}, ${s}%, ${l}%)`;
+};
 export default function OurPlatform() {
   const [loading, setLoading] = useState(false);
   const [tokens, setTokens] = useState<any[]>([]);
@@ -159,6 +169,8 @@ const TokenCard = ({
   showPnl = false,
   pairAddress
 }: TokenCardProps) => {
+  const tokenColor = getTokenColor(name);
+
   const isProfitable = pnl && parseFloat(pnl.replace(/[^0-9.-]/g, "")) > 0;
   const progress = 50;
   const radius = 20;
@@ -191,14 +203,10 @@ const TokenCard = ({
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-15 h-15 flex justify-center items-center relative">
-              <img
-                src={icon}
-                alt={name}
-                className="w-12 h-12 rounded-full object-cover border-2 border-primary/20 relative"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).src = "/images/aaa.png";
-                }}
-              />
+              <div
+                className="w-12 h-12 rounded-full border-2 border-primary/20"
+                style={{ backgroundColor: tokenColor }}
+              ></div>
             </div>
 
             <div className="flex flex-col">

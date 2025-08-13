@@ -38,6 +38,16 @@ const getTokenColor = (tokenName: string) => {
     const l = 40 + Math.abs(hash) % 30;
     return `hsl(${h}, ${s}%, ${l}%)`;
 };
+const getTokenColors = (tokenName: string) => {
+    let hash = 0;
+    for (let i = 0; i < tokenName.length; i++) {
+        hash = tokenName.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const h = Math.abs(hash) % 360;
+    const s = 30 + Math.abs(hash) % 40;
+    const l = 40 + Math.abs(hash) % 30;
+    return `hsl(${h}, ${s}%, ${l}%)`;
+};
 
 export const TradingCard = ({
     buyer,
@@ -106,37 +116,38 @@ const TokenCard = ({
     pool_address,
     showBoost = false,
 }: TokenCardProps) => {
+    const tokenColor = getTokenColors(symbol);
+
     const { data: session } = useSession();
     const { value } = useSelector((state: State) => state.buy);
     const [buyLoading, setBuyLoading] = useState(false)
-  const buyToken = async () => {
-    setBuyLoading(true);
-    try {
-      let payload = {
-        "username": session?.user.username,
-        "address_swapping_from": "0x0000000000000000000000000000000000000000",
-        "address_swapping_to": address,
-        "amount": value,
-      }
-      let { message } = await swap(payload);
-      toast(message)
-    } catch (error) {
+    const buyToken = async () => {
+        setBuyLoading(true);
+        try {
+            let payload = {
+                "username": session?.user.username,
+                "address_swapping_from": "0x0000000000000000000000000000000000000000",
+                "address_swapping_to": address,
+                "amount": value,
+            }
+            let { message } = await swap(payload);
+            toast(message)
+        } catch (error) {
 
-    } finally {
-      setBuyLoading(false)
+        } finally {
+            setBuyLoading(false)
+        }
+
     }
-
-  }
     return (
         <Link href={`/detail/${pool_address}`}>
             <Card className="bg-gradient-card w-full border-border p-4 shadow-card hover:border-primary/20 transition-all duration-300 mt-2">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                        <img
-                            src={icon}
-                            alt={name}
-                            className="w-12 h-12 rounded-full object-cover border-2 border-primary/20"
-                        />
+                        <div
+                            className="w-12 h-12 rounded-full border-2 border-primary/20"
+                            style={{ backgroundColor: tokenColor }}
+                        ></div>
                         <div className="flex flex-col">
                             <div className="flex items-center gap-2">
                                 <h3 className="font-bold text-foreground text-sm">{name}</h3>
@@ -199,24 +210,24 @@ const TokenCard = ({
                             MCAP <span className="text-green-500 text-sm font-medium">{marketCap}</span>
                         </div>
                         <Button
-                size="sm"
-                className="h-6 gap-0 w-13 px-3 mt-2 p-0 bg-green-500 hover:bg-green-600 text-black"
-                onClick={(e) => {
-                  e.preventDefault(); // prevents navigation
-                  e.stopPropagation();
-                  buyToken()
-                }}
-              >
-               
+                            size="sm"
+                            className="h-6 gap-0 w-13 px-3 mt-2 p-0 bg-green-500 hover:bg-green-600 text-black"
+                            onClick={(e) => {
+                                e.preventDefault(); // prevents navigation
+                                e.stopPropagation();
+                                buyToken()
+                            }}
+                        >
 
-                {
-                  buyLoading ? <Loader2></Loader2> :
-                    <>
-                       <Plus color="black" size={14} />{value}
-                    </>
-                }
 
-              </Button>
+                            {
+                                buyLoading ? <Loader2></Loader2> :
+                                    <>
+                                        <Plus color="black" size={14} />{value}
+                                    </>
+                            }
+
+                        </Button>
                     </div>
                 </div>
             </Card>
@@ -244,16 +255,16 @@ export default function TradeComponent() {
         fetchTokens();
     }, []);
 
-    if(loading){
+    if (loading) {
         return (
-             <SkeletonLoader></SkeletonLoader>
+            <SkeletonLoader></SkeletonLoader>
         )
     }
 
-    
+
     return (
         <div className="flex flex-col items-center gap-4 w-full">
-           
+
             {!loading &&
                 tokens.map((item, idx) => {
                     const token = item?.social_info[0];
