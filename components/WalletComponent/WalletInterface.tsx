@@ -53,7 +53,9 @@ interface BalanceProp  {
     name:string,
     symbol:string,
     balance:string,
-    logo:string
+    logo:string,
+    balance_formatted:string;
+
 }
 
 export const WalletInterface = ({ onClose }: WalletInterfaceProps) => {
@@ -179,7 +181,7 @@ export const WalletInterface = ({ onClose }: WalletInterfaceProps) => {
                                                             {token.symbol }
                                                         </h4>
                                                         <p className="text-sm text-text-secondary">
-                                                            {token.balance}
+                                                            {token.balance_formatted}
                                                         </p>
                                                     </div>
                                                 </div>
