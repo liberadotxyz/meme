@@ -35,11 +35,11 @@ export const Header = () => {
         }));
     }
 
-    useEffect(() => {
-        if (session?.user) {
-            setQuickBuy()
-        }
-    }, [session])
+    // useEffect(() => {
+    //     if (session?.user) {
+    //         setQuickBuy()
+    //     }
+    // }, [session])
     async function handleCloseDialog() {
         setIsSendDialogOpen(false);
     }
