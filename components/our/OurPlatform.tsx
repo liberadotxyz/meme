@@ -15,6 +15,19 @@ import { useSession } from "next-auth/react";
 import { getRecent } from "@/api/topToken";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
+import { getMetaData } from "@/api/topToken";
+import Image from "next/image";
+type NFTMetadata = {
+  description: string;
+  image: string;
+  name: string;
+  properties: {
+    discord: string;
+    telegram: string;
+    twitter: string;
+    website: string;
+  };
+};
 const getTokenColor = (tokenName: string) => {
   let hash = 0;
   for (let i = 0; i < tokenName.length; i++) {
@@ -179,6 +192,8 @@ const TokenCard = ({
   const strokeDashoffset = circumference - (progress / 100) * circumference;
   const { value } = useSelector((state: State) => state.buy)
   const [buyLoading, setBuyLoading] = useState(false)
+  const [metadata, setMetaData] = useState<NFTMetadata>();
+
   const buyToken = async () => {
     setBuyLoading(true);
     try {
@@ -197,16 +212,41 @@ const TokenCard = ({
     }
 
   }
+
+
+  const getMedia = async () => {
+    try {
+      let { data } = await getMetaData(address || "")
+      console.log("result k xa", data);
+      let url = `https://ipfs.io/ipfs/${data.metadata}`
+      let result = await fetch(url, {
+        method: "GET"
+      });
+      let a = await result.json();
+      console.log("aaaaa", a)
+      setMetaData(a)
+    } catch (error) {
+
+    }
+  }
+
+  useEffect(() => {
+    getMedia()
+  }, [address])
+
   return (
     <Link href={`/detail/${pairAddress}`}>
       <Card className="bg-gradient-card border-border gap-0 p-4 shadow-card hover:border-primary/20 transition-all duration-300">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-15 h-15 flex justify-center items-center relative">
-              <div
-                className="w-12 h-12 rounded-full border-2 border-primary/20"
-                style={{ backgroundColor: tokenColor }}
-              ></div>
+              <Image 
+              src={`https://ipfs.io/ipfs/${metadata?.image.split("//")[1]}`}
+              alt=""
+              width={50}
+              height={50}
+              className="rounded-full"
+              ></Image>
             </div>
 
             <div className="flex flex-col">
@@ -219,18 +259,23 @@ const TokenCard = ({
 
               <div className="flex flex-col gap-1">
                 <div className="text-muted-foreground text-xs flex gap-2">
-                  {twitterHandle && (
-                    <a href={twitterHandle} target="_blank" rel="noopener noreferrer">
+                   {metadata?.properties.telegram && (
+                    <a href={metadata?.properties.telegram} target="_blank" rel="noopener noreferrer">
+                      <FaTelegram size={12} className="hover:text-blue-400" />
+                    </a>
+                  )}
+                  {metadata?.properties.twitter && (
+                    <a href={metadata?.properties.twitter} target="_blank" rel="noopener noreferrer">
                       <FaTwitter size={12} className="hover:text-blue-400" />
                     </a>
                   )}
-                  {discordUrl && (
-                    <a href={discordUrl} target="_blank" rel="noopener noreferrer">
+                  {metadata?.properties.discord && (
+                    <a href={metadata?.properties.discord} target="_blank" rel="noopener noreferrer">
                       <FaDiscord size={12} className="hover:text-purple-400" />
                     </a>
                   )}
-                  {websiteUrl && (
-                    <a href={websiteUrl} target="_blank" rel="noopener noreferrer">
+                  {metadata?.properties.website && (
+                    <a href={metadata?.properties.website} target="_blank" rel="noopener noreferrer">
                       <Globe size={12} className="hover:text-green-400" />
                     </a>
                   )}

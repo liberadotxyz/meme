@@ -17,6 +17,7 @@ import { NotLoggedIn } from "@/components/NotLoggedIn";
 const PINATA_API_KEY = process.env.PINATA_API_KEY!;
 const PINATA_API_SECRET = process.env.PINATA_API_SECRET!;
 import { useSession } from "next-auth/react";
+
 type FormData = {
     image: File | null;
     name: string;
@@ -28,8 +29,6 @@ type FormData = {
     discordLink: string;
     eth_amount_eth: string;
 };
-
-
 
 const TokenCreationForm = () => {
     const router = useRouter();
@@ -48,11 +47,17 @@ const TokenCreationForm = () => {
     const [loading, setLoading] = useState(false)
     const [imagePreview, setImagePreview] = useState<string | null>(null);
     const [isLessOptionsOpen, setIsLessOptionsOpen] = useState(false);
+    const [errors, setErrors] = useState({
+        image: "",
+        name: "",
+        symbol: ""
+    });
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0] || null;
         setFormData((prev) => ({ ...prev, image: file }));
+        setErrors(prev => ({ ...prev, image: "" }));
         if (file) {
             const reader = new FileReader();
             reader.onload = () => setImagePreview(reader.result as string);
@@ -67,6 +72,34 @@ const TokenCreationForm = () => {
     ) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
+        if (name === "name" || name === "symbol") {
+            setErrors(prev => ({ ...prev, [name]: "" }));
+        }
+    };
+
+    const validateForm = () => {
+        let valid = true;
+        const newErrors = {
+            image: "",
+            name: "",
+            symbol: ""
+        };
+
+        if (!formData.image) {
+            newErrors.image = "Token image is required";
+            valid = false;
+        }
+        if (!formData.name.trim()) {
+            newErrors.name = "Token name is required";
+            valid = false;
+        }
+        if (!formData.symbol.trim()) {
+            newErrors.symbol = "Token symbol is required";
+            valid = false;
+        }
+
+        setErrors(newErrors);
+        return valid;
     };
 
     const uploadFileToPinata = async (file: File) => {
@@ -106,9 +139,8 @@ const TokenCreationForm = () => {
     };
 
     const uploadToPinata = async () => {
-        if (!formData.image) throw new Error("No image selected");
         // Upload image first
-        const imageCID = await uploadFileToPinata(formData.image);
+        const imageCID = await uploadFileToPinata(formData.image!);
 
         // Create metadata JSON linking to imageCID
         const metadata = {
@@ -135,7 +167,12 @@ const TokenCreationForm = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setLoading(true)
+        
+        if (!validateForm()) {
+            return;
+        }
+
+        setLoading(true);
 
         try {
             const { metadataURI } = await uploadToPinata();
@@ -149,7 +186,6 @@ const TokenCreationForm = () => {
             };
 
             console.log("Payload:", payload);
-            // Example: call deployToken(payload) or send to your backend
             const data = await deployToken(payload);
             let payload2 = {
                 username: session?.user.address,
@@ -159,13 +195,12 @@ const TokenCreationForm = () => {
                 symbol: formData.symbol
             }
 
-            await saveToken(payload2)
+            await saveToken(payload2);
             router.push(`/detail/${data.pool_address}`);
         } catch (error) {
             console.error("Pinata upload failed:", error);
             alert("Upload failed: " + (error as Error).message);
-            setLoading(false)
-
+            setLoading(false);
         }
     };
 
@@ -184,10 +219,17 @@ const TokenCreationForm = () => {
                     onSubmit={handleSubmit}
                     className="p-6 bg-card space-y-6 rounded-md"
                 >
+                    {/* Image Upload */}
                     <div className="space-y-2">
+                        <div className="flex items-center gap-1">
+                            <label className="text-md text-muted-foreground">Token Image</label>
+                            <span className="text-red-500">*</span>
+                        </div>
                         <div
                             onClick={triggerFileInput}
-                            className="upload-area flex items-center justify-center h-32 border-dashed border border-white rounded-lg cursor-pointer hover:border-primary transition-colors"
+                            className={`upload-area flex items-center justify-center h-32 border-dashed rounded-lg cursor-pointer hover:border-primary transition-colors ${
+                                errors.image ? "border-red-500 border-2" : "border border-white"
+                            }`}
                         >
                             {imagePreview ? (
                                 <img
@@ -199,7 +241,7 @@ const TokenCreationForm = () => {
                                 <>
                                     <ImagePlus className="w-8 h-8 text-primary mb-2" />
                                     <span className="text-sm text-muted-foreground">
-                                        Upload image
+                                        Upload image (required)
                                     </span>
                                 </>
                             )}
@@ -209,33 +251,50 @@ const TokenCreationForm = () => {
                                 onChange={handleImageUpload}
                                 className="hidden"
                                 ref={fileInputRef}
+                                required
                             />
                         </div>
+                        {errors.image && (
+                            <p className="text-red-500 text-sm">{errors.image}</p>
+                        )}
                     </div>
 
-                    {/* Name, Symbol, Description fields */}
                     <div className="space-y-4">
+                        {/* Name Field */}
                         <div>
-                            <label className="text-md text-muted-foreground">Name</label>
+                            <div className="flex items-center gap-1">
+                                <label className="text-md text-muted-foreground">Name</label>
+                                <span className="text-red-500">*</span>
+                            </div>
                             <Input
                                 name="name"
                                 value={formData.name}
                                 onChange={handleInputChange}
-                                required
-                                className="h-12"
+                                className={`h-12 ${errors.name ? "border-red-500" : ""}`}
                             />
+                            {errors.name && (
+                                <p className="text-red-500 text-sm">{errors.name}</p>
+                            )}
                         </div>
+
+                        {/* Symbol Field */}
                         <div>
-                            <label className="text-md text-muted-foreground">Ticker</label>
+                            <div className="flex items-center gap-1">
+                                <label className="text-md text-muted-foreground">Ticker</label>
+                                <span className="text-red-500">*</span>
+                            </div>
                             <Input
                                 name="symbol"
                                 value={formData.symbol}
                                 onChange={handleInputChange}
-                                required
-                                className="h-12"
-
+                                className={`h-12 ${errors.symbol ? "border-red-500" : ""}`}
                             />
+                            {errors.symbol && (
+                                <p className="text-red-500 text-sm">{errors.symbol}</p>
+                            )}
                         </div>
+
+                        {/* Description Field */}
                         <div>
                             <label className="text-md text-muted-foreground">
                                 Description
@@ -245,7 +304,6 @@ const TokenCreationForm = () => {
                                 value={formData.description}
                                 onChange={handleInputChange}
                                 className="h-20"
-
                             />
                         </div>
                     </div>
@@ -263,7 +321,6 @@ const TokenCreationForm = () => {
                                 min="0"
                                 required
                                 className="h-12"
-
                             />
                             <span className="absolute right-3 top-1/2 -translate-y-1/2">
                                 ETH
@@ -353,7 +410,6 @@ const TokenCreationForm = () => {
                                 </div>
                             </div>
                         </CollapsibleContent>
-
                     </Collapsible>
 
                     <Button type="submit" className="w-full bg-green-500 hover:bg-green-600">
@@ -363,8 +419,6 @@ const TokenCreationForm = () => {
                                 Uploading...
                             </> : "Submit"
                         }
-
-
                     </Button>
                 </form>
             </div>

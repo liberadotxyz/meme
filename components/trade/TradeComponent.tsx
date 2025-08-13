@@ -17,7 +17,22 @@ import SkeletonLoader from "../SkeletonLoader";
 import { Loader2 } from "lucide-react";
 import { swap } from "@/api/topToken";
 import { toast } from "sonner";
+import { getMetaData } from "@/api/topToken";
+import Image from "next/image";
 // ========== Trading Card Component ==========
+
+type NFTMetadata = {
+    description: string;
+    image: string;
+    name: string;
+    properties: {
+        discord: string;
+        telegram: string;
+        twitter: string;
+        website: string;
+    };
+};
+
 interface TradingCardProps {
     tokenName: string;
     tokenIcon?: string;
@@ -120,7 +135,8 @@ const TokenCard = ({
 
     const { data: session } = useSession();
     const { value } = useSelector((state: State) => state.buy);
-    const [buyLoading, setBuyLoading] = useState(false)
+    const [buyLoading, setBuyLoading] = useState(false);
+    const [metadata, setMetaData] = useState<NFTMetadata>();
     const buyToken = async () => {
         setBuyLoading(true);
         try {
@@ -139,15 +155,38 @@ const TokenCard = ({
         }
 
     }
+    const getMedia = async () => {
+        try {
+            let { data } = await getMetaData(address || "")
+            console.log("result k xa", data);
+            let url = `https://ipfs.io/ipfs/${data.metadata}`
+            let result = await fetch(url, {
+                method: "GET"
+            });
+            let a = await result.json();
+            console.log("aaaaa", a)
+            setMetaData(a)
+        } catch (error) {
+
+        }
+    }
+
+    useEffect(() => {
+        getMedia()
+    }, [address])
+
     return (
         <Link href={`/detail/${pool_address}`}>
             <Card className="bg-gradient-card w-full border-border p-4 shadow-card hover:border-primary/20 transition-all duration-300 mt-2">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                        <div
-                            className="w-12 h-12 rounded-full border-2 border-primary/20"
-                            style={{ backgroundColor: tokenColor }}
-                        ></div>
+                        <Image
+                            src={`https://ipfs.io/ipfs/${metadata?.image.split("//")[1]}`}
+                            alt=""
+                            width={50}
+                            height={50}
+                            className="rounded-full"
+                        ></Image>
                         <div className="flex flex-col">
                             <div className="flex items-center gap-2">
                                 <h3 className="font-bold text-foreground text-sm">{name}</h3>
@@ -157,24 +196,24 @@ const TokenCard = ({
 
                             {/* Social Icons */}
                             <div className="text-muted-foreground text-xs flex gap-2 mt-1">
-                                {telegram && (
-                                    <a href={telegram} target="_blank">
-                                        <FaTelegram size={12} />
+                                {metadata?.properties.telegram && (
+                                    <a href={metadata?.properties.telegram} target="_blank" rel="noopener noreferrer">
+                                        <FaTelegram size={12} className="hover:text-blue-400" />
                                     </a>
                                 )}
-                                {twitter && (
-                                    <a href={`https://twitter.com/${twitter}`} target="_blank">
-                                        <FaTwitter size={12} />
+                                {metadata?.properties.twitter && (
+                                    <a href={metadata?.properties.twitter} target="_blank" rel="noopener noreferrer">
+                                        <FaTwitter size={12} className="hover:text-blue-400" />
                                     </a>
                                 )}
-                                {discord && (
-                                    <a href={discord} target="_blank">
-                                        <FaDiscord size={12} />
+                                {metadata?.properties.discord && (
+                                    <a href={metadata?.properties.discord} target="_blank" rel="noopener noreferrer">
+                                        <FaDiscord size={12} className="hover:text-purple-400" />
                                     </a>
                                 )}
-                                {website && (
-                                    <a href={website} target="_blank">
-                                        <Globe size={12} />
+                                {metadata?.properties.website && (
+                                    <a href={metadata?.properties.website} target="_blank" rel="noopener noreferrer">
+                                        <Globe size={12} className="hover:text-green-400" />
                                     </a>
                                 )}
                             </div>

@@ -229,3 +229,22 @@ export async function quickBuySetting(payload: any) {
     return null;
   }
 }
+
+
+
+export async function getMetaData(address:string) {
+  const url = `https://backends.phaser.bot/api/v1/token-metadata/${address}`;
+  const res = await fetch(url, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+
+    },
+
+  });
+  if (res.status < 400) {
+    return await res.json();
+  } else {
+    return null;
+  }
+}
