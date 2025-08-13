@@ -13,6 +13,7 @@ import { useSession } from "next-auth/react";
 import { toast } from "sonner";
 import { swap } from "@/api/topToken";
 import { useSelector } from "react-redux";
+import Link from "next/link";
 // API types
 interface PoolInfo {
   id: string;
@@ -54,6 +55,7 @@ interface TokenCardProps {
   top10Percent: string;
   devPercent: string;
   createdAgo: string;
+  pairAddress:string;
   social: {
     telegram?: string;
     twitter?: string;
@@ -73,6 +75,7 @@ const TokenCard = ({
   devPercent,
   createdAgo,
   social,
+  pairAddress
 }: TokenCardProps) => {
   const { data: session } = useSession()
 
@@ -90,6 +93,7 @@ const TokenCard = ({
     toast(`succssfully buy worth of ${value} of ${name}`)
   }
   return (
+    <Link href={`/detail/${pairAddress}`}>
     <Card className="bg-gradient-card border-border p-4 shadow-card hover:border-primary/20 transition-all duration-300">
       <div className="flex items-center justify-between">
         {/* Left Section */}
@@ -194,6 +198,11 @@ const TokenCard = ({
               variant="ghost"
               size="sm"
               className="h-6 gap-0 w-13 px-3 mt-2 p-0 bg-green-500 hover:bg-green-600 text-black"
+              onClick={(e) => {
+                  e.preventDefault(); // prevents navigation
+                  e.stopPropagation();
+                  buyToken()
+                }}
             >
               <Plus color="black" /> 0.01
             </Button>
@@ -201,6 +210,7 @@ const TokenCard = ({
         </div>
       </div>
     </Card>
+    </Link>
   );
 };
 
@@ -251,6 +261,7 @@ export default function TopComponent() {
             icon={token_detail?.image_url}
             marketCap={`$${(pool_info?.market_cap_usd / 1_000_000).toFixed(2)}M`}
             address={token_detail?.address}
+            pairAddress={pool_info.address}
             holdersCount={token_detail?.holders.count}
             devPercent={"1"} // placeholder
             top10Percent={token_detail?.holders.distribution_percentage?.top_10}

@@ -11,7 +11,7 @@ interface TokenHeaderProps {
 
 const TokenHeader = ({ token, stats }: TokenHeaderProps) => {
   return (
-    <div className="bg-surface-elevated border-b border-green-500 p-4 mb-1">
+    <div className="bg-surface-elevated border-b border-gray-500 p-4 mb-1">
       <div className="flex items-center justify-between">
         {/* Left */}
         <div className="flex items-center space-x-4">

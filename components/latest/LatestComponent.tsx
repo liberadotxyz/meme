@@ -13,6 +13,7 @@ import { useSelector } from "react-redux";
 import { State } from "@/redux";
 import { useSession } from "next-auth/react";
 import { toast } from "sonner";
+import Link from "next/link";
 interface TokenData {
   address: string;
   name: string;
@@ -41,7 +42,16 @@ interface TokenData {
     };
   }[];
 }
-
+const getTokenColor = (tokenName: string) => {
+  let hash = 0;
+  for (let i = 0; i < tokenName.length; i++) {
+    hash = tokenName.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  const h = Math.abs(hash) % 360;
+  const s = 30 + Math.abs(hash) % 40;
+  const l = 40 + Math.abs(hash) % 30;
+  return `hsl(${h}, ${s}%, ${l}%)`;
+};
 export default function LatestComponent() {
   const [loading, setLoading] = useState(false);
   const [tokens, setTokens] = useState<TokenData[]>([]);
@@ -77,6 +87,7 @@ export default function LatestComponent() {
               marketCap={formatNumber(token.fdv_usd)}
               pnl={token.price_change_percentage.h24}
               address={token.token_address}
+              pariaddress={token.address}
               holders={formatNumber(token.transactions.h24.buyers + token.transactions.h24.sellers)}
               devHold="1%" // placeholder if no API value
               topHolders="2%" // placeholder if no API value
@@ -130,6 +141,7 @@ interface TokenCardProps {
   createdAgo: string;
   volume: string;
   txCount: string;
+  pariaddress: string;
   socialLinks: {
     telegram?: string;
     twitter?: string;
@@ -152,12 +164,13 @@ const TokenCard = ({
   volume,
   txCount,
   socialLinks,
+  pariaddress,
 }: TokenCardProps) => {
   const isProfitable = pnl && parseFloat(pnl) > 0;
-    const { data: session } = useSession()
-  
+  const { data: session } = useSession()
+
   const { value } = useSelector((state: State) => state.buy)
-   const buyToken = async () => {
+  const buyToken = async () => {
     let payload = {
       "username": session?.user.username,
       "address_swapping_from": "0x0000000000000000000000000000000000000000",
@@ -167,58 +180,71 @@ const TokenCard = ({
     }
     let result = await swap(payload);
     console.log("result k aayo", result)
-    toast(`succssfully buy worth of ${value} of ${name}`)
+    // toast(`succssfully buy worth of ${value} of ${name}`)
   }
+  const tokenColor = getTokenColor(name);
+
   return (
-    <Card className="bg-gradient-card border-border p-4 shadow-card hover:border-primary/20 transition-all duration-300">
-      <div className="flex items-center justify-between">
-        {/* Left */}
-        <div className="flex items-center gap-3">
-          <img src={icon} alt={name} className="w-12 h-12 rounded-full border-2 border-primary/20" />
-
-          <div className="flex flex-col">
-            <div className="flex items-center gap-3">
-              <h3 className="font-bold text-foreground text-sm">{name}</h3>
-              <h3 className="font-bold text-muted-foreground text-sm">{symbol}</h3>
-            </div>
-
-            <div className="flex flex-col gap-1">
-              {/* Conditional Social Media Icons */}
-              <div className="text-muted-foreground text-xs flex gap-2">
-                {socialLinks.telegram && <a href={socialLinks.telegram} target="_blank"><FaTelegram size={12} /></a>}
-                {socialLinks.twitter && <a href={socialLinks.twitter} target="_blank"><FaTwitter size={12} /></a>}
-                {socialLinks.discord && <a href={socialLinks.discord} target="_blank"><FaDiscord size={12} /></a>}
-                {socialLinks.website && <a href={socialLinks.website} target="_blank"><Globe size={12} /></a>}
+    <Link href={`/detail/${pariaddress}`}>
+      <Card className="bg-gradient-card border-border p-4 shadow-card hover:border-primary/20 transition-all duration-300">
+        <div className="flex items-center justify-between">
+          {/* Left */}
+          <div className="flex items-center gap-3">
+            {/* <img src={icon} alt={name} className="w-12 h-12 rounded-full border-2 border-primary/20" /> */}
+            <div
+              className="w-8 h-8 rounded-full border-2 border-primary/20"
+              style={{ backgroundColor: tokenColor }}
+            ></div>
+            <div className="flex flex-col">
+              <div className="flex items-center gap-3">
+                <h3 className="font-bold text-foreground text-sm">{name}</h3>
+                <h3 className="font-bold text-muted-foreground text-sm">{symbol}</h3>
               </div>
 
-              <div className="text-muted-foreground text-xs flex items-center mb-1">
-                <CopyableEthText text={shortenAddress(address)} />
-              </div>
+              <div className="flex flex-col gap-1">
+                {/* Conditional Social Media Icons */}
+                <div className="text-muted-foreground text-xs flex gap-2">
+                  {socialLinks.telegram && <a href={socialLinks.telegram} target="_blank"><FaTelegram size={12} /></a>}
+                  {socialLinks.twitter && <a href={socialLinks.twitter} target="_blank"><FaTwitter size={12} /></a>}
+                  {socialLinks.discord && <a href={socialLinks.discord} target="_blank"><FaDiscord size={12} /></a>}
+                  {socialLinks.website && <a href={socialLinks.website} target="_blank"><Globe size={12} /></a>}
+                </div>
 
-              <div className="text-muted-foreground text-xs flex gap-1 mt-1">
-                <TooltipBadge icon={<User size={10} />} text={holders} tooltip="Total number of holders" />
-                <TooltipBadge icon={<ChefHat size={10} />} text={devHold} tooltip="Dev team holdings" />
-                <TooltipBadge icon={<Crown size={10} />} text={topHolders} tooltip="Top 10 holder percentage" />
-                <TooltipBadge icon={<Sprout size={10} />} text={createdAgo} tooltip="Token creation time" />
+                <div className="text-muted-foreground text-xs flex items-center mb-1">
+                  <CopyableEthText text={shortenAddress(address)} />
+                </div>
+
+                <div className="text-muted-foreground text-xs flex gap-1 mt-1">
+                  <TooltipBadge icon={<User size={10} />} text={holders} tooltip="Total number of holders" />
+                  <TooltipBadge icon={<ChefHat size={10} />} text={devHold} tooltip="Dev team holdings" />
+                  <TooltipBadge icon={<Crown size={10} />} text={topHolders} tooltip="Top 10 holder percentage" />
+                  <TooltipBadge icon={<Sprout size={10} />} text={createdAgo} tooltip="Token creation time" />
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        {/* Right */}
-        <div className="flex flex-col items-end gap-2">
-          <div className="text-muted-foreground text-sm flex items-center gap-1">
-            V <span className="text-white">{volume}</span> MCAP
-            <span className={`text-${isProfitable ? "green" : "red"}-500`}>{marketCap}</span>
+          {/* Right */}
+          <div className="flex flex-col items-end gap-2">
+            <div className="text-muted-foreground text-sm flex items-center gap-1">
+              V <span className="text-white">{volume}</span> MCAP
+              <span className={`text-${isProfitable ? "green" : "red"}-500`}>{marketCap}</span>
+            </div>
+            <div className="text-muted-foreground text-xs">TX <span className="text-white">{txCount}</span></div>
+            {pnl && <div className={`text-xs mt-1 ${isProfitable ? "text-green-500" : "text-red-500"}`}>{parseFloat(pnl) > 0 ? "+" : ""}{pnl}%</div>}
+            <Button className="h-6 px-3 bg-green-500 hover:bg-green-600 text-black"
+              onClick={(e) => {
+                e.preventDefault(); // prevents navigation
+                e.stopPropagation();
+                buyToken()
+              }}
+            >
+              <Plus size={14} /> {value}
+            </Button>
           </div>
-          <div className="text-muted-foreground text-xs">TX <span className="text-white">{txCount}</span></div>
-          {pnl && <div className={`text-xs mt-1 ${isProfitable ? "text-green-500" : "text-red-500"}`}>{parseFloat(pnl) > 0 ? "+" : ""}{pnl}%</div>}
-          <Button className="h-6 px-3 bg-green-500 hover:bg-green-600 text-black">
-            <Plus size={14} /> {value}
-          </Button>
         </div>
-      </div>
-    </Card>
+      </Card>
+    </Link>
   );
 };
 

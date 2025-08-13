@@ -1,5 +1,3 @@
-// app/detail/[id]/page.tsx
-
 import TokenHeader from "@/components/detalpage/TreadingHeader";
 import TradingPanel from "@/components/detalpage/TradingPanel";
 import { getDetail } from "@/api/topToken";

@@ -12,7 +12,7 @@ import { ArrowUp, User, Crown, ChefHat, Plus, Globe, Sprout } from "lucide-react
 import { Badge } from "@/components/ui/badge";
 import { FaTelegram, FaTwitter, FaDiscord } from "react-icons/fa";
 import { CopyableEthText } from "../ui/copy-text";
-
+import Link from "next/link";
 // ========== Trading Card Component ==========
 interface TradingCardProps {
     tokenName: string;
@@ -56,8 +56,11 @@ export const TradingCard = ({
                         ></div>
                         <div>
                             <h3 className="font-bold text-foreground text-sm">
-                                {buyer?.slice(0,4)}...{buyer?.slice(-4)}{" "}
-                                <Button className="px-4 text-xs bg-green-400 h-4">{type}</Button>
+                                {buyer?.slice(0, 4)}...{buyer?.slice(-4)}{" "}
+                                {
+                                    type == "buy" ? <Button className="px-4 text-xs bg-green-400 h-4">{type}</Button> :
+                                        <Button className="px-4 text-xs bg-red-400 h-4">{type}</Button>
+                                }
                             </h3>
                             <div className="text-xs text-foreground">
                                 {price} USD at {marketCap} market cap
@@ -76,6 +79,7 @@ interface TokenCardProps {
     name: string;
     symbol: string;
     icon: string;
+    pool_address: string;
     marketCap: string;
     address?: string;
     telegram?: string;
@@ -95,91 +99,94 @@ const TokenCard = ({
     twitter,
     discord,
     website,
+    pool_address,
     showBoost = false,
 }: TokenCardProps) => {
     const { data: session } = useSession();
     const { value } = useSelector((state: State) => state.buy);
 
     return (
-        <Card className="bg-gradient-card w-full border-border p-4 shadow-card hover:border-primary/20 transition-all duration-300 mt-2">
-            <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                    <img
-                        src={icon}
-                        alt={name}
-                        className="w-12 h-12 rounded-full object-cover border-2 border-primary/20"
-                    />
-                    <div className="flex flex-col">
-                        <div className="flex items-center gap-2">
-                            <h3 className="font-bold text-foreground text-sm">{name}</h3>
-                            <h3 className="font-bold text-muted-foreground text-sm ml-3">{symbol}</h3>
+        <Link href={`/detail/${pool_address}`}>
+            <Card className="bg-gradient-card w-full border-border p-4 shadow-card hover:border-primary/20 transition-all duration-300 mt-2">
+                <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                        <img
+                            src={icon}
+                            alt={name}
+                            className="w-12 h-12 rounded-full object-cover border-2 border-primary/20"
+                        />
+                        <div className="flex flex-col">
+                            <div className="flex items-center gap-2">
+                                <h3 className="font-bold text-foreground text-sm">{name}</h3>
+                                <h3 className="font-bold text-muted-foreground text-sm ml-3">{symbol}</h3>
 
-                        </div>
-
-                        {/* Social Icons */}
-                        <div className="text-muted-foreground text-xs flex gap-2 mt-1">
-                            {telegram && (
-                                <a href={telegram} target="_blank">
-                                    <FaTelegram size={12} />
-                                </a>
-                            )}
-                            {twitter && (
-                                <a href={`https://twitter.com/${twitter}`} target="_blank">
-                                    <FaTwitter size={12} />
-                                </a>
-                            )}
-                            {discord && (
-                                <a href={discord} target="_blank">
-                                    <FaDiscord size={12} />
-                                </a>
-                            )}
-                            {website && (
-                                <a href={website} target="_blank">
-                                    <Globe size={12} />
-                                </a>
-                            )}
-                        </div>
-
-                        {/* Address */}
-                        {address && (
-                            <div className="text-muted-foreground text-xs flex items-center mb-1 hover:text-green-500">
-                                <CopyableEthText text={address} />
                             </div>
-                        )}
 
-                        {/* Badges */}
-                        <div className="text-muted-foreground text-xs flex gap-1 mt-1">
-                            <Badge className="p-1 h-4 bg-transparent border border-gray-600 text-green-500 cursor-pointer">
-                                <User size={10} />14
-                            </Badge>
-                            <Badge className="p-1 h-4 bg-transparent border border-gray-600 text-green-500 cursor-pointer">
-                                <ChefHat size={10} />1%
-                            </Badge>
-                            <Badge className="p-1 h-4 bg-transparent border border-gray-600 text-green-500 cursor-pointer">
-                                <Crown size={10} />2%
-                            </Badge>
-                            <Badge className="p-1 h-4 bg-transparent border border-gray-600 text-green-500 cursor-pointer">
-                                <Sprout size={10} className="inline mr-1" />3s
-                            </Badge>
+                            {/* Social Icons */}
+                            <div className="text-muted-foreground text-xs flex gap-2 mt-1">
+                                {telegram && (
+                                    <a href={telegram} target="_blank">
+                                        <FaTelegram size={12} />
+                                    </a>
+                                )}
+                                {twitter && (
+                                    <a href={`https://twitter.com/${twitter}`} target="_blank">
+                                        <FaTwitter size={12} />
+                                    </a>
+                                )}
+                                {discord && (
+                                    <a href={discord} target="_blank">
+                                        <FaDiscord size={12} />
+                                    </a>
+                                )}
+                                {website && (
+                                    <a href={website} target="_blank">
+                                        <Globe size={12} />
+                                    </a>
+                                )}
+                            </div>
+
+                            {/* Address */}
+                            {address && (
+                                <div className="text-muted-foreground text-xs flex items-center mb-1 hover:text-green-500">
+                                    <CopyableEthText text={address} />
+                                </div>
+                            )}
+
+                            {/* Badges */}
+                            <div className="text-muted-foreground text-xs flex gap-1 mt-1">
+                                <Badge className="p-1 h-4 bg-transparent border border-gray-600 text-green-500 cursor-pointer">
+                                    <User size={10} />14
+                                </Badge>
+                                <Badge className="p-1 h-4 bg-transparent border border-gray-600 text-green-500 cursor-pointer">
+                                    <ChefHat size={10} />1%
+                                </Badge>
+                                <Badge className="p-1 h-4 bg-transparent border border-gray-600 text-green-500 cursor-pointer">
+                                    <Crown size={10} />2%
+                                </Badge>
+                                <Badge className="p-1 h-4 bg-transparent border border-gray-600 text-green-500 cursor-pointer">
+                                    <Sprout size={10} className="inline mr-1" />3s
+                                </Badge>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                {/* Right Side Info */}
-                <div className="text-right">
-                    <div className="text-muted-foreground text-sm flex items-center gap-1">
-                        MCAP <span className="text-green-500 text-sm font-medium">{marketCap}</span>
+                    {/* Right Side Info */}
+                    <div className="text-right">
+                        <div className="text-muted-foreground text-sm flex items-center gap-1">
+                            MCAP <span className="text-green-500 text-sm font-medium">{marketCap}</span>
+                        </div>
+                        <Button
+                            size="sm"
+                            className="h-6 gap-0 w-13 px-3 mt-2 p-0 bg-green-500 hover:bg-green-600 text-black"
+                        >
+                            <Plus color="black" />
+                            {value}
+                        </Button>
                     </div>
-                    <Button
-                        size="sm"
-                        className="h-6 gap-0 w-13 px-3 mt-2 p-0 bg-green-500 hover:bg-green-600 text-black"
-                    >
-                        <Plus color="black" />
-                        {value}
-                    </Button>
                 </div>
-            </div>
-        </Card>
+            </Card>
+        </Link>
     );
 };
 
@@ -223,6 +230,7 @@ export default function TradeComponent() {
                                 type={item?.trade_type}
                             />
                             <TokenCard
+                                pool_address={item?.pool_address}
                                 name={token?.name || ""}
                                 symbol={token?.symbol || ""}
                                 icon={token?.image?.large || "/images/aaa.png"}
