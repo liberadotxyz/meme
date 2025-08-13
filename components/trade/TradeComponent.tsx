@@ -211,7 +211,7 @@ const TokenCard = ({
                         </div>
                         <Button
                             size="sm"
-                            className="h-6 gap-0 w-15 px-3 mt-2 p-0 bg-green-500 hover:bg-green-600 text-black"
+                            className="h-6 gap-0 min-w-13 px-3 mt-2 p-0 bg-green-500 hover:bg-green-600 text-black"
                             onClick={(e) => {
                                 e.preventDefault(); // prevents navigation
                                 e.stopPropagation();
