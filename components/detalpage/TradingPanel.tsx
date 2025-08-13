@@ -130,9 +130,9 @@ const TradingPanel = ({ token, stats }: TokenHeaderProps) => {
     <div className="bg-surface-elevated p-1">
       <div className="grid grid-cols-3 gap-1">
         <div className="col-span-2">
-          <Card className="h-110 rounded-none border-1 border-[#4a4747] py-0">
+          <Card className="h-full rounded-none border-1 border-[#4a4747] py-0">
 
-            <iframe className="h-120 w-full"  src={`https://dexscreener.com/base/${token.address}?embed=1&loadChartSettings=0&trades=0&tabs=0&info=0&chartLeftToolbar=0&chartTheme=dark&theme=dark&chartStyle=0&chartType=usd&interval=15`}></iframe>
+            <iframe className="h-full w-full"  src={`https://dexscreener.com/base/${token.address}?embed=1&loadChartSettings=0&trades=0&tabs=0&info=0&chartLeftToolbar=0&chartTheme=dark&theme=dark&chartStyle=0&chartType=usd&interval=15`}></iframe>
 
 
           </Card>
