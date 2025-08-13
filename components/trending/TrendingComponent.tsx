@@ -49,7 +49,6 @@ export default function Trending() {
       {tokens.length > 0 && tokens?.map((token) => {
         const tokenDetail = token?.token_detail;
         const tokenStats = token?.token_stats;
-        const socailState = token?.social_info;
         const marketCap = tokenStats?.market_cap_usd
           ? `$${(parseFloat(tokenStats?.market_cap_usd) / 1000000).toFixed(2)}M`
           : "N/A";

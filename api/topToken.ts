@@ -205,7 +205,7 @@ export async function swap(payload: any) {
     headers: {
       "Content-Type": "application/json",
     },
-    body:JSON.stringify(payload)
+    body: JSON.stringify(payload)
   });
   if (res.status < 400) {
     return await res.json();
@@ -221,7 +221,7 @@ export async function quickBuySetting(payload: any) {
     headers: {
       "Content-Type": "application/json",
     },
-    body:JSON.stringify(payload)
+    body: JSON.stringify(payload)
   });
   if (res.status < 400) {
     return await res.json();
