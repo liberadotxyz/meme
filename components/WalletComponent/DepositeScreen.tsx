@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ArrowLeft, Copy } from 'lucide-react';
-
+import { useSession } from 'next-auth/react';
+import { toast } from 'sonner';
 interface DepositScreenProps {
   onBack: () => void;
 }
@@ -10,9 +11,21 @@ interface DepositScreenProps {
 export const DepositScreen = ({ onBack }: DepositScreenProps) => {
   const [amount, setAmount] = useState('0');
   const [selectedToken, setSelectedToken] = useState('ETH');
-
+  const { data: session } = useSession()
   const presetAmounts = ['0.001 ETH', '0.01 ETH', '0.1 ETH', 'Max'];
-
+  const handleCopyAddress = () => {
+    if (session?.user.address) {
+      navigator.clipboard.writeText(session.user.address)
+        .then(() => {
+          // Optional: Show a toast/notification (e.g., "Copied!")
+          toast("address copied!!!")
+          console.log("Address copied to clipboard!");
+        })
+        .catch((err) => {
+          console.error("Failed to copy address:", err);
+        });
+    }
+  };
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -42,10 +55,12 @@ export const DepositScreen = ({ onBack }: DepositScreenProps) => {
 
       {/* Address */}
       <div className="flex items-center gap-2 p-3 bg-wallet-bg rounded-lg">
-        <div className="w-4 h-4 rounded-full bg-crypto-blue"></div>
-        <span className="text-sm font-mono">0xcc0c...e129</span>
-        <Copy className="w-4 h-4 ml-auto cursor-pointer hover:text-foreground" />
-      </div>
+        {/* <div className="w-4 h-4 rounded-full bg-crypto-blue"></div> */}
+        <span className="text-sm font-mono">{session?.user.address?.slice(0, 4)}...{session?.user.address?.slice(-4)}</span>
+        <Copy
+          className="w-4 h-4 ml-auto cursor-pointer  hover:text-green-500"
+          onClick={handleCopyAddress}
+        />      </div>
 
       {/* Amount Input */}
       <div className="space-y-4 ">
@@ -61,8 +76,8 @@ export const DepositScreen = ({ onBack }: DepositScreenProps) => {
             className="text-4xl font-light border-none bg-[#262626] px-0 h-auto text-left focus:outline-none focus:ring-0"
             placeholder="0"
             style={{
-              background:"#262626",
-              
+              background: "#262626",
+
             }}
           />
           <div className="flex items-center gap-2 px-3 py-2 bg-crypto-blue text-crypto-blue-foreground rounded-lg bg-black">

@@ -2,14 +2,31 @@
 "use client"
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Copy, Share2 } from "lucide-react";
-
+import { Copy, Share2, Globe } from "lucide-react";
+import { useSession } from "next-auth/react";
+import { toast } from "sonner";
+import { FaTwitter, FaDiscord, FaTelegram } from "react-icons/fa";
+import Image from "next/image";
 interface TokenHeaderProps {
   token: any;
   stats: any;
 }
 
 const TokenHeader = ({ token, stats }: TokenHeaderProps) => {
+  const { data: session } = useSession()
+  const handleCopyAddress = () => {
+    if (session?.user.address) {
+      navigator.clipboard.writeText(token.address)
+        .then(() => {
+          // Optional: Show a toast/notification (e.g., "Copied!")
+          toast("address copied!!!")
+          console.log("Address copied to clipboard!");
+        })
+        .catch((err) => {
+          console.error("Failed to copy address:", err);
+        });
+    }
+  };
   return (
     <div className="bg-surface-elevated border-b border-1 border-[#4a4747] p-4 mb-1">
       <div className="flex items-center justify-between">
@@ -39,9 +56,11 @@ const TokenHeader = ({ token, stats }: TokenHeaderProps) => {
                 <Badge variant="secondary" className="text-xs">
                   {token?.symbol}
                 </Badge>
-                <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
-                  <Copy className="h-3 w-3" />
-                </Button>
+                {/* <Button  size="sm" className="h-6 w-6 p-0"> */}
+                <Copy className="h-3 w-3 hover:text-green-500 cursor-pointer" onClick={() => {
+                  handleCopyAddress()
+                }} />
+                {/* </Button> */}
               </div>
 
               <div className="flex items-center space-x-4 text-sm text-muted-foreground">
@@ -87,6 +106,40 @@ const TokenHeader = ({ token, stats }: TokenHeaderProps) => {
 
         {/* Right Actions */}
         <div className="flex items-center space-x-2">
+          <div className="text-muted-foreground text-xs flex gap-2">
+            {token.twitter_handle && (
+              <a href={token.twitter_handle} onClick={(e) => e.stopPropagation()} target="_blank" rel="noopener noreferrer">
+                <FaTwitter size={18} className="hover:text-blue-400" />
+              </a>
+            )}
+            {token.discord_url && (
+              <a href={token.discord_url} onClick={(e) => e.stopPropagation()} target="_blank" rel="noopener noreferrer">
+                <FaDiscord size={18} className="hover:text-purple-400" />
+              </a>
+            )}
+            {token.telegram_handle && (
+              <a href={token.telegram_handle} onClick={(e) => e.stopPropagation()} target="_blank" rel="noopener noreferrer">
+                <FaTelegram size={18} className="hover:text-purple-400" />
+              </a>
+            )}
+            {token.websites.length > 0 && (
+              <a href={token.websites[0]} onClick={(e) => e.stopPropagation()} target="_blank" rel="noopener noreferrer">
+                <Globe size={18} className="hover:text-green-400" />
+              </a>
+            )}
+
+          </div>
+          <a href={`https://dexscreener.com/base/${token.address}`}
+            target="_blank"
+          >
+            <Image
+              src={`/images/dex.jpg`}
+              width={25}
+              height={25}
+              className="rounded-full"
+              alt=""
+            ></Image>
+          </a>
           <Button variant="ghost" size="sm">
             <Share2 className="h-4 w-4" />
           </Button>

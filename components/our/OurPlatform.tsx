@@ -17,6 +17,7 @@ import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import { getMetaData } from "@/api/topToken";
 import Image from "next/image";
+import { getTokenDetailHolder } from "@/api/topToken";
 type NFTMetadata = {
   description: string;
   image: string;
@@ -72,7 +73,6 @@ export default function OurPlatform() {
       {tokens.length > 0 && tokens?.map((token) => {
         const tokenDetail = token?.token_detail;
         const tokenStats = token?.token_stats;
-        const socailState = token?.social_info;
         const marketCap = tokenStats?.market_cap_usd
           ? `$${(parseFloat(tokenStats?.market_cap_usd) / 1000000).toFixed(2)}M`
           : "N/A";
@@ -194,6 +194,83 @@ const TokenCard = ({
   const [buyLoading, setBuyLoading] = useState(false)
   const [metadata, setMetaData] = useState<NFTMetadata>();
 
+  
+ type HolderDetail = {
+  totalHolders: number;
+  holdersByAcquisition: {
+    swap: number;
+    transfer: number;
+    airdrop: number;
+  };
+  holderChange: {
+    "5min": {
+      change: number;
+      changePercent: number;
+    };
+    "1h": {
+      change: number;
+      changePercent: number;
+    };
+    "6h": {
+      change: number;
+      changePercent: number;
+    };
+    "24h": {
+      change: number;
+      changePercent: number;
+    };
+    "3d": {
+      change: number;
+      changePercent: number;
+    };
+    "7d": {
+      change: number;
+      changePercent: number;
+    };
+    "30d": {
+      change: number;
+      changePercent: number;
+    };
+  };
+  holderSupply: {
+    top10: {
+      supply: string;
+      supplyPercent: number;
+    };
+    top25: {
+      supply: string;
+      supplyPercent: number;
+    };
+    top50: {
+      supply: string;
+      supplyPercent: number;
+    };
+    top100: {
+      supply: string;
+      supplyPercent: number;
+    };
+    top250: {
+      supply: string;
+      supplyPercent: number;
+    };
+    top500: {
+      supply: string;
+      supplyPercent: number;
+    };
+  };
+  holderDistribution: {
+    whales: number;
+    sharks: number;
+    dolphins: number;
+    fish: number;
+    octopus: number;
+    crabs: number;
+    shrimps: number;
+  };
+};
+
+
+  const [holderDetail, setHolderDetail] = useState<HolderDetail>()
   const buyToken = async () => {
     setBuyLoading(true);
     try {
@@ -232,6 +309,21 @@ const TokenCard = ({
 
   useEffect(() => {
     getMedia()
+  }, [address])
+
+
+  const getHolder = async () => {
+    try {
+      let { data } = await getTokenDetailHolder(address?.toLowerCase() || "");
+      setHolderDetail(data)
+    } catch (error) {
+
+    }
+
+  }
+
+  useEffect(() => {
+    getHolder()
   }, [address])
 
   return (
@@ -300,7 +392,7 @@ const TokenCard = ({
                 <div className="text-muted-foreground text-xs flex gap-1 mt-1">
                   <div className="relative group">
                     <Badge className="p-1 h-4 bg-transparent border border-gray-600 text-green-500 cursor-pointer">
-                      <User size={10} /> {holdersCount > 1000 ? `${(holdersCount / 1000).toFixed(1)}K` : holdersCount}
+                      <User size={10} /> {holderDetail?.totalHolders}
                     </Badge>
                     <div className="absolute bottom-full z-20 left-1/2 -translate-x-1/2 mb-2 px-2 py-1 text-xs rounded bg-gray-800 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none">
                       Total number of holders
@@ -318,8 +410,8 @@ const TokenCard = ({
 
                   <div className="relative group">
                     <Badge className="p-1 h-4 bg-transparent border border-gray-600 text-green-500 cursor-pointer">
-                      <Crown size={10} /> {top10Holders}%
-                    </Badge>
+                      <Crown size={10} /> {holderDetail?.holderSupply?.top10.supplyPercent || ""}%
+                                    </Badge>
                     <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 text-xs rounded bg-gray-800 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none">
                       Top 10 holder percentage
                     </div>

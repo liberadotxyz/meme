@@ -229,7 +229,7 @@ const TokenCard = ({
                 </div>
 
                 <div className="text-muted-foreground text-xs flex items-center mb-1 hover:text-green-500">
-                  <CopyableEthText text={pairAddress || ""} />
+                  <CopyableEthText text={address || ""} />
                 </div>
 
                 <div className="text-muted-foreground text-xs flex gap-1 mt-1">

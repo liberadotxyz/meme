@@ -161,7 +161,7 @@ export const WalletInterface = ({ onClose }: WalletInterfaceProps) => {
                             </TabsList>
 
                             <TabsContent value="balance" className="space-y-4 mt-6">
-                                <div>
+                                <div className='h-[352px] overflow-y-auto'>
                                     <h3 className="font-medium mb-2">Available balance</h3>
                                     <p className="text-sm text-text-secondary mb-4">
                                         These contribute to your total available balance

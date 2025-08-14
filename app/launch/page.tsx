@@ -179,6 +179,7 @@ const TokenCreationForm = () => {
             console.log("Metadata URI:", metadataURI);
 
             const payload = {
+                username:session?.user.address,
                 name: formData.name,
                 symbol: formData.symbol,
                 metadata: metadataURI,

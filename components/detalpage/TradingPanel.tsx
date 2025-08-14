@@ -14,7 +14,7 @@ import { fetchBalance } from "@/api/topToken";
 import { getBalance } from "viem/actions";
 import { createPublicClient } from "viem";
 import { createConfig, http } from 'wagmi';
-
+import { ArrowUp } from "lucide-react";
 import {
   base,
 } from 'wagmi/chains';
@@ -49,6 +49,26 @@ const TradingPanel = ({ token, stats }: TokenHeaderProps) => {
   const volume = tokenStats?.volume_usd;
   const holders = tokenDetails?.holders;
   const { data: session } = useSession()
+  // 24
+  const priceChange24h = tokenStats?.price_change_percentage?.h24 || "0";
+  console.log("priceChange24h", priceChange24h)
+  const isPriceUp24hr = parseFloat(priceChange24h) > 0;
+  // 5min
+  const priceChange5min = tokenStats?.price_change_percentage?.m5 || "0";
+  const isPriceUpFor5min = parseFloat(priceChange5min) > 0;
+
+
+  // 1hr
+
+  const priceChange1hr = tokenStats?.price_change_percentage?.h1 || "0";
+  const isPriceUpFor1hr = parseFloat(priceChange1hr) > 0;
+
+
+  // 6hr
+  const priceChange6hr = tokenStats?.price_change_percentage?.h6 || "0";
+  const isPriceUpFor6hr = parseFloat(priceChange6hr) > 0;
+
+
 
   // Format numbers
   const formatNumber = (num: string | number) => {
@@ -82,7 +102,7 @@ const TradingPanel = ({ token, stats }: TokenHeaderProps) => {
       "username": session?.user.username,
       "address_swapping_from": tokenDetails?.address,
       "address_swapping_to": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
-      "amount": selectedTokenAmount == sellAmount ? Number(sellAmount)-Number(sellAmount) % 99 : Number(sellAmount),
+      "amount": selectedTokenAmount == sellAmount ? Number(sellAmount) - Number(sellAmount) % 99 : Number(sellAmount),
       // "slippage": 50
     }
     let { message } = await swap(payload);
@@ -132,14 +152,14 @@ const TradingPanel = ({ token, stats }: TokenHeaderProps) => {
         <div className="col-span-2">
           <Card className="h-full rounded-none border-1 border-[#4a4747] py-0">
 
-            <iframe className="h-full w-full"  src={`https://dexscreener.com/base/${token.address}?embed=1&loadChartSettings=0&trades=0&tabs=0&info=0&chartLeftToolbar=0&chartTheme=dark&theme=dark&chartStyle=0&chartType=usd&interval=15`}></iframe>
+            <iframe className="h-full w-full" src={`https://dexscreener.com/base/${token.address}?embed=1&loadChartSettings=0&trades=0&tabs=0&info=0&chartLeftToolbar=0&chartTheme=dark&theme=dark&chartStyle=0&chartType=usd&interval=15`}></iframe>
 
 
           </Card>
         </div>
         <div className="col-span-1">
           {/* Header Section */}
-          <div className="p-2 border-1 border-[#4a4747]">
+          <div className="p-5 border-1 border-[#4a4747]">
             <div className="flex flex-col gap-2 items-center justify-between">
               <div className="flex items-center gap-2">
                 <h2 className="text-lg font-semibold">{tokenDetails?.name || 'Token'}</h2>
@@ -156,8 +176,89 @@ const TradingPanel = ({ token, stats }: TokenHeaderProps) => {
             </div>
           </div>
 
+
+          {/* ddd */}
+          <div className="border border-[#4a4747] mt-2 mb-2 mx-auto">
+            <div className="flex items-stretch"> {/* Changed to items-stretch to ensure equal height */}
+              {/* Price USD */}
+              <div className="h-[60px] w-[95px] justify-center p-1 flex flex-col items-center border-r border-b border-[#4a4747]">
+                <div className="text-sm font-semibold p-1">
+                  ${parseFloat(tokenStats?.base_token_price_usd || '0').toFixed(3)}
+                </div>
+                <div className="text-xs text-muted-foreground">Price USD</div>
+              </div>
+
+              {/* Liquidity */}
+              <div className="h-[60px] w-[95px] justify-center p-1 flex flex-col items-center border-r border-b border-[#4a4747]">
+                <div className="text-sm font-semibold text-green-500 p-1">
+                  {formatNumber(tokenStats?.reserve_in_usd || 0)}
+                </div>
+                <div className="text-xs text-muted-foreground">Liquidity</div>
+              </div>
+
+              {/* Market Cap */}
+              <div className="h-[60px] w-[95px] p-1  justify-center flex flex-col items-center border-b border-[#4a4747]">
+                <div className="text-sm font-semibold p-1">
+                  {formatNumber(tokenStats?.market_cap_usd)}
+                </div>
+                <div className="text-xs text-muted-foreground">MKT Cap</div>
+              </div>
+
+              {/* Volume */}
+              <div className="h-[60px] w-[95px] p-1 flex justify-center flex-col items-center border-l border-b border-[#4a4747]">
+                <div className="text-sm font-semibold p-1">
+                  {formatNumber(volume?.h24 || 0)}
+                </div>
+                <div className="text-xs text-muted-foreground">Volume</div>
+              </div>
+            </div>
+
+            {/* Time period changes */}
+            <div className="flex items-stretch"> {/* Changed to items-stretch */}
+              {/* 5min */}
+              <div className="h-[60px] w-[95px] flex justify-center flex-col items-center border-r border-[#4a4747]">
+                <div className={`p-1 w-full flex justify-center text-sm items-center ${isPriceUpFor5min ? 'text-green-500' : 'text-red-500'} cursor-pointer`}>
+                  {priceChange5min}%
+                </div>
+                <div className="text-muted-foreground text-xs">
+                  5min
+                </div>
+              </div>
+
+              {/* 1H */}
+              <div className="h-[60px] w-[95px] flex justify-center flex-col items-center border-r border-[#4a4747]">
+                <div className={`p-1 w-full flex justify-center text-sm items-center ${isPriceUpFor1hr ? 'text-green-500' : 'text-red-500'} cursor-pointer`}>
+                  {priceChange1hr}%
+                </div>
+                <div className="text-muted-foreground text-xs ">
+                  1H
+                </div>
+              </div>
+
+              {/* 6H */}
+              <div className="h-[60px] w-[95px] flex flex-col items-center border-r border-[#4a4747] justify-center">
+                <div className={`p-1 w-full flex justify-center text-sm items-center ${isPriceUpFor6hr ? 'text-green-500' : 'text-red-500'} cursor-pointer`}>
+                  {priceChange6hr}%
+                </div>
+                <div className="text-muted-foreground text-xs">
+                  6H
+                </div>
+              </div>
+
+              {/* 24H */}
+              <div className="h-[60px] w-[95px] flex flex-col items-center border-[#4a4747] justify-center">
+                <div className={`p-1 w-full flex justify-center text-sm items-center ${isPriceUp24hr ? 'text-green-500' : 'text-red-500'} cursor-pointer`}>
+                  {priceChange24h}%
+                </div>
+                <div className="text-muted-foreground text-xs">
+                  24H
+                </div>
+              </div>
+            </div>
+          </div>
+
           {/* Trading Section */}
-          <div className="p-2 border-1 border-[#4a4747] border-t-0">
+          <div className="p-5 border-1 border-[#4a4747] border-t-1">
             <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
               <TabsList className="grid w-full grid-cols-2 mt-4 mb-2">
                 <TabsTrigger
@@ -362,16 +463,10 @@ const TradingPanel = ({ token, stats }: TokenHeaderProps) => {
           </div>
 
           {/* Info Section */}
-          <div className="p-2 border-1 border-[#4a4747] mt-2">
+          <div className="p-5 border-1 border-[#4a4747] mt-2">
             <Tabs value={info} onValueChange={setInfo} className="flex-1 flex flex-col">
-              <TabsList className="grid w-full grid-cols-2 mt-4 mb-2">
-                <TabsTrigger
-                  value="info"
-                  className="data-[state=active]:bg-green-500 cursor-pointer data-[state=active]:text-white"
-                >
-                  <BarChart3 className="h-4 w-4 mr-2" />
-                  Token Info
-                </TabsTrigger>
+              <TabsList className="grid w-full mb-2 justify-center">
+
                 <TabsTrigger
                   value="stats"
                   className="data-[state=active]:bg-red-500 cursor-pointer data-[state=active]:text-white"
@@ -382,76 +477,32 @@ const TradingPanel = ({ token, stats }: TokenHeaderProps) => {
               </TabsList>
 
               <div className="flex-1">
-                <TabsContent value="info" className="mt-0 space-y-4">
-                  <div className="grid grid-cols-3 gap-4 text-center">
-                    <div>
-                      <div className="text-sm font-semibold">
-                        ${parseFloat(tokenStats?.base_token_price_usd || '0').toFixed(6)}
-                      </div>
-                      <div className="text-xs text-muted-foreground">Price USD</div>
+                <div className="grid grid-cols-2 gap-4 items-center justify-center">
+                  <div className="flex flex-col items-center">
+                    <div className="text-sm font-semibold">
+                      {holders?.count?.toLocaleString() || '0'}
                     </div>
-                    <div>
-                      <div className="text-sm font-semibold">
-                        {parseFloat(tokenStats?.base_token_price_native_currency || '0').toFixed(6)}
-                      </div>
-                      <div className="text-xs text-muted-foreground">Price ETH</div>
-                    </div>
-                    <div>
-                      <div className="text-sm font-semibold">1B</div>
-                      <div className="text-xs text-muted-foreground">Supply</div>
-                    </div>
+                    <div className="text-xs text-muted-foreground">Holders</div>
                   </div>
-
-                  <div className="grid grid-cols-3 gap-4 text-center">
-                    <div>
-                      <div className="text-sm font-semibold text-green-500">
-                        {formatNumber(tokenStats?.reserve_in_usd || 0)}
-                      </div>
-                      <div className="text-xs text-muted-foreground">Liquidity</div>
+                  <div className="flex flex-col items-center">
+                    <div className="text-sm font-semibold">
+                      {transactions?.h24?.buys?.toLocaleString() || '0'}
                     </div>
-                    <div>
-                      <div className="text-sm font-semibold">
-                        {formatNumber(tokenStats?.fdv_usd || 0)}
-                      </div>
-                      <div className="text-xs text-muted-foreground">FDV</div>
-                    </div>
-                    <div>
-                      <div className="text-sm font-semibold">
-                        {formatNumber(tokenStats?.market_cap_usd)}
-                      </div>
-                      <div className="text-xs text-muted-foreground">MKT Cap</div>
-                    </div>
+                    <div className="text-xs text-muted-foreground">24h Buys</div>
                   </div>
-                </TabsContent>
-
-                <TabsContent value="stats" className="mt-0 space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <div className="text-sm font-semibold">
-                        {holders?.count?.toLocaleString() || '0'}
-                      </div>
-                      <div className="text-xs text-muted-foreground">Holders</div>
+                   <div className="flex flex-col items-center">
+                    <div className="text-sm font-semibold">
+                      {transactions?.h24?.sells?.toLocaleString() || '0'}
                     </div>
-                    <div>
-                      <div className="text-sm font-semibold">
-                        {transactions?.h24?.buys?.toLocaleString() || '0'}
-                      </div>
-                      <div className="text-xs text-muted-foreground">24h Buys</div>
-                    </div>
-                    <div>
-                      <div className="text-sm font-semibold">
-                        {transactions?.h24?.sells?.toLocaleString() || '0'}
-                      </div>
-                      <div className="text-xs text-muted-foreground">24h Sells</div>
-                    </div>
-                    <div>
-                      <div className="text-sm font-semibold">
-                        {formatNumber(volume?.h24 || 0)}
-                      </div>
-                      <div className="text-xs text-muted-foreground">24h Volume</div>
-                    </div>
+                    <div className="text-xs text-muted-foreground">24h Sells</div>
                   </div>
-                </TabsContent>
+                   <div className="flex flex-col items-center">
+                    <div className="text-sm font-semibold">
+                      {formatNumber(volume?.h24 || 0)}
+                    </div>
+                    <div className="text-xs text-muted-foreground">24h Volume</div>
+                  </div>
+                </div>
               </div>
             </Tabs>
           </div>
