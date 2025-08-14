@@ -17,7 +17,8 @@ import { NotLoggedIn } from "@/components/NotLoggedIn";
 const PINATA_API_KEY = process.env.PINATA_API_KEY!;
 const PINATA_API_SECRET = process.env.PINATA_API_SECRET!;
 import { useSession } from "next-auth/react";
-
+import { toast } from "sonner";
+import { ethers } from 'ethers'
 type FormData = {
     image: File | null;
     name: string;
@@ -167,7 +168,7 @@ const TokenCreationForm = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        
+
         if (!validateForm()) {
             return;
         }
@@ -179,7 +180,7 @@ const TokenCreationForm = () => {
             console.log("Metadata URI:", metadataURI);
 
             const payload = {
-                username:session?.user.address,
+                username: session?.user.address,
                 name: formData.name,
                 symbol: formData.symbol,
                 metadata: metadataURI,
@@ -188,6 +189,25 @@ const TokenCreationForm = () => {
 
             console.log("Payload:", payload);
             const data = await deployToken(payload);
+            console.log("deployed response", data);
+
+            if (data.error) {
+                try {
+                    const errorObj = JSON.parse(data.error.replace(/'/g, '"'));
+                    let errorMessage = errorObj.message;
+
+                    if (errorMessage.includes('insufficient funds')) {
+                        errorMessage = "Your wallet doesn't have enough ETH to cover the transaction costs.";
+                    }
+
+                    toast.error(errorMessage);
+                } catch (e) {
+                    toast.error("Transaction failed. Please try again.");
+                }
+
+                setLoading(false);
+                return;
+            }
             let payload2 = {
                 username: session?.user.address,
                 token_address: data.token_address,
@@ -208,7 +228,7 @@ const TokenCreationForm = () => {
 
     const triggerFileInput = () => fileInputRef.current?.click();
 
-    if(!session?.user.address){
+    if (!session?.user.address) {
         return (
             <NotLoggedIn />
         )
@@ -229,9 +249,8 @@ const TokenCreationForm = () => {
                         </div>
                         <div
                             onClick={triggerFileInput}
-                            className={`upload-area flex items-center justify-center h-32 border-dashed rounded-lg cursor-pointer hover:border-primary transition-colors ${
-                                errors.image ? "border-red-500 border-2" : "border border-white"
-                            }`}
+                            className={`upload-area flex items-center justify-center h-32 border-dashed rounded-lg cursor-pointer hover:border-primary transition-colors ${errors.image ? "border-red-500 border-2" : "border border-white"
+                                }`}
                         >
                             {imagePreview ? (
                                 <img
