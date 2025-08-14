@@ -79,7 +79,7 @@ const TradingPanel = ({ token, stats }: TokenHeaderProps) => {
     if (number >= 1000) {
       return `$${(number / 1000).toFixed(2)}K`;
     }
-    return `$${number}`;
+    return `$${Number(number).toFixed(3)}`;
   };
 
   const buyToken = async () => {
@@ -208,6 +208,7 @@ const TradingPanel = ({ token, stats }: TokenHeaderProps) => {
               <div className="h-[60px] w-[95px] p-1 flex justify-center flex-col items-center border-l border-b border-[#4a4747]">
                 <div className="text-sm font-semibold p-1">
                   {formatNumber(volume?.h24 || 0)}
+                  {/* {volume?.h24} */}
                 </div>
                 <div className="text-xs text-muted-foreground">Volume</div>
               </div>
