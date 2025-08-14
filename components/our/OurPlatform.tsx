@@ -82,14 +82,6 @@ export default function OurPlatform() {
           : "";
 
 
-
-        // Get social links
-        const discordUrl = tokenDetail?.discord_url || "";
-        const twitterHandle = tokenDetail?.twitter_handle
-          ? `https://twitter.com/${tokenDetail?.twitter_handle}`
-          : "";
-        const websiteUrl = tokenDetail?.websites?.[0] || "";
-
         // Get holder distribution
         const holderDistribution = tokenDetail?.holders?.distribution_percentage || {
           top_10: "0",
@@ -111,7 +103,7 @@ export default function OurPlatform() {
           <div key={tokenStats?.address} className="p-2 w-full max-w-4xl gap-0">
             <TokenCard
               name={tokenDetail?.name}
-              symbol={tokenDetail?.symbol}
+              symbol={tokenDetail?.symbol || ""}
               icon={tokenDetail?.image_url || "/images/aaa.png"}
               marketCap={marketCap}
               address={tokenDetail?.address}
@@ -122,10 +114,7 @@ export default function OurPlatform() {
               volume24h={volume24h}
               holdersCount={tokenDetail?.holders?.count || 0}
               top10Holders={holderDistribution.top_10}
-              devHolders={holderDistribution["11_30"]} // Using 11-30% as proxy for dev holdings
-              twitterHandle={twitterHandle}
-              discordUrl={discordUrl}
-              websiteUrl={websiteUrl}
+              devHolders={holderDistribution["11_30"]} 
               transactions24h={token.total_buys_24h + token.total_sells_24h}
             />
           </div>
@@ -136,7 +125,7 @@ export default function OurPlatform() {
 }
 
 interface TokenCardProps {
-  name: string;
+  name:string,
   symbol: string;
   icon: string;
   marketCap: string;
@@ -172,9 +161,7 @@ const TokenCard = ({
   holdersCount = 0,
   top10Holders = "0",
   devHolders = "0",
-  twitterHandle = "",
-  discordUrl = "",
-  websiteUrl = "",
+
   transactions24h = 0,
   pnl,
   pnlPercentage,
@@ -182,14 +169,12 @@ const TokenCard = ({
   showPnl = false,
   pairAddress
 }: TokenCardProps) => {
-  const tokenColor = getTokenColor(name);
+  const tokenColor = getTokenColor("name");
 
   const isProfitable = pnl && parseFloat(pnl.replace(/[^0-9.-]/g, "")) > 0;
   const progress = 50;
   const radius = 20;
   const { data: session } = useSession()
-  const circumference = 2 * Math.PI * radius;
-  const strokeDashoffset = circumference - (progress / 100) * circumference;
   const { value } = useSelector((state: State) => state.buy)
   const [buyLoading, setBuyLoading] = useState(false)
   const [metadata, setMetaData] = useState<NFTMetadata>();
@@ -477,21 +462,7 @@ const TokenCard = ({
           </div>
         </div>
 
-        {showPnl && pnl && pnlPercentage && (
-          <div className="mt-4 pt-4 border-t border-border/50">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <span className="text-muted-foreground">P&L:</span>
-                <div className={`flex items-center gap-1 ${isProfitable ? 'text-trading-success' : 'text-trading-danger'}`}>
-                  <span className="font-bold">{pnl}</span>
-                  <ArrowUp className={`h-4 w-4 ${!isProfitable && 'rotate-180'}`} />
-                  <span className="font-semibold">{pnlPercentage}</span>
-                </div>
-              </div>
-              <div className="text-muted-foreground text-sm">{marketCap} MC</div>
-            </div>
-          </div>
-        )}
+
       </Card>
     </Link>
 
