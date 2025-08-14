@@ -157,7 +157,7 @@ const TokenCard = ({
     }
     const getMedia = async () => {
         try {
-            let { data } = await getMetaData(address || "")
+            let { data } = await getMetaData(address?.toLowerCase() || "")
             console.log("result k xa", data);
             let url = `https://ipfs.io/ipfs/${data.metadata}`
             let result = await fetch(url, {
