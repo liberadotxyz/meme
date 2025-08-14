@@ -109,7 +109,7 @@ export default function OurPlatform() {
               address={tokenDetail?.address}
               formattedAddress={formattedAddress}
               priceChange24h={priceChange24h}
-              pairAddress={tokenStats?.address}
+              pairAddress={token?.pool_address}
               isPriceUp={isPriceUp}
               volume24h={volume24h}
               holdersCount={tokenDetail?.holders?.count || 0}
@@ -312,7 +312,7 @@ const TokenCard = ({
   }, [address])
 
   return (
-    <Link href={`/detail/${pairAddress}`}>
+    <Link href={`/detail/${pairAddress?.toLowerCase()}`}>
       <Card className="bg-gradient-card border-border gap-0 p-4 shadow-card hover:border-primary/20 transition-all duration-300">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -384,7 +384,7 @@ const TokenCard = ({
                 </div>
 
                 <div className="text-muted-foreground text-xs flex items-center mb-1 hover:text-green-500">
-                  <CopyableEthText text={pairAddress || ""} />
+                  <CopyableEthText text={address || ""} />
                 </div>
 
                 <div className="text-muted-foreground text-xs flex gap-1 mt-1">

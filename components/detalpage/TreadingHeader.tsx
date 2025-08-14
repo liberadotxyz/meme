@@ -15,8 +15,8 @@ interface TokenHeaderProps {
 const TokenHeader = ({ token, stats }: TokenHeaderProps) => {
   const { data: session } = useSession()
   const handleCopyAddress = () => {
-    if (session?.user.address) {
-      navigator.clipboard.writeText(token.address)
+    if (session?.user?.address) {
+      navigator.clipboard.writeText(token?.address)
         .then(() => {
           // Optional: Show a toast/notification (e.g., "Copied!")
           toast("address copied!!!")
@@ -107,29 +107,29 @@ const TokenHeader = ({ token, stats }: TokenHeaderProps) => {
         {/* Right Actions */}
         <div className="flex items-center space-x-2">
           <div className="text-muted-foreground text-xs flex gap-2">
-            {token.twitter_handle && (
+            {token?.twitter_handle && (
               <a href={token.twitter_handle} onClick={(e) => e.stopPropagation()} target="_blank" rel="noopener noreferrer">
                 <FaTwitter size={18} className="hover:text-blue-400" />
               </a>
             )}
-            {token.discord_url && (
+            {token?.discord_url && (
               <a href={token.discord_url} onClick={(e) => e.stopPropagation()} target="_blank" rel="noopener noreferrer">
                 <FaDiscord size={18} className="hover:text-purple-400" />
               </a>
             )}
-            {token.telegram_handle && (
+            {token?.telegram_handle && (
               <a href={token.telegram_handle} onClick={(e) => e.stopPropagation()} target="_blank" rel="noopener noreferrer">
                 <FaTelegram size={18} className="hover:text-purple-400" />
               </a>
             )}
-            {token.websites.length > 0 && (
+            {token?.websites.length > 0 && (
               <a href={token.websites[0]} onClick={(e) => e.stopPropagation()} target="_blank" rel="noopener noreferrer">
                 <Globe size={18} className="hover:text-green-400" />
               </a>
             )}
 
           </div>
-          <a href={`https://dexscreener.com/base/${token.address}`}
+          <a href={`https://dexscreener.com/base/${token?.address}`}
             target="_blank"
             className="cursor-pointer"
           >
