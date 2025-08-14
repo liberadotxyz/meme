@@ -18,7 +18,6 @@ const PINATA_API_KEY = process.env.PINATA_API_KEY!;
 const PINATA_API_SECRET = process.env.PINATA_API_SECRET!;
 import { useSession } from "next-auth/react";
 import { toast } from "sonner";
-import { ethers } from 'ethers'
 type FormData = {
     image: File | null;
     name: string;
