@@ -222,6 +222,8 @@ const TokenCreationForm = () => {
             console.error("Pinata upload failed:", error);
             toast("Upload failed: " + (error as Error).message);
             setLoading(false);
+        }finally{
+            setLoading(false);
         }
     };
 
