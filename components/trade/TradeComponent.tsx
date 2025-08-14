@@ -79,6 +79,41 @@ export const TradingCard = ({
     created_at
 }: TradingCardProps) => {
     const tokenColor = getTokenColor(tokenName);
+    const [timeAgo, setTimeAgo] = useState("");
+
+    useEffect(() => {
+        if (!created_at) return;
+
+        const updateTimeAgo = () => {
+            const createdDate = new Date(created_at); // UTC time
+            const now = new Date();
+            const diffSeconds = Math.floor((now.getTime() - createdDate.getTime()) / 1000);
+
+            let display = "";
+            if (diffSeconds < 60) {
+                display = `${diffSeconds}s ago`;
+            } else if (diffSeconds < 3600) {
+                const minutes = Math.floor(diffSeconds / 60);
+                const seconds = diffSeconds % 60;
+                display = `${minutes}m ${seconds}s ago`;
+            } else if (diffSeconds < 86400) {
+                const hours = Math.floor(diffSeconds / 3600);
+                const minutes = Math.floor((diffSeconds % 3600) / 60);
+                display = `${hours}h ${minutes}m ago`;
+            } else {
+                const days = Math.floor(diffSeconds / 86400);
+                const hours = Math.floor((diffSeconds % 86400) / 3600);
+                display = `${days}d ${hours}h ago`;
+            }
+
+            setTimeAgo(display);
+        };
+
+        updateTimeAgo();
+        const interval = setInterval(updateTimeAgo, 1000); // refresh every second
+        return () => clearInterval(interval);
+    }, [created_at]);
+
     return (
         <div className="space-y-4">
             <div className="bg-gradient-card p-1 shadow-card">
@@ -102,7 +137,7 @@ export const TradingCard = ({
                         </div>
                     </div>
                     <span className="text-xs text-muted-foreground">
-                        {formatDistanceToNow(new Date(created_at), { addSuffix: true })}
+                        {timeAgo}
 
                     </span>
                 </div>
