@@ -328,6 +328,19 @@ const TokenCard = ({
                                         <Globe size={12} className="hover:text-green-400" />
                                     </a>
                                 )}
+                                <a href={`https://dexscreener.com/base/${address}`}
+                                    target="_blank"
+                                    className="cursor-pointer"
+                                    onClick={(e) => e.stopPropagation()}
+                                >
+                                    <Image
+                                        src={`/images/dex.jpg`}
+                                        width={15}
+                                        height={15}
+                                        className="rounded-full"
+                                        alt=""
+                                    ></Image>
+                                </a>
                             </div>
 
                             {/* Address */}

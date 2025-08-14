@@ -131,6 +131,7 @@ const TokenHeader = ({ token, stats }: TokenHeaderProps) => {
           </div>
           <a href={`https://dexscreener.com/base/${token.address}`}
             target="_blank"
+            className="cursor-pointer"
           >
             <Image
               src={`/images/dex.jpg`}

@@ -148,7 +148,7 @@ const TradingPanel = ({ token, stats }: TokenHeaderProps) => {
   }, [session])
   return (
     <div className="bg-surface-elevated p-1">
-      <div className="grid grid-cols-3 gap-1">
+      <div className="grid grid-cols-3 gap-2">
         <div className="col-span-2">
           <Card className="h-full rounded-none border-1 border-[#4a4747] py-0">
 

@@ -194,80 +194,80 @@ const TokenCard = ({
   const [buyLoading, setBuyLoading] = useState(false)
   const [metadata, setMetaData] = useState<NFTMetadata>();
 
-  
- type HolderDetail = {
-  totalHolders: number;
-  holdersByAcquisition: {
-    swap: number;
-    transfer: number;
-    airdrop: number;
+
+  type HolderDetail = {
+    totalHolders: number;
+    holdersByAcquisition: {
+      swap: number;
+      transfer: number;
+      airdrop: number;
+    };
+    holderChange: {
+      "5min": {
+        change: number;
+        changePercent: number;
+      };
+      "1h": {
+        change: number;
+        changePercent: number;
+      };
+      "6h": {
+        change: number;
+        changePercent: number;
+      };
+      "24h": {
+        change: number;
+        changePercent: number;
+      };
+      "3d": {
+        change: number;
+        changePercent: number;
+      };
+      "7d": {
+        change: number;
+        changePercent: number;
+      };
+      "30d": {
+        change: number;
+        changePercent: number;
+      };
+    };
+    holderSupply: {
+      top10: {
+        supply: string;
+        supplyPercent: number;
+      };
+      top25: {
+        supply: string;
+        supplyPercent: number;
+      };
+      top50: {
+        supply: string;
+        supplyPercent: number;
+      };
+      top100: {
+        supply: string;
+        supplyPercent: number;
+      };
+      top250: {
+        supply: string;
+        supplyPercent: number;
+      };
+      top500: {
+        supply: string;
+        supplyPercent: number;
+      };
+    };
+    holderDistribution: {
+      whales: number;
+      sharks: number;
+      dolphins: number;
+      fish: number;
+      octopus: number;
+      crabs: number;
+      shrimps: number;
+    };
   };
-  holderChange: {
-    "5min": {
-      change: number;
-      changePercent: number;
-    };
-    "1h": {
-      change: number;
-      changePercent: number;
-    };
-    "6h": {
-      change: number;
-      changePercent: number;
-    };
-    "24h": {
-      change: number;
-      changePercent: number;
-    };
-    "3d": {
-      change: number;
-      changePercent: number;
-    };
-    "7d": {
-      change: number;
-      changePercent: number;
-    };
-    "30d": {
-      change: number;
-      changePercent: number;
-    };
-  };
-  holderSupply: {
-    top10: {
-      supply: string;
-      supplyPercent: number;
-    };
-    top25: {
-      supply: string;
-      supplyPercent: number;
-    };
-    top50: {
-      supply: string;
-      supplyPercent: number;
-    };
-    top100: {
-      supply: string;
-      supplyPercent: number;
-    };
-    top250: {
-      supply: string;
-      supplyPercent: number;
-    };
-    top500: {
-      supply: string;
-      supplyPercent: number;
-    };
-  };
-  holderDistribution: {
-    whales: number;
-    sharks: number;
-    dolphins: number;
-    fish: number;
-    octopus: number;
-    crabs: number;
-    shrimps: number;
-  };
-};
 
 
   const [holderDetail, setHolderDetail] = useState<HolderDetail>()
@@ -383,6 +383,19 @@ const TokenCard = ({
                       <Globe size={12} className="hover:text-green-400" />
                     </a>
                   )}
+                  <a href={`https://dexscreener.com/base/${address}`}
+                    target="_blank"
+                    className="cursor-pointer"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <Image
+                      src={`/images/dex.jpg`}
+                      width={15}
+                      height={15}
+                      className="rounded-full"
+                      alt=""
+                    ></Image>
+                  </a>
                 </div>
 
                 <div className="text-muted-foreground text-xs flex items-center mb-1 hover:text-green-500">
@@ -411,7 +424,7 @@ const TokenCard = ({
                   <div className="relative group">
                     <Badge className="p-1 h-4 bg-transparent border border-gray-600 text-green-500 cursor-pointer">
                       <Crown size={10} /> {holderDetail?.holderSupply?.top10.supplyPercent || ""}%
-                                    </Badge>
+                    </Badge>
                     <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 text-xs rounded bg-gray-800 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none">
                       Top 10 holder percentage
                     </div>

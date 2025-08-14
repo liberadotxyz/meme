@@ -15,6 +15,7 @@ import { swap } from "@/api/topToken";
 import { useSession } from "next-auth/react";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
+import Image from "next/image";
 export default function Trending() {
   const [loading, setLoading] = useState(false);
   const [tokens, setTokens] = useState<any[]>([]);
@@ -190,7 +191,7 @@ const TokenCard = ({
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-15 h-15 flex justify-center items-center relative">
-              
+
               <img
                 src={icon}
                 alt={name}
@@ -226,6 +227,19 @@ const TokenCard = ({
                       <Globe size={12} className="hover:text-green-400" />
                     </a>
                   )}
+                  <a href={`https://dexscreener.com/base/${address}`}
+                    target="_blank"
+                    className="cursor-pointer"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <Image
+                      src={`/images/dex.jpg`}
+                      width={15}
+                      height={15}
+                      className="rounded-full"
+                      alt=""
+                    ></Image>
+                  </a>
                 </div>
 
                 <div className="text-muted-foreground text-xs flex items-center mb-1 hover:text-green-500">
