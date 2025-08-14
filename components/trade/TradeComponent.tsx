@@ -19,6 +19,8 @@ import { swap } from "@/api/topToken";
 import { toast } from "sonner";
 import { getMetaData } from "@/api/topToken";
 import Image from "next/image";
+import { formatDistanceToNow } from 'date-fns';
+
 // ========== Trading Card Component ==========
 
 type NFTMetadata = {
@@ -40,7 +42,8 @@ interface TradingCardProps {
     marketCap?: string;
     timestamp?: string;
     buyer?: string;
-    type: string
+    type: string;
+    created_at: string;
 }
 
 const getTokenColor = (tokenName: string) => {
@@ -71,7 +74,8 @@ export const TradingCard = ({
     price,
     marketCap,
     timestamp = "26m",
-    type
+    type,
+    created_at
 }: TradingCardProps) => {
     const tokenColor = getTokenColor(tokenName);
     return (
@@ -96,7 +100,10 @@ export const TradingCard = ({
                             </div>
                         </div>
                     </div>
-                    <span className="text-xs text-muted-foreground">{timestamp}</span>
+                    <span className="text-xs text-muted-foreground">
+                        {formatDistanceToNow(new Date(created_at), { addSuffix: true })}
+
+                    </span>
                 </div>
             </div>
         </div>
@@ -116,10 +123,12 @@ interface TokenCardProps {
     discord?: string;
     website?: string;
     showBoost?: boolean;
+    created_at: String;
 }
 
 const TokenCard = ({
     name,
+    created_at,
     symbol,
     icon,
     marketCap,
@@ -182,14 +191,14 @@ const TokenCard = ({
                     <div className="flex items-center gap-3">
                         {
                             metadata?.image ? <>
-                             <Image
-                            src={`https://ipfs.io/ipfs/${metadata?.image.split("//")[1]}`}
-                            alt=""
-                            width={50}
-                            height={50}
-                            className="rounded-full"
-                        ></Image>
-                            </> : <div className="w-13 h-13 rounded-full" style={{background:`${tokenColor}`}}>
+                                <Image
+                                    src={`https://ipfs.io/ipfs/${metadata?.image.split("//")[1]}`}
+                                    alt=""
+                                    width={50}
+                                    height={50}
+                                    className="rounded-full"
+                                ></Image>
+                            </> : <div className="w-13 h-13 rounded-full" style={{ background: `${tokenColor}` }}>
                             </div>
                         }
                         {/* <Image
@@ -295,6 +304,7 @@ export default function TradeComponent() {
         setLoading(true);
         try {
             const { data } = await getTradeToken();
+            console.log("aaaaaaaaaaaa trade", data)
             setTokens(data || []);
         } catch (err) {
             console.error("Failed to fetch tokens", err);
@@ -331,11 +341,14 @@ export default function TradeComponent() {
                                 // marketCap={`$${Number(stats?.fdv_usd || 0).toLocaleString()}`}
                                 // timestamp="26m"
                                 type={item?.trade_type}
+                                created_at={item?.created_at}
+
                             />
                             <TokenCard
                                 pool_address={item?.pool_address}
                                 name={token?.name || ""}
                                 symbol={token?.symbol || ""}
+                                created_at={item?.created_at}
                                 icon={token?.image?.large || "/images/aaa.png"}
                                 marketCap={`$${Number(token?.fdv_usd || 0).toLocaleString()}`}
                                 address={token?.address || ""}

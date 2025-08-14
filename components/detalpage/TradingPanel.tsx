@@ -82,7 +82,7 @@ const TradingPanel = ({ token, stats }: TokenHeaderProps) => {
       "username": session?.user.username,
       "address_swapping_from": tokenDetails?.address,
       "address_swapping_to": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
-      "amount": Number(amount),
+      "amount": selectedTokenAmount == sellAmount ? Number(sellAmount)-Number(sellAmount) % 99 : Number(sellAmount),
       // "slippage": 50
     }
     let { message } = await swap(payload);
@@ -114,7 +114,7 @@ const TradingPanel = ({ token, stats }: TokenHeaderProps) => {
 
 
   const userWallet = async () => {
-    let { result } = await fetchBalance(session?.user?.address || "");
+    let { result } = await fetchBalance(session?.user.address || "");
     result.map((item: any, index: any) => {
       if (item.token_address == tokenDetails.address) {
         setSelectedTokenAddress(item.balance_formatted)
@@ -280,7 +280,7 @@ const TradingPanel = ({ token, stats }: TokenHeaderProps) => {
                       <Input
                         type="text"
                         placeholder="Enter a custom amount"
-                        value={amount}
+                        value={sellAmount}
                         onChange={(e) => setSellAmount(e.target.value)}
                         className="bg-surface border-border"
                       />
@@ -300,11 +300,11 @@ const TradingPanel = ({ token, stats }: TokenHeaderProps) => {
                         className="h-8 text-xs cursor-pointer border-border bg-surface hover:bg-surface-elevated hover:text-green-500"
                         onClick={() => {
                           if (value === "MAX") {
-                            setAmount(selectedTokenAmount || "0");
+                            setSellAmount(selectedTokenAmount || "0");
                           } else {
                             const percent = parseFloat(value) / 100;
                             const tokenToSell = (parseFloat(selectedTokenAmount || "0") * percent).toFixed(7);
-                            setAmount(tokenToSell);
+                            setSellAmount(tokenToSell);
                           }
                         }}
                       >
@@ -338,8 +338,8 @@ const TradingPanel = ({ token, stats }: TokenHeaderProps) => {
                       <span className="text-sm text-muted-foreground">~</span>
                       <div className="text-right text-xs font-mono">
                         <span className="text-xs text-muted-foreground"></span>
-                        $ {amount
-                          ? (parseFloat(amount) * parseFloat(tokenStats?.base_token_price_usd || '1')).toFixed(7)
+                        $ {sellAmount
+                          ? (parseFloat(sellAmount) * parseFloat(tokenStats?.base_token_price_usd || '1')).toFixed(7)
                           : '0.0000000'
                         }                      </div>
                     </div>
