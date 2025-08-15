@@ -217,7 +217,7 @@ const TokenCreationForm = () => {
 
             await saveToken(payload2);
             toast("Successfully launched!!!")
-            // router.push(`/detail/${data.pool_address}`);
+            router.push(`/detail/${data.pool_address}`);
         } catch (error) {
             console.error("Pinata upload failed:", error);
             toast("Upload failed: " + (error as Error).message);

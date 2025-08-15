@@ -48,7 +48,17 @@ interface TradingCardProps {
     display_image: string;
     display_name: string;
 }
-
+function formatMarketCap(value: number): string {
+        if (value >= 1_000_000_000) {
+            return (value / 1_000_000_000).toFixed(2) + "B";
+        } else if (value >= 1_000_000) {
+            return (value / 1_000_000).toFixed(2) + "M";
+        } else if (value >= 1_000) {
+            return (value / 1_000).toFixed(2) + "k";
+        } else {
+            return value.toString();
+        }
+    }
 const getTokenColor = (tokenName: string) => {
     let hash = 0;
     for (let i = 0; i < tokenName.length; i++) {
@@ -117,6 +127,7 @@ export const TradingCard = ({
         const interval = setInterval(updateTimeAgo, 1000); // refresh every second
         return () => clearInterval(interval);
     }, [created_at]);
+    
 
     return (
         <div className="space-y-4">
@@ -147,8 +158,10 @@ export const TradingCard = ({
                                 }
                             </h3>
                             <div className="text-xs text-foreground">
-                                {price} USD at {marketCap} market cap
+                                {price} USD at {formatMarketCap(Number(marketCap))} market cap
+                                {/* {marketCap} */}
                             </div>
+
                         </div>
                     </div>
                     <span className="text-xs text-muted-foreground">
@@ -445,7 +458,7 @@ const TokenCard = ({
                     {/* Right Side Info */}
                     <div className="text-right">
                         <div className="text-muted-foreground text-sm flex items-center gap-1">
-                            MCAP <span className="text-green-500 text-sm font-medium">{marketCap}</span>
+                            MCAP <span className="text-green-500 text-sm font-medium">{formatMarketCap(Number(marketCap))}</span>
                         </div>
                         <Button
                             size="sm"
@@ -521,6 +534,7 @@ export default function TradeComponent() {
                                 created_at={item?.created_at}
                                 display_image={item?.display_image || ""}
                                 display_name={item?.display_name || ""}
+                                marketCap={item?.bought_marketcap}
 
                             />
                             <TokenCard
@@ -529,7 +543,7 @@ export default function TradeComponent() {
                                 symbol={token?.symbol || ""}
                                 created_at={item?.created_at}
                                 icon={token?.image?.large || "/images/aaa.png"}
-                                marketCap={`$${Number(token?.fdv_usd || 0).toLocaleString()}`}
+                                marketCap={token?.market_cap }
                                 address={token?.address || ""}
                                 telegram={
                                     token?.telegram_handle
