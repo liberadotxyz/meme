@@ -29,6 +29,7 @@ import {
 import { quickBuySetting } from '@/api/topToken';
 import { useDispatch } from 'react-redux';
 import { setBuy } from '@/redux/quickbuy';
+import Image from 'next/image';
 export function Wallet() {
     const [open, setOpen] = useState(false);
     const { data: session } = useSession();
@@ -57,7 +58,17 @@ export function Wallet() {
                     className="flex items-center gap-3 px-4 py-1 h-auto rounded-md border border-border bg-card hover:bg-accent transition-colors"
                 >
                     <Avatar className="w-8 h-7">
-                        <AvatarFallback><User className="w-4 h-4" /></AvatarFallback>
+                        <AvatarFallback>
+                            {
+                                session?.user.image ? <>
+                                <Image src={`${session?.user.image}`}
+                                alt={""}
+                                height={30}
+                                width={30}
+                                ></Image></> :
+                                <User className="w-4 h-4" />
+                            }
+                            </AvatarFallback>
                     </Avatar>
                     <span className="font-medium text-foreground">{session?.user.address?.slice(0,4)}...{session?.user.address?.slice(-4)}</span>
                     <ChevronUp className={`w-4 h-4 text-muted-foreground transition-transform duration-200 ${open ? 'rotate-180' : ''}`} />

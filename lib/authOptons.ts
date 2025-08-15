@@ -45,6 +45,8 @@ export const authOptions = {
                         },
                         body: JSON.stringify({
                             username: username,
+                            display_name: "",
+                            display_image: ""
                         }),
                     });
 
@@ -113,6 +115,8 @@ export const authOptions = {
                         },
                         body: JSON.stringify({
                             username: token.username,
+                            display_name: user?.name,
+                            display_image: user?.image
                         }),
                     });
 
@@ -121,7 +125,7 @@ export const authOptions = {
                         token.userId = data.id;
                         token.address = data.address;
                         token.quick_buy_amount = data.quick_buy_amount;
-                       
+
                     } else {
                         console.error("Backend error saving user:", await res.text());
                     }
