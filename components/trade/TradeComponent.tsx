@@ -45,6 +45,8 @@ interface TradingCardProps {
     buyer?: string;
     type: string;
     created_at: string;
+    display_image: string;
+    display_name: string;
 }
 
 const getTokenColor = (tokenName: string) => {
@@ -76,7 +78,9 @@ export const TradingCard = ({
     marketCap,
     timestamp = "26m",
     type,
-    created_at
+    created_at,
+    display_image,
+    display_name
 }: TradingCardProps) => {
     const tokenColor = getTokenColor(tokenName);
     const [timeAgo, setTimeAgo] = useState("");
@@ -119,13 +123,24 @@ export const TradingCard = ({
             <div className="bg-gradient-card p-1 shadow-card">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                        <div
-                            className="w-8 h-8 rounded-full border-2 border-primary/20"
-                            style={{ backgroundColor: tokenColor }}
-                        ></div>
+                        {
+                            display_image == "" ? <div
+                                className="w-8 h-8 rounded-full border-2 border-primary/20"
+                                style={{ backgroundColor: tokenColor }}
+                            ></div> : <>
+                                <Image
+                                    src={display_image}
+                                    alt=""
+                                    width={50}
+                                    height={50}
+                                    className="rounded-full"
+                                ></Image>
+                            </>
+                        }
+
                         <div>
                             <h3 className="font-bold text-foreground text-sm">
-                                {buyer?.slice(0, 4)}...{buyer?.slice(-4)}{" "}
+                                {display_name}
                                 {
                                     type == "buy" ? <Button className="px-4 text-xs bg-green-400 h-4">{type}</Button> :
                                         <Button className="px-4 text-xs bg-red-400 h-4">{type}</Button>
@@ -485,7 +500,6 @@ export default function TradeComponent() {
         )
     }
 
-
     return (
         <div className="flex flex-col items-center gap-4 w-full">
 
@@ -505,6 +519,8 @@ export default function TradeComponent() {
                                 // timestamp="26m"
                                 type={item?.trade_type}
                                 created_at={item?.created_at}
+                                display_image={item?.display_image || ""}
+                                display_name={item?.display_name || ""}
 
                             />
                             <TokenCard

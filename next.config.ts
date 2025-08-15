@@ -16,7 +16,8 @@ const nextConfig: NextConfig = {
       "logo.moralis.io",
       "img.reservoir.tools",
       "raw.githubusercontent.com",
-      "ipfs.io"
+      "ipfs.io",
+      "pbs.twimg.com"
     ],
   },
 };

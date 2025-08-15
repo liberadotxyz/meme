@@ -105,7 +105,6 @@ export const authOptions = {
             } else {
 
             }
-
             if (account) {
                 try {
                     const res = await fetch("https://backends.phaser.bot/api/v1/user/save/", {
@@ -115,14 +114,14 @@ export const authOptions = {
                         },
                         body: JSON.stringify({
                             username: token.username,
-                            display_name: user?.name,
-                            display_image: user?.image
+                            display_name:user?.name,
+                            display_image:user?.image
                         }),
                     });
 
+                    // console.log( await JSON.stringify(res.json()))
                     if (res.ok) {
                         const data = await res.json();
-                        console.log("dataaaaa", data)
                         token.userId = data.id;
                         token.address = data.address;
                         token.quick_buy_amount = data.quick_buy_amount;
@@ -136,6 +135,7 @@ export const authOptions = {
             }
 
             return token;
+            
         }
         ,
     },

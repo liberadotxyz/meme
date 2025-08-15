@@ -59,8 +59,15 @@ export function Wallet() {
                 >
                     <Avatar className="w-8 h-7">
                         <AvatarFallback>
-                            <AvatarImage src={`${session?.user.image}`} alt="Sardor" />
-                        <AvatarFallback><User className="w-6 h-6" /></AvatarFallback>
+                            {
+                                session?.user.image ? <>
+                                    <Image src={`${session?.user.image}`}
+                                        alt={""}
+                                        height={30}
+                                        width={30}
+                                    ></Image></> :
+                                    <User className="w-4 h-4" />
+                            }
                         </AvatarFallback>
                     </Avatar>
                     <span className="font-medium text-foreground">{session?.user.address?.slice(0, 4)}...{session?.user.address?.slice(-4)}</span>
