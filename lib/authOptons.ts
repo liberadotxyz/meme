@@ -122,6 +122,7 @@ export const authOptions = {
 
                     if (res.ok) {
                         const data = await res.json();
+                        console.log("dataaaaa", data)
                         token.userId = data.id;
                         token.address = data.address;
                         token.quick_buy_amount = data.quick_buy_amount;
