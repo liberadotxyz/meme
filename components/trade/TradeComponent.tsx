@@ -131,19 +131,19 @@ export const TradingCard = ({
                                 <Image
                                     src={display_image}
                                     alt=""
-                                    width={30}
-                                    height={30}
+                                    width={35}
+                                    height={35}
                                     className="rounded-full"
                                 ></Image>
                             </>
                         }
 
                         <div>
-                            <h3 className="font-bold text-foreground text-sm ml-2">
+                            <h3 className="font-bold text-foreground text-sm ">
                                 {display_name}
                                 {
-                                    type == "buy" ? <Button className="px-4 text-xs bg-green-400 h-4">{type}</Button> :
-                                        <Button className="px-4 text-xs bg-red-400 h-4">{type}</Button>
+                                    type == "buy" ? <Button className="px-4 text-xs bg-green-400 h-4 ml-2">{type}</Button> :
+                                        <Button className="px-4 text-xs bg-red-400 h-4 ml-2">{type}</Button>
                                 }
                             </h3>
                             <div className="text-xs text-foreground">
