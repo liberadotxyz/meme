@@ -139,7 +139,7 @@ export const TradingCard = ({
                         }
 
                         <div>
-                            <h3 className="font-bold text-foreground text-sm">
+                            <h3 className="font-bold text-foreground text-sm ml-2">
                                 {display_name}
                                 {
                                     type == "buy" ? <Button className="px-4 text-xs bg-green-400 h-4">{type}</Button> :
