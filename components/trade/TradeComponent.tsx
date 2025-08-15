@@ -131,8 +131,8 @@ export const TradingCard = ({
                                 <Image
                                     src={display_image}
                                     alt=""
-                                    width={50}
-                                    height={50}
+                                    width={30}
+                                    height={30}
                                     className="rounded-full"
                                 ></Image>
                             </>
