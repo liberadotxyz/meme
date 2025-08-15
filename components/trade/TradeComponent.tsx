@@ -543,8 +543,9 @@ export default function TradeComponent() {
                                 symbol={token?.symbol || ""}
                                 created_at={item?.created_at}
                                 icon={token?.image?.large || "/images/aaa.png"}
-                                marketCap={token?.market_cap }
+                                marketCap={item?.token_stats.fdv_usd }
                                 address={token?.address || ""}
+                                
                                 telegram={
                                     token?.telegram_handle
                                         ? `https://t.me/${token.telegram_handle}`
