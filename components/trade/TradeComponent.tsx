@@ -19,7 +19,7 @@ import { swap } from "@/api/topToken";
 import { toast } from "sonner";
 import { getMetaData } from "@/api/topToken";
 import Image from "next/image";
-import { formatDistanceToNow } from 'date-fns';
+// import { formatDistanceToNow } from 'date-fns';
 import { getTokenDetailHolder } from "@/api/topToken";
 
 // ========== Trading Card Component ==========

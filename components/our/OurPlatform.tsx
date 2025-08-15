@@ -75,7 +75,7 @@ export default function OurPlatform() {
         const tokenStats = token?.token_stats;
         const marketCap = tokenStats?.market_cap_usd
           ? `$${(parseFloat(tokenStats?.market_cap_usd) / 1000000).toFixed(2)}M`
-          : "N/A";
+          : `$${(parseFloat(tokenStats?.fdv_usd)).toFixed(2)}K`;
 
         const formattedAddress = tokenDetail?.address
           ? `${tokenDetail?.address.slice(0, 4)}...${tokenDetail?.address.slice(-4)}`

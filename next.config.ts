@@ -18,7 +18,8 @@ const nextConfig: NextConfig = {
       "raw.githubusercontent.com",
       "ipfs.io",
       "pbs.twimg.com",
-      "lh3.googleusercontent.com"
+      "lh3.googleusercontent.com",
+      
     ],
   },
 };
