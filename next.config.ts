@@ -17,7 +17,8 @@ const nextConfig: NextConfig = {
       "img.reservoir.tools",
       "raw.githubusercontent.com",
       "ipfs.io",
-      "pbs.twimg.com"
+      "pbs.twimg.com",
+      "lh3.googleusercontent.com"
     ],
   },
 };
